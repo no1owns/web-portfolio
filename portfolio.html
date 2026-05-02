@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayodeji Akintilo — Creative Systems Leader</title>
+  <meta name="description" content="Ayo Akintilo — Creative Systems Leader, UX/UI Storyteller, Brand Architect. 15+ years crafting visual narratives for MongoDB, DocuSign, BetterUp, and more.">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="stylesheet" href="portfolio.css">
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div id="progress-bar"></div>
+
+<!-- ── Navigation ─────────────────────────────────── -->
+<nav class="p-nav" id="p-nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">AYO<span>.</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle nav">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-social" style="display:flex;gap:0.5rem;">
+        <a href="https://dribbble.com/aakintilo" target="_blank" rel="noopener" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+        <a href="https://www.behance.net/ayodejiakintilo" target="_blank" rel="noopener" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        <a href="https://www.linkedin.com/in/ayoakintilo/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <a href="#contact" class="nav-hire">Hire Me</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────── -->
+<section id="hero" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="hero-content" id="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Available for new projects
+    </div>
+    <h1 class="hero-name">
+      <span class="hero-name-line"><span class="hero-name-inner"><span class="g-text">Ayodeji</span></span></span>
+      <span class="hero-name-line"><span class="hero-name-inner delay-2">Akintilo</span></span>
+    </h1>
+    <p class="hero-sub">Creative Systems Leader &nbsp;·&nbsp; UX/UI Storyteller &nbsp;·&nbsp; Brand Architect</p>
+    <p class="hero-typewriter">
+      Currently: <span id="tw-text" class="tw-text"></span><span class="tw-cursor">|</span>
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View My Work <i class="fas fa-arrow-right"></i></a>
+      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-ring"><i class="fas fa-chevron-down"></i></div>
+  </div>
+</section>
+
+<!-- ── About ──────────────────────────────────────── -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- Image -->
+      <div class="about-img-wrap reveal-l">
+        <div class="about-img-frame parallax-frame">
+          <img src="../images/Filmmakers+Therapy+Couch+Website+intro+(3).gif"
+               alt="Ayodeji Akintilo"
+               class="parallax-img"
+               onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#111122,#1a1a35)'">
+          <div class="about-img-accent"></div>
+        </div>
+        <div class="about-img-badge">
+          <span class="badge-ic"><i class="fas fa-award"></i></span>
+          Award-Winning Creative
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="reveal-r">
+        <div class="section-chip">About</div>
+        <h2 class="section-title">Designing with<br><span class="g-text">Purpose & Precision</span></h2>
+        <div class="about-text">
+          <p>I started my creative journey as a designer obsessed with solving problems through visual storytelling. Today I lead high-impact creative strategies for global tech brands, transforming complex product capabilities into compelling narratives.</p>
+          <p>With 15+ years of experience across UX/UI design, brand strategy, and creative direction, I've had the privilege of shaping campaigns for companies like MongoDB, DocuSign, BetterUp, and AppOmni — as well as cultural institutions that demand storytelling at its finest.</p>
+          <p>I believe every pixel should carry intent. Every system should scale. Every story should move people.</p>
+        </div>
+
+        <div class="about-edu">
+          <h4>Education</h4>
+          <div class="edu-item">
+            <strong>BA in Visual Communication</strong>
+            <span>University of Maryland, Baltimore County (UMBC)</span>
+          </div>
+          <div class="edu-item">
+            <strong>Architecture Theory & Design</strong>
+            <span>University of Greenwich, London</span>
+          </div>
+        </div>
+
+        <div class="skills-cloud">
+          <span class="skill-tag">UX/UI Design</span>
+          <span class="skill-tag">Brand Strategy</span>
+          <span class="skill-tag">Creative Direction</span>
+          <span class="skill-tag">Art Direction</span>
+          <span class="skill-tag">Design Systems</span>
+          <span class="skill-tag">Visual Storytelling</span>
+          <span class="skill-tag">Information Architecture</span>
+          <span class="skill-tag">Impact Producing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-band">
+      <div class="stat-cell reveal-s d1">
+        <div class="stat-val"><span class="stat-n" data-target="15">0</span><span class="stat-plus">+</span></div>
+        <div class="stat-lbl">Years Experience</div>
+      </div>
+      <div class="stat-cell reveal-s d2">
+        <div class="stat-val"><span class="stat-n" data-target="60">0</span><span class="stat-plus">+</span></div>
+        <div class="stat-lbl">Projects Delivered</div>
+      </div>
+      <div class="stat-cell reveal-s d3">
+        <div class="stat-val"><span class="stat-n" data-target="8">0</span><span class="stat-plus"></span></div>
+        <div class="stat-lbl">Global Brands</div>
+      </div>
+      <div class="stat-cell reveal-s d4">
+        <div class="stat-val"><span class="stat-n" data-target="3">0</span><span class="stat-plus"></span></div>
+        <div class="stat-lbl">Continents Worked</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Projects ───────────────────────────────────── -->
+<section id="projects" class="projects-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-chip">Selected Work</div>
+      <h2 class="section-title">Brands I've <span class="g-text">Shaped</span></h2>
+      <p class="section-body">High-impact creative across tech, SaaS, and cultural institutions — from IPO launches to cultural documentary films.</p>
+    </div>
+
+    <div class="filter-row reveal">
+      <button class="flt-btn on" data-f="all">All</button>
+      <button class="flt-btn" data-f="brand-systems">Brand Systems</button>
+      <button class="flt-btn" data-f="event-brand">Event Brand</button>
+      <button class="flt-btn" data-f="campaign">Campaign</button>
+      <button class="flt-btn" data-f="technical">Technical</button>
+      <button class="flt-btn" data-f="brand-character">Brand Character</button>
+      <button class="flt-btn" data-f="linx">Linx Security</button>
+      <button class="flt-btn" data-f="presentation">Presentation</button>
+      <button class="flt-btn" data-f="culture">Culture</button>
+    </div>
+
+    <div class="proj-grid">
+
+      <!-- MongoDB IPO -->
+      <div class="proj-card img-rise d1" data-cat="technical">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#001E2B 0%,#023430 100%);">
+            MDB
+            <div style="position:absolute;bottom:1rem;left:1rem;right:1rem;">
+              <div style="font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,237,100,0.6);margin-bottom:4px;">MongoDB</div>
+              <div style="width:40px;height:3px;background:linear-gradient(90deg,#00ED64,transparent);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Campaign · Brand</span>
+              <h3>MongoDB IPO Launch</h3>
+              <p>Worked with CEO, CTO & CMO on messaging and visual storytelling for outdoor, TV, online, and print advertising campaigns for the IPO.</p>
+              <a href="technical-developer/mongodb-ipo.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Campaign</div>
+            <div class="proj-foot-title">MongoDB IPO Launch</div>
+          </div>
+          <span class="proj-year">2017</span>
+        </div>
+      </div>
+
+      <!-- MongoDB Events -->
+      <div class="proj-card img-rise d2" data-cat="event-brand">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#001a25 0%,#012e1e 100%);">
+            MDB<br>WORLD
+            <div style="position:absolute;bottom:1rem;left:1rem;right:1rem;">
+              <div style="font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,237,100,0.6);margin-bottom:4px;">MongoDB</div>
+              <div style="width:60px;height:3px;background:linear-gradient(90deg,#00ED64,transparent);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Events · Creative Direction</span>
+              <h3>MongoDB Global Events</h3>
+              <p>Led global event creative direction across multiple conferences, scaling product storytelling assets across demos and digital content.</p>
+              <a href="event-brand/mongodb-world.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Creative Direction</div>
+            <div class="proj-foot-title">MongoDB Global Events</div>
+          </div>
+          <span class="proj-year">2017–19</span>
+        </div>
+      </div>
+
+      <!-- DocuSign Ads -->
+      <div class="proj-card img-rise d3" data-cat="campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0a1628 0%,#0d2649 100%);">
+            DOCU
+            <div style="position:absolute;bottom:1rem;left:1rem;right:1rem;">
+              <div style="font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,172,51,0.7);margin-bottom:4px;">DocuSign</div>
+              <div style="width:50px;height:3px;background:linear-gradient(90deg,#FFAC33,transparent);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Campaign · Ad Creative</span>
+              <h3>DocuSign Digital Ad Campaigns</h3>
+              <p>Led creative direction for DocuSign's digital campaigns — including the iconic "Just DocuSign It" and "Close Business Fast" taglines.</p>
+              <a href="campaign-partner/docusign-salesforce.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Campaign</div>
+            <div class="proj-foot-title">DocuSign Ad Campaigns</div>
+          </div>
+          <span class="proj-year">2020</span>
+        </div>
+      </div>
+
+      <!-- DocuSign Momentum -->
+      <div class="proj-card img-rise d4" data-cat="event-brand">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0a1220 0%,#0e1f3d 100%);">
+            MNTM
+            <div style="position:absolute;bottom:1rem;left:1rem;right:1rem;">
+              <div style="font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(51,136,255,0.8);margin-bottom:4px;">DocuSign</div>
+              <div style="width:45px;height:3px;background:linear-gradient(90deg,#3388FF,transparent);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Event · Brand</span>
+              <h3>DocuSign Momentum Conference</h3>
+              <p>Full conference branding and event creative for DocuSign's flagship annual user conference — Momentum.</p>
+              <a href="event-brand/docusign-momentum.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Event Branding</div>
+            <div class="proj-foot-title">DocuSign Momentum</div>
+          </div>
+          <span class="proj-year">2021</span>
+        </div>
+      </div>
+
+      <!-- BetterUp -->
+      <div class="proj-card img-rise d5" data-cat="presentation">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0c0c2a 0%,#16104a 100%);">
+            BU
+            <div style="position:absolute;bottom:1rem;left:1rem;right:1rem;">
+              <div style="font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(130,100,255,0.8);margin-bottom:4px;">BetterUp</div>
+              <div style="width:55px;height:3px;background:linear-gradient(90deg,#8264FF,transparent);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Presentation · Communication Design</span>
+              <h3>BetterUp Design System</h3>
+              <p>Communication design and presentation systems for BetterUp's content marketing and sales teams — shaping how they convey product benefits.</p>
+              <a href="presentation-design/betterup.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">UX · Systems</div>
+            <div class="proj-foot-title">BetterUp</div>
+          </div>
+          <span class="proj-year">2022</span>
+        </div>
+      </div>
+
+      <!-- Filmmakers Therapy Couch -->
+      <div class="proj-card img-rise d6" data-cat="culture">
+        <div class="proj-thumb">
+          <img src="../images/filmmakers_therapy_couch.png" alt="Filmmakers Therapy Couch">
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Culture · Documentary</span>
+              <h3>Filmmakers Therapy Couch</h3>
+              <p>Award-winning documentary and community platform supporting mental wellness in the filmmaking community — from Harvard to The Apollo.</p>
+              <a href="ftc.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Culture</div>
+            <div class="proj-foot-title">Filmmakers Therapy Couch</div>
+          </div>
+          <span class="proj-year">Ongoing</span>
+        </div>
+      </div>
+
+    </div><!-- /.proj-grid -->
+  </div>
+</section>
+
+<!-- ── Experience ─────────────────────────────────── -->
+<section id="experience" class="exp-section">
+  <div class="container">
+    <div class="exp-grid">
+      <div class="exp-sticky reveal-l">
+        <div class="section-chip">Experience</div>
+        <h2 class="section-title">Where I've<br><span class="g-text">Made Impact</span></h2>
+        <p class="section-body">From early-stage startups to publicly traded enterprises, I build design cultures that last.</p>
+        <div style="margin-top:2rem;">
+          <a href="https://www.linkedin.com/in/ayoakintilo/" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.85rem;">
+            Full Resume <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item reveal d1">
+          <div class="tl-dot">01</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Senior Visual Designer</span>
+              <span class="tl-dates">2023 – Present</span>
+            </div>
+            <div class="tl-company">AppOmni</div>
+            <p class="tl-desc">Driving visual design strategy for a leading cloud security platform, building scalable brand and product design systems for enterprise audiences.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d2">
+          <div class="tl-dot">02</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Principal Designer</span>
+              <span class="tl-dates">2021 – 2023</span>
+            </div>
+            <div class="tl-company">Secureframe</div>
+            <p class="tl-desc">Guided teams to develop scalable design systems and unforgettable brand experiences for a fast-growing compliance automation startup.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d3">
+          <div class="tl-dot">03</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Visual Designer</span>
+              <span class="tl-dates">2020 – 2021</span>
+            </div>
+            <div class="tl-company">Navan (formerly TripActions)</div>
+            <p class="tl-desc">Created compelling visual assets and campaign materials for one of corporate travel's fastest-growing unicorns.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d4">
+          <div class="tl-dot">04</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Creative Director</span>
+              <span class="tl-dates">2015 – 2020</span>
+            </div>
+            <div class="tl-company">MongoDB</div>
+            <p class="tl-desc">Led global event creative across major conferences. Spearheaded visual storytelling for the MongoDB IPO launch alongside the CEO, CTO, and CMO — spanning outdoor, TV, digital, and print.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d5">
+          <div class="tl-dot">05</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Creative Director / Founder</span>
+              <span class="tl-dates">2010 – 2015</span>
+            </div>
+            <div class="tl-company">Forge HQ (Independent Studio)</div>
+            <p class="tl-desc">Founded an independent creative studio serving startups and cultural organizations with branding, UX, and art direction across the US and UK.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ─────────────────────────────────────── -->
+<section id="skills" class="skills-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-chip">Capabilities</div>
+      <h2 class="section-title">What I <span class="g-text">Bring</span></h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal d1">
+        <div class="sg-icon"><i class="fas fa-palette"></i></div>
+        <h3 class="sg-title">Design</h3>
+        <div class="sg-tags">
+          <span class="sg-tag">UX/UI Design</span>
+          <span class="sg-tag">Visual Design</span>
+          <span class="sg-tag">Information Architecture</span>
+          <span class="sg-tag">Design Systems</span>
+          <span class="sg-tag">Typography</span>
+          <span class="sg-tag">Motion</span>
+        </div>
+      </div>
+      <div class="skill-group reveal d2">
+        <div class="sg-icon"><i class="fas fa-bullhorn"></i></div>
+        <h3 class="sg-title">Brand & Strategy</h3>
+        <div class="sg-tags">
+          <span class="sg-tag">Brand Identity</span>
+          <span class="sg-tag">Creative Direction</span>
+          <span class="sg-tag">Brand Strategy</span>
+          <span class="sg-tag">Art Direction</span>
+          <span class="sg-tag">Campaign Strategy</span>
+          <span class="sg-tag">Concept Development</span>
+        </div>
+      </div>
+      <div class="skill-group reveal d3">
+        <div class="sg-icon"><i class="fas fa-users"></i></div>
+        <h3 class="sg-title">Leadership</h3>
+        <div class="sg-tags">
+          <span class="sg-tag">Team Leadership</span>
+          <span class="sg-tag">Project Management</span>
+          <span class="sg-tag">Strategic Planning</span>
+          <span class="sg-tag">Cross-Functional</span>
+          <span class="sg-tag">Stakeholder Mgmt</span>
+        </div>
+      </div>
+      <div class="skill-group reveal d4">
+        <div class="sg-icon"><i class="fas fa-film"></i></div>
+        <h3 class="sg-title">Production</h3>
+        <div class="sg-tags">
+          <span class="sg-tag">Advertising</span>
+          <span class="sg-tag">Print Production</span>
+          <span class="sg-tag">Video Direction</span>
+          <span class="sg-tag">Photography</span>
+          <span class="sg-tag">Impact Producing</span>
+          <span class="sg-tag">DEIB Storytelling</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ────────────────────────────────────── -->
+<section id="contact" class="contact-section">
+  <div class="contact-glow"></div>
+  <div class="container">
+    <div class="contact-inner reveal">
+      <div class="section-chip">Let's Connect</div>
+      <h2 class="section-title">Ready to Build<br><span class="g-text">Something Great?</span></h2>
+      <p class="section-body">Whether you're launching a product, scaling a brand, or need a creative partner who can think strategically and execute beautifully — let's talk.</p>
+      <div class="contact-actions">
+        <a href="mailto:ayo@akintilo.com" class="btn btn-primary">Send a Message <i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/ayoakintilo/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn <i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div class="social-row">
+        <a href="https://dribbble.com/aakintilo" target="_blank" rel="noopener" class="soc-link" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+        <a href="https://www.behance.net/ayodejiakintilo" target="_blank" rel="noopener" class="soc-link" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        <a href="https://www.linkedin.com/in/ayoakintilo/" target="_blank" rel="noopener" class="soc-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://vimeo.com/user82366035" target="_blank" rel="noopener" class="soc-link" aria-label="Vimeo"><i class="fab fa-vimeo-v"></i></a>
+        <a href="https://medium.com/@ayodejiakintilo" target="_blank" rel="noopener" class="soc-link" aria-label="Medium"><i class="fab fa-medium-m"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────── -->
+<footer class="p-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:0.75rem;">AYO<span style="background:linear-gradient(135deg,#5b8cff,#9b6dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">.</span></div>
+        <p>Creative Systems Leader · UX/UI Storyteller · Brand Architect for Modern Teams.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Work</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#skills">Skills</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Elsewhere</h5>
+        <ul>
+          <li><a href="https://dribbble.com/aakintilo" target="_blank" rel="noopener">Dribbble</a></li>
+          <li><a href="https://www.behance.net/ayodejiakintilo" target="_blank" rel="noopener">Behance</a></li>
+          <li><a href="https://www.linkedin.com/in/ayoakintilo/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://vimeo.com/user82366035" target="_blank" rel="noopener">Vimeo</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2024 Ayodeji Akintilo. All rights reserved.</span>
+      <span>Berkeley, CA</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="back-top" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+<!-- ══════════════════════════════════════════════════
+     JavaScript
+     ══════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Body load ── */
+  document.body.classList.add('loaded');
+
+  /* ── Refs ── */
+  const progressBar  = document.getElementById('progress-bar');
+  const nav          = document.getElementById('p-nav');
+  const backTop      = document.getElementById('back-top');
+  const heroContent  = document.getElementById('hero-content');
+  const navToggle    = document.getElementById('nav-toggle');
+  const navLinks     = document.getElementById('nav-links');
+
+  /* ── Scroll handler ── */
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const sy    = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+
+        // Progress bar
+        progressBar.style.width = (sy / total * 100) + '%';
+
+        // Nav glass
+        nav.classList.toggle('scrolled', sy > 60);
+
+        // Back-to-top
+        backTop.classList.toggle('show', sy > 400);
+
+        // Hero parallax
+        if (heroContent && sy < window.innerHeight) {
+          const p = sy / window.innerHeight;
+          heroContent.style.transform = `translateY(${sy * 0.28}px)`;
+          heroContent.style.opacity   = Math.max(0, 1 - p * 1.4);
+        }
+
+        // Image parallax
+        runParallax();
+
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  /* ── Back to top ── */
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  /* ── Smooth scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  /* ── Mobile nav ── */
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  /* ── Reveal observer (sections, text blocks) ── */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .reveal-s').forEach(el => revObs.observe(el));
+
+  /* ── Image slide-up + scale ── */
+  const riseEls = document.querySelectorAll('.img-rise');
+  const riseObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = [...riseEls].indexOf(e.target);
+        setTimeout(() => e.target.classList.add('in-view'), (idx % 3) * 110);
+        riseObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+  riseEls.forEach(el => riseObs.observe(el));
+
+  /* ── Parallax ── */
+  function runParallax() {
+    document.querySelectorAll('.parallax-frame').forEach(frame => {
+      const img = frame.querySelector('.parallax-img');
+      if (!img) return;
+      const rect = frame.getBoundingClientRect();
+      const winH  = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > winH) return;
+      const progress = (winH - rect.top) / (winH + rect.height);
+      const shift = (progress - 0.5) * 70;
+      img.style.transform = `scale(1.14) translateY(${shift}px)`;
+    });
+  }
+  runParallax();
+
+  /* ── Active nav link ── */
+  const sections   = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+  const activeObs  = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const hit = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (hit) hit.classList.add('active');
+      }
+    });
+  }, { threshold: 0.45 });
+  sections.forEach(s => activeObs.observe(s));
+
+  /* ── Stat counters ── */
+  function countUp(el) {
+    const target = +el.dataset.target;
+    const dur    = 1600;
+    const start  = performance.now();
+    (function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    })(start);
+  }
+  const cntObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); cntObs.unobserve(e.target); } });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('.stat-n').forEach(el => cntObs.observe(el));
+
+  /* ── Typewriter ── */
+  const phrases = [
+    'Senior Visual Designer @ AppOmni',
+    'Former Creative Director @ MongoDB',
+    'Brand Architect for Modern Teams',
+    'Visual Storyteller for 15+ Years'
+  ];
+  const twEl  = document.getElementById('tw-text');
+  let pi = 0, ci = 0, del = false;
+
+  function type() {
+    const cur = phrases[pi];
+    if (del) {
+      twEl.textContent = cur.slice(0, --ci);
+      if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; setTimeout(type, 350); return; }
+      setTimeout(type, 35);
+    } else {
+      twEl.textContent = cur.slice(0, ++ci);
+      if (ci === cur.length) { del = true; setTimeout(type, 2200); return; }
+      setTimeout(type, 70);
+    }
+  }
+  setTimeout(type, 800);
+
+  /* ── Particles ── */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const pts = Array.from({ length: 65 }, () => ({
+    x:  Math.random() * canvas.width,
+    y:  Math.random() * canvas.height,
+    r:  Math.random() * 1.6 + 0.3,
+    dx: (Math.random() - 0.5) * 0.22,
+    dy: (Math.random() - 0.5) * 0.22,
+    o:  Math.random() * 0.35 + 0.08,
+    c:  Math.random() > 0.5 ? '91,140,255' : '155,109,255'
+  }));
+
+  (function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Connection lines
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const d = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
+        if (d < 110) {
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x, pts[i].y);
+          ctx.lineTo(pts[j].x, pts[j].y);
+          ctx.strokeStyle = `rgba(91,140,255,${0.07 * (1 - d / 110)})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    // Dots
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.c},${p.o})`;
+      ctx.fill();
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(draw);
+  })();
+
+  /* ── Heading line-mask reveal ── */
+  (function () {
+    function splitReveal(selector) {
+      document.querySelectorAll(selector).forEach(el => {
+        el.classList.add('heading-reveal');
+        const nodes = [...el.childNodes];
+        const lines = [[]];
+        nodes.forEach(node => {
+          if (node.nodeName === 'BR') lines.push([]);
+          else lines[lines.length - 1].push(node.cloneNode(true));
+        });
+        el.innerHTML = '';
+        lines.forEach((lineNodes, i) => {
+          if (!lineNodes.length) return;
+          const wrap  = document.createElement('span');
+          wrap.className = 'h-line';
+          const inner = document.createElement('span');
+          inner.className = 'h-line-inner';
+          inner.style.transitionDelay = (i * 85) + 'ms';
+          lineNodes.forEach(n => inner.appendChild(n));
+          wrap.appendChild(inner);
+          el.appendChild(wrap);
+        });
+      });
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+      document.querySelectorAll('.heading-reveal').forEach(el => obs.observe(el));
+    }
+    splitReveal('.section-title');
+  })();
+
+  /* ── Card 3D tilt ── */
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r  = card.getBoundingClientRect();
+      const x  = (e.clientX - r.left) / r.width  - 0.5;
+      const y  = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform = `perspective(900px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateZ(6px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateZ(0)';
+    });
+  });
+
+  /* ── Project filter ── */
+  const filterBtns = document.querySelectorAll('.flt-btn');
+  const projCards  = document.querySelectorAll('.proj-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      const f = btn.dataset.f;
+      projCards.forEach(card => {
+        const cats = (card.dataset.cat || '').split(' ');
+        card.classList.toggle('faded', f !== 'all' && !cats.includes(f));
+      });
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>

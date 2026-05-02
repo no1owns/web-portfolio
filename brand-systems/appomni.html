@@ -10,10 +10,80 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../case-study.css">
   <style>
-    .cs-hero-bg { background: radial-gradient(ellipse 80%% 60%% at 10%% 60%%, rgba(139,92,246,0.14) 0%%, transparent 55%%); }
+    .cs-hero-bg { background: radial-gradient(ellipse 80% 60% at 10% 60%, rgba(139,92,246,0.14) 0%, transparent 55%); }
     .cs-tag { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.09); color: #8B5CF6; }
     .cs-section-label { color: #8B5CF6; }
-    .g-text { background: linear-gradient(135deg, #8B5CF6, #8B5CF6cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .g-text { background: linear-gradient(135deg, #8B5CF6, #a78bfacc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Bento grid ── */
+    .bento-wrap {
+      padding: 0 0 80px;
+      position: relative;
+    }
+    .bento-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -100px;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 60% at 20% 50%, rgba(139,92,246,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 80% 40%, rgba(167,139,250,0.07) 0%, transparent 55%);
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .bento-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-top-color: var(--glass-top);
+      box-shadow: var(--glass-hi), var(--glass-shadow);
+      opacity: 0;
+      transform: translateY(40px) scale(0.96);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                  transform 1s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform, opacity;
+    }
+    .bento-card.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .bento-card img,
+    .bento-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .bento-hero     { grid-column: span 3; aspect-ratio: 16/6; }
+    .bento-wide     { grid-column: span 2; aspect-ratio: 16/10; }
+    .bento-portrait { grid-column: span 1; aspect-ratio: 9/16; }
+    .bento-third    { grid-column: span 1; aspect-ratio: 4/3; }
+
+    @media (max-width: 768px) {
+      .bento-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .bento-hero { grid-column: span 2; aspect-ratio: 16/8; }
+      .bento-wide { grid-column: span 2; }
+      .bento-portrait { aspect-ratio: 4/3; }
+    }
+
+    @media (max-width: 480px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-hero, .bento-wide, .bento-portrait, .bento-third {
+        grid-column: span 1;
+        aspect-ratio: 4/3;
+      }
+    }
   </style>
 </head>
 <body>
@@ -34,9 +104,14 @@
       <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
       <span>AppOmni</span>
     </div>
-    <div class="cs-tags"><span class="cs-tag">Brand Systems</span><span class="cs-tag">Design System</span><span class="cs-tag">UX</span><span class="cs-tag">Visual Design</span></div>
+    <div class="cs-tags">
+      <span class="cs-tag">Brand Systems</span>
+      <span class="cs-tag">Design System</span>
+      <span class="cs-tag">Motion</span>
+      <span class="cs-tag">Visual Design</span>
+    </div>
     <h1 class="cs-title"><span class="g-text">AppOmni</span></h1>
-    <p class="cs-summary">Driving visual design strategy for a leading cloud security platform — building scalable brand and product design systems for enterprise audiences.</p>
+    <p class="cs-summary">Building a scalable visual design system for a cloud security leader — from RSA conference experiences to product motion and digital campaigns.</p>
   </div>
 </section>
 
@@ -44,43 +119,141 @@
   <div class="cs-meta-cell"><div class="cs-meta-label">Role</div><div class="cs-meta-value">Senior Visual Designer</div></div>
   <div class="cs-meta-cell"><div class="cs-meta-label">Client</div><div class="cs-meta-value">AppOmni</div></div>
   <div class="cs-meta-cell"><div class="cs-meta-label">Year</div><div class="cs-meta-value">2023–Present</div></div>
-  <div class="cs-meta-cell"><div class="cs-meta-label">Deliverables</div><div class="cs-meta-value">Brand System · UX · Motion</div></div>
+  <div class="cs-meta-cell"><div class="cs-meta-label">Deliverables</div><div class="cs-meta-value">Brand System · Motion · Campaign · Events</div></div>
 </div>
 
 <div class="cs-body">
   <div class="container">
 
-    <div class="cs-section img-full">
-      <div class="img-slot">
-        <i class="fas fa-image"></i>
-        <div class="img-slot-label">Hero Image</div>
-        <div class="img-slot-hint">Upload assets to images/case-studies/ and update this page</div>
-      </div>
-    </div>
-
     <div class="cs-section">
       <div class="cs-section-label">Overview</div>
-      <h2 class="cs-section-title">Case Study Coming Soon</h2>
+      <h2 class="cs-section-title">Security Design That Earns Trust</h2>
       <div class="cs-section-text">
-        <p>Full case study content and imagery for AppOmni will be added once assets are uploaded. Check back soon.</p>
+        <p>AppOmni sits at the intersection of SaaS security and enterprise compliance — a space where design has to do heavy lifting. Buyers are sophisticated CISOs and security architects who can spot fluff instantly. The brand had to communicate depth, intelligence, and precision before a single word was read.</p>
+        <p>Brought on as Senior Visual Designer, I've been driving the visual strategy across brand systems, product marketing, event presence, and digital campaigns — creating a cohesive design language that makes AppOmni feel as sophisticated as the platform it's selling.</p>
       </div>
     </div>
 
-    <div class="cs-section img-grid img-grid-2">
-      <div class="img-slot"><i class="fas fa-image"></i><div class="img-slot-label">Asset 1</div></div>
-      <div class="img-slot"><i class="fas fa-image"></i><div class="img-slot-label">Asset 2</div></div>
+  </div>
+
+  <div class="bento-wrap" style="max-width:1200px; width:92%; margin:0 auto;">
+    <div class="bento-grid">
+
+      <!-- Row 1 — full-width hero (RSA booth) -->
+      <div class="bento-card bento-hero">
+        <img src="../images/appomni/rsa-booth.png" alt="AppOmni RSA Conference booth">
+      </div>
+
+      <!-- Row 2 — homepage animation (wide) + vertical product demo (portrait 9/16) -->
+      <div class="bento-card bento-wide">
+        <video autoplay muted loop playsinline>
+          <source src="../images/appomni/AO-HP-Animations.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="bento-card bento-portrait">
+        <video autoplay muted loop playsinline>
+          <source src="../images/appomni/video-agent-guard_vertical_1.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Row 3 — three equal thirds -->
+      <div class="bento-card bento-third">
+        <img src="../images/appomni/Demo_Request_Click_Linkedin_LG_NA_M3.png" alt="AppOmni LinkedIn campaign ad">
+      </div>
+      <div class="bento-card bento-third">
+        <video autoplay muted loop playsinline>
+          <source src="../images/appomni/Firefly animate the flow of energy and colors between the floating spheres 148710.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="bento-card bento-third">
+        <img src="../images/appomni/IMG_7833.jpeg" alt="AppOmni brand in the field">
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="cs-section">
+      <div class="cs-section-label">Approach</div>
+      <h2 class="cs-section-title">One System, Every Surface</h2>
+      <div class="cs-section-text">
+        <p>Enterprise security brands often default to cold, technical aesthetics — dark blues, circuit-board textures, padlock iconography. AppOmni needed something sharper: a visual language that felt authoritative without being sterile, and dynamic without sacrificing clarity.</p>
+        <p>I developed a motion-forward design system built around AppOmni's purple — using generative motion, flowing energy forms, and layered depth to communicate the platform's intelligence. That same visual DNA scaled from 80-foot RSA trade show backdrops down to 1080×1080 LinkedIn ads and in-product UI moments, giving the brand a consistent visual identity across every context where buyers encounter it.</p>
+      </div>
+    </div>
+
+    <div class="cs-results">
+      <div class="cs-result-card">
+        <div class="cs-result-num">1</div>
+        <div class="cs-result-label">Unified design system across brand and product</div>
+      </div>
+      <div class="cs-result-card">
+        <div class="cs-result-num">RSA</div>
+        <div class="cs-result-label">Flagship conference presence, end-to-end</div>
+      </div>
+      <div class="cs-result-card">
+        <div class="cs-result-num">∞</div>
+        <div class="cs-result-label">Motion system that scales to any format</div>
+      </div>
     </div>
 
     <div class="cs-next">
       <div>
-        <div class="cs-next-label">Back</div>
-        <a href="../portfolio.html"><div class="cs-next-title">All Projects →</div></a>
+        <div class="cs-next-label">Next Project</div>
+        <a href="secureframe.html"><div class="cs-next-title">Secureframe →</div></a>
       </div>
-      <a href="../portfolio.html"><div class="cs-next-arrow"><i class="fas fa-arrow-right"></i></div></a>
+      <a href="secureframe.html"><div class="cs-next-arrow"><i class="fas fa-arrow-right"></i></div></a>
     </div>
 
   </div>
 </div>
 
+<script>
+(function() {
+  const cards = [...document.querySelectorAll('.bento-card')];
+  const bentoObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = cards.indexOf(e.target);
+        setTimeout(() => e.target.classList.add('in-view'), idx * 90);
+        bentoObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
+  cards.forEach(el => bentoObs.observe(el));
+
+  function splitReveal(selector) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.add('heading-reveal');
+      const nodes = [...el.childNodes];
+      const lines = [[]];
+      nodes.forEach(node => {
+        if (node.nodeName === 'BR') lines.push([]);
+        else lines[lines.length - 1].push(node.cloneNode(true));
+      });
+      el.innerHTML = '';
+      lines.forEach((lineNodes, i) => {
+        if (!lineNodes.length) return;
+        const wrap  = document.createElement('span');
+        wrap.className = 'h-line';
+        const inner = document.createElement('span');
+        inner.className = 'h-line-inner';
+        inner.style.transitionDelay = (i * 85) + 'ms';
+        lineNodes.forEach(n => inner.appendChild(n));
+        wrap.appendChild(inner);
+        el.appendChild(wrap);
+      });
+    });
+    const headObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); headObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+    document.querySelectorAll('.heading-reveal').forEach(el => headObs.observe(el));
+  }
+  splitReveal('.cs-section-title');
+})();
+</script>
 </body>
 </html>

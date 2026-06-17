@@ -5,22 +5,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
 :root {
-  --bg-deep:       #0c0a08;
-  --bg-dark:       #141210;
-  --bg-card:       #1c1a18;
-  --bg-elevated:   #242220;
-  --accent:        hsl(38, 70%, 44%);
-  --accent-warm:   hsl(38, 70%, 64%);
-  --accent-bright: hsl(38, 70%, 84%);
-  --gradient:      linear-gradient(135deg, hsl(33, 70%, 44%) 0%, hsl(43, 70%, 64%) 100%);
-  --text-primary:  hsl(38, 20%, 92%);
-  --text-sub:      hsl(38, 10%, 58%);
-  --text-muted:    hsl(38,  8%, 34%);
-  --border:        rgba(255, 240, 210, 0.07);
-  --border-lit:    rgba(200, 146,  42, 0.30);
-  --border-solid:  #2c2826;
-  --surface-shadow: 0 1px 0 rgba(255, 240, 210, 0.06) inset,
-                    0 16px 40px rgba(0, 0, 0, 0.50);
+  --bg-deep:       #f7f6f3;
+  --bg-dark:       #f0efec;
+  --bg-card:       #ffffff;
+  --bg-elevated:   #eae9e6;
+  --accent:        hsl(33, 90%, 46%);
+  --accent-warm:   hsl(38, 85%, 40%);
+  --accent-bright: hsl(43, 80%, 54%);
+  --gradient:      linear-gradient(135deg, hsl(28, 90%, 46%) 0%, hsl(43, 86%, 58%) 100%);
+  --text-primary:  hsl(30, 12%, 10%);
+  --text-sub:      hsl(30,  6%, 38%);
+  --text-muted:    hsl(30,  4%, 58%);
+  --border:        rgba(0, 0, 0, 0.07);
+  --border-lit:    rgba(180, 110, 20, 0.28);
+  --border-solid:  #dddbd7;
+  --surface-shadow: 0 1px 0 rgba(255,255,255,0.9) inset,
+                    0 2px 8px rgba(0,0,0,0.04),
+                    0 10px 30px rgba(0,0,0,0.07);
   --tr:            0.3s ease;
   --font-display:  'Cormorant Garamond', Georgia, serif;
   --font-head:     'Space Grotesk', sans-serif;
@@ -49,9 +50,10 @@ ul { list-style: none; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: var(--bg-deep);
-  border-bottom: 1px solid var(--border);
+  background: rgba(247, 246, 243, 0.97);
+  border-bottom: 1px solid var(--border-solid);
   padding: 0.9rem 0;
+  box-shadow: 0 1px 20px rgba(0,0,0,0.06);
 }
 .cs-nav-inner {
   max-width: var(--max-w);
@@ -76,6 +78,7 @@ ul { list-style: none; }
   font-family: var(--font-head);
   font-size: 1.1rem;
   font-weight: 700;
+  color: var(--text-primary);
 }
 .cs-nav-logo span {
   background: var(--gradient);
@@ -96,11 +99,12 @@ ul { list-style: none; }
   padding: 140px 0 80px;
   position: relative;
   overflow: hidden;
+  background: var(--bg-card);
 }
 .cs-hero-bg {
   position: absolute;
   inset: 0;
-  opacity: 0.6;
+  opacity: 0.5;
   z-index: 0;
 }
 .cs-hero-inner { position: relative; z-index: 1; }
@@ -122,8 +126,8 @@ ul { list-style: none; }
 }
 .cs-tag {
   padding: 4px 12px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.04);
+  border: 1px solid var(--border-solid);
   border-radius: 100px;
   font-size: 0.68rem;
   font-weight: 500;
@@ -138,6 +142,7 @@ ul { list-style: none; }
   letter-spacing: -0.01em;
   line-height: 1.0;
   margin-bottom: 1.25rem;
+  color: var(--text-primary);
   text-wrap: balance;
   animation: csTitleRise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
 }
@@ -227,14 +232,7 @@ ul { list-style: none; }
 .cs-body {
   padding-bottom: 100px;
   position: relative;
-}
-.cs-body::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: none;
-  z-index: 0;
+  background: var(--bg-deep);
 }
 .cs-body > * { position: relative; z-index: 1; }
 .cs-section { margin-bottom: 80px; }
@@ -269,8 +267,8 @@ ul { list-style: none; }
 /* ── Image slots ── */
 .img-slot {
   width: 100%;
-  background: var(--bg-card);
-  border: 2px dashed rgba(255,255,255,0.1);
+  background: var(--bg-elevated);
+  border: 2px dashed var(--border-solid);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
@@ -292,7 +290,6 @@ ul { list-style: none; }
 .img-wide .img-slot  { aspect-ratio: 21/9; }
 .img-square .img-slot{ aspect-ratio: 1/1; }
 
-/* Actual images (once added) */
 .img-full img, .img-wide img, .img-square img {
   width: 100%;
   border-radius: var(--radius);
@@ -338,7 +335,7 @@ ul { list-style: none; }
 /* ── Next project ── */
 .cs-next {
   padding: 80px 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-solid);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -362,7 +359,7 @@ ul { list-style: none; }
 .cs-next a:hover .cs-next-title { color: var(--accent); }
 .cs-next-arrow {
   width: 52px; height: 52px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-solid);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   color: var(--text-sub);
@@ -381,6 +378,7 @@ ul { list-style: none; }
   .cs-results { grid-template-columns: 1fr 1fr; }
   .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
   .cs-next { flex-direction: column; align-items: flex-start; }
+  .cs-title { font-size: clamp(2.8rem, 10vw, 5rem); }
 }
 @media (max-width: 480px) {
   .cs-results { grid-template-columns: 1fr; }

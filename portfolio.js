@@ -150,23 +150,6 @@ document.querySelectorAll('.stat-n').forEach(el => {
   });
 });
 
-/* ── Editorial marquee (scroll-driven) ── */
-const marqueeWrap  = document.querySelector('.marquee-wrap');
-const marqueeStrip = document.querySelector('.marquee-strip');
-if (marqueeWrap && marqueeStrip) {
-  gsap.to(marqueeStrip, {
-    x: () => -(marqueeStrip.scrollWidth - window.innerWidth + 80),
-    ease: 'none',
-    scrollTrigger: {
-      trigger: marqueeWrap,
-      pin: true,
-      scrub: 1,
-      end: () => '+=' + marqueeStrip.scrollWidth * 0.5,
-      invalidateOnRefresh: true
-    }
-  });
-}
-
 /* ── 3D card tilt (GSAP-smoothed) ── */
 document.querySelectorAll('.proj-card').forEach(card => {
   card.addEventListener('mousemove', e => {

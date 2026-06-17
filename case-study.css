@@ -5,30 +5,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
 :root {
-  --bg-deep:      #07070f;
-  --bg-dark:      #0c0c18;
-  --bg-card:      #111122;
-  --bg-elevated:  #181830;
-  --accent:       #5b8cff;
-  --accent-2:     #9b6dff;
-  --gradient:     linear-gradient(135deg, #5b8cff 0%, #9b6dff 100%);
-  --text-primary: #ede9e4;
-  --text-sub:     #8e8ea8;
-  --text-muted:   #55557a;
-  --border:       rgba(255,255,255,0.07);
-  --border-lit:   rgba(91,140,255,0.28);
-  --glass-bg:     linear-gradient(160deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%);
-  --glass-border: rgba(255,255,255,0.07);
-  --glass-top:    rgba(255,255,255,0.22);
-  --glass-blur:   blur(40px) saturate(180%);
-  --glass-shadow: 0 16px 48px rgba(0,0,0,0.45), 0 4px 12px rgba(0,0,0,0.3);
-  --glass-hi:     inset 0 1px 0 rgba(255,255,255,0.16);
-  --tr:           0.3s ease;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-head:    'Space Grotesk', sans-serif;
-  --font-body:    'Inter', sans-serif;
-  --radius:       12px;
-  --max-w:        1040px;
+  --bg-deep:       #0c0a08;
+  --bg-dark:       #141210;
+  --bg-card:       #1c1a18;
+  --bg-elevated:   #242220;
+  --accent:        hsl(38, 70%, 44%);
+  --accent-warm:   hsl(38, 70%, 64%);
+  --accent-bright: hsl(38, 70%, 84%);
+  --gradient:      linear-gradient(135deg, hsl(33, 70%, 44%) 0%, hsl(43, 70%, 64%) 100%);
+  --text-primary:  hsl(38, 20%, 92%);
+  --text-sub:      hsl(38, 10%, 58%);
+  --text-muted:    hsl(38,  8%, 34%);
+  --border:        rgba(255, 240, 210, 0.07);
+  --border-lit:    rgba(200, 146,  42, 0.30);
+  --border-solid:  #2c2826;
+  --surface-shadow: 0 1px 0 rgba(255, 240, 210, 0.06) inset,
+                    0 16px 40px rgba(0, 0, 0, 0.50);
+  --tr:            0.3s ease;
+  --font-display:  'Cormorant Garamond', Georgia, serif;
+  --font-head:     'Space Grotesk', sans-serif;
+  --font-body:     'Inter', sans-serif;
+  --radius:        12px;
+  --max-w:         1040px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,9 +49,7 @@ ul { list-style: none; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(7,7,15,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--bg-deep);
   border-bottom: 1px solid var(--border);
   padding: 0.9rem 0;
 }
@@ -167,17 +163,14 @@ ul { list-style: none; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  background: var(--glass-border);
-  border-top: 1px solid var(--glass-border);
-  border-bottom: 1px solid var(--glass-border);
+  background: var(--border-solid);
+  border-top: 1px solid var(--border-solid);
+  border-bottom: 1px solid var(--border-solid);
   margin-bottom: 80px;
 }
 .cs-meta-cell {
   padding: 1.5rem 1.25rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-hi);
+  background: var(--bg-card);
 }
 .cs-meta-label {
   font-size: 0.68rem;
@@ -240,9 +233,7 @@ ul { list-style: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 50% at 10% 30%, rgba(91,140,255,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 60% at 90% 70%, rgba(155,109,255,0.06) 0%, transparent 55%);
+  background: none;
   z-index: 0;
 }
 .cs-body > * { position: relative; z-index: 1; }
@@ -325,12 +316,9 @@ ul { list-style: none; }
 }
 .cs-result-card {
   padding: 1.75rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-top-color: var(--glass-top);
-  box-shadow: var(--glass-hi), var(--glass-shadow);
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  box-shadow: var(--surface-shadow);
   border-radius: var(--radius);
   text-align: center;
 }

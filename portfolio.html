@@ -10,6 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="portfolio.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Observer.min.js"></script>
 </head>
 <body>
 
@@ -43,9 +46,6 @@
 
 <!-- ── Hero ───────────────────────────────────────── -->
 <section id="hero" class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <canvas id="particles-canvas"></canvas>
 
   <div class="hero-content" id="hero-content">
     <div class="hero-eyebrow">
@@ -168,6 +168,12 @@
       <button class="flt-btn" data-f="linx">Linx Security</button>
       <button class="flt-btn" data-f="presentation">Presentation</button>
       <button class="flt-btn" data-f="culture">Culture</button>
+    </div>
+
+    <div class="marquee-wrap">
+      <div class="marquee-strip">
+        MongoDB &nbsp;·&nbsp; DocuSign &nbsp;·&nbsp; AppOmni &nbsp;·&nbsp; BetterUp &nbsp;·&nbsp; Navan &nbsp;·&nbsp; Secureframe &nbsp;·&nbsp; Loft &nbsp;·&nbsp; Visa &nbsp;·&nbsp; MongoDB &nbsp;·&nbsp; DocuSign &nbsp;·&nbsp; AppOmni &nbsp;·&nbsp; BetterUp &nbsp;·&nbsp; Navan &nbsp;·&nbsp; Secureframe &nbsp;·&nbsp; Loft &nbsp;·&nbsp; Visa
+      </div>
     </div>
 
     <div class="proj-grid">
@@ -540,7 +546,7 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="nav-logo" style="margin-bottom:0.75rem;">AYO<span style="background:linear-gradient(135deg,#5b8cff,#9b6dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">.</span></div>
+        <div class="nav-logo" style="margin-bottom:0.75rem;">AYO<span>.</span></div>
         <p>Creative Systems Leader · UX/UI Storyteller · Brand Architect for Modern Teams.</p>
       </div>
       <div class="footer-col">
@@ -572,273 +578,7 @@
 <!-- Back to top -->
 <button id="back-top" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
 
-<!-- ══════════════════════════════════════════════════
-     JavaScript
-     ══════════════════════════════════════════════════ -->
-<script>
-(function () {
-  'use strict';
-
-  /* ── Body load ── */
-  document.body.classList.add('loaded');
-
-  /* ── Refs ── */
-  const progressBar  = document.getElementById('progress-bar');
-  const nav          = document.getElementById('p-nav');
-  const backTop      = document.getElementById('back-top');
-  const heroContent  = document.getElementById('hero-content');
-  const navToggle    = document.getElementById('nav-toggle');
-  const navLinks     = document.getElementById('nav-links');
-
-  /* ── Scroll handler ── */
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const sy    = window.scrollY;
-        const total = document.documentElement.scrollHeight - window.innerHeight;
-
-        // Progress bar
-        progressBar.style.width = (sy / total * 100) + '%';
-
-        // Nav glass
-        nav.classList.toggle('scrolled', sy > 60);
-
-        // Back-to-top
-        backTop.classList.toggle('show', sy > 400);
-
-        // Hero parallax
-        if (heroContent && sy < window.innerHeight) {
-          const p = sy / window.innerHeight;
-          heroContent.style.transform = `translateY(${sy * 0.28}px)`;
-          heroContent.style.opacity   = Math.max(0, 1 - p * 1.4);
-        }
-
-        // Image parallax
-        runParallax();
-
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-
-  /* ── Back to top ── */
-  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  /* ── Smooth scroll ── */
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const t = document.querySelector(a.getAttribute('href'));
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-    });
-  });
-
-  /* ── Mobile nav ── */
-  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
-
-  /* ── Reveal observer (sections, text blocks) ── */
-  const revObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-  document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .reveal-s').forEach(el => revObs.observe(el));
-
-  /* ── Image slide-up + scale ── */
-  const riseEls = document.querySelectorAll('.img-rise');
-  const riseObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const idx = [...riseEls].indexOf(e.target);
-        setTimeout(() => e.target.classList.add('in-view'), (idx % 3) * 110);
-        riseObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
-  riseEls.forEach(el => riseObs.observe(el));
-
-  /* ── Parallax ── */
-  function runParallax() {
-    document.querySelectorAll('.parallax-frame').forEach(frame => {
-      const img = frame.querySelector('.parallax-img');
-      if (!img) return;
-      const rect = frame.getBoundingClientRect();
-      const winH  = window.innerHeight;
-      if (rect.bottom < 0 || rect.top > winH) return;
-      const progress = (winH - rect.top) / (winH + rect.height);
-      const shift = (progress - 0.5) * 70;
-      img.style.transform = `scale(1.14) translateY(${shift}px)`;
-    });
-  }
-  runParallax();
-
-  /* ── Active nav link ── */
-  const sections   = document.querySelectorAll('section[id]');
-  const navAnchors = document.querySelectorAll('.nav-links a');
-  const activeObs  = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        navAnchors.forEach(a => a.classList.remove('active'));
-        const hit = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
-        if (hit) hit.classList.add('active');
-      }
-    });
-  }, { threshold: 0.45 });
-  sections.forEach(s => activeObs.observe(s));
-
-  /* ── Stat counters ── */
-  function countUp(el) {
-    const target = +el.dataset.target;
-    const dur    = 1600;
-    const start  = performance.now();
-    (function tick(now) {
-      const p = Math.min((now - start) / dur, 1);
-      el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
-      if (p < 1) requestAnimationFrame(tick);
-      else el.textContent = target;
-    })(start);
-  }
-  const cntObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); cntObs.unobserve(e.target); } });
-  }, { threshold: 0.6 });
-  document.querySelectorAll('.stat-n').forEach(el => cntObs.observe(el));
-
-  /* ── Typewriter ── */
-  const phrases = [
-    'Senior Visual Designer @ AppOmni',
-    'Former Creative Director @ MongoDB',
-    'Brand Architect for Modern Teams',
-    'Visual Storyteller for 15+ Years'
-  ];
-  const twEl  = document.getElementById('tw-text');
-  let pi = 0, ci = 0, del = false;
-
-  function type() {
-    const cur = phrases[pi];
-    if (del) {
-      twEl.textContent = cur.slice(0, --ci);
-      if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; setTimeout(type, 350); return; }
-      setTimeout(type, 35);
-    } else {
-      twEl.textContent = cur.slice(0, ++ci);
-      if (ci === cur.length) { del = true; setTimeout(type, 2200); return; }
-      setTimeout(type, 70);
-    }
-  }
-  setTimeout(type, 800);
-
-  /* ── Particles ── */
-  const canvas = document.getElementById('particles-canvas');
-  const ctx    = canvas.getContext('2d');
-
-  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const pts = Array.from({ length: 65 }, () => ({
-    x:  Math.random() * canvas.width,
-    y:  Math.random() * canvas.height,
-    r:  Math.random() * 1.6 + 0.3,
-    dx: (Math.random() - 0.5) * 0.22,
-    dy: (Math.random() - 0.5) * 0.22,
-    o:  Math.random() * 0.35 + 0.08,
-    c:  Math.random() > 0.5 ? '91,140,255' : '155,109,255'
-  }));
-
-  (function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Connection lines
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const d = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
-        if (d < 110) {
-          ctx.beginPath();
-          ctx.moveTo(pts[i].x, pts[i].y);
-          ctx.lineTo(pts[j].x, pts[j].y);
-          ctx.strokeStyle = `rgba(91,140,255,${0.07 * (1 - d / 110)})`;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
-      }
-    }
-    // Dots
-    pts.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${p.c},${p.o})`;
-      ctx.fill();
-      p.x += p.dx; p.y += p.dy;
-      if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
-      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-    });
-    requestAnimationFrame(draw);
-  })();
-
-  /* ── Heading line-mask reveal ── */
-  (function () {
-    function splitReveal(selector) {
-      document.querySelectorAll(selector).forEach(el => {
-        el.classList.add('heading-reveal');
-        const nodes = [...el.childNodes];
-        const lines = [[]];
-        nodes.forEach(node => {
-          if (node.nodeName === 'BR') lines.push([]);
-          else lines[lines.length - 1].push(node.cloneNode(true));
-        });
-        el.innerHTML = '';
-        lines.forEach((lineNodes, i) => {
-          if (!lineNodes.length) return;
-          const wrap  = document.createElement('span');
-          wrap.className = 'h-line';
-          const inner = document.createElement('span');
-          inner.className = 'h-line-inner';
-          inner.style.transitionDelay = (i * 85) + 'ms';
-          lineNodes.forEach(n => inner.appendChild(n));
-          wrap.appendChild(inner);
-          el.appendChild(wrap);
-        });
-      });
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-      document.querySelectorAll('.heading-reveal').forEach(el => obs.observe(el));
-    }
-    splitReveal('.section-title');
-  })();
-
-  /* ── Card 3D tilt ── */
-  document.querySelectorAll('.proj-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r  = card.getBoundingClientRect();
-      const x  = (e.clientX - r.left) / r.width  - 0.5;
-      const y  = (e.clientY - r.top)  / r.height - 0.5;
-      card.style.transform = `perspective(900px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateZ(6px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateZ(0)';
-    });
-  });
-
-  /* ── Project filter ── */
-  const filterBtns = document.querySelectorAll('.flt-btn');
-  const projCards  = document.querySelectorAll('.proj-card');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      const f = btn.dataset.f;
-      projCards.forEach(card => {
-        const cats = (card.dataset.cat || '').split(' ');
-        card.classList.toggle('faded', f !== 'all' && !cats.includes(f));
-      });
-    });
-  });
-
-})();
-</script>
+<script defer src="portfolio.js"></script>
 
 </body>
 </html>

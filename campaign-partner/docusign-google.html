@@ -10,10 +10,43 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../case-study.css">
   <style>
-    .cs-hero-bg { background: radial-gradient(ellipse 80%% 60%% at 10%% 60%%, rgba(66,133,244,0.14) 0%%, transparent 55%%); }
+    .cs-hero-bg { background: radial-gradient(ellipse 80% 60% at 10% 60%, rgba(66,133,244,0.14) 0%, transparent 55%); }
     .cs-tag { border-color: rgba(66,133,244,0.3); background: rgba(66,133,244,0.09); color: #4285F4; }
-    .cs-section-label { color: #4285F4; }
+    .cs-section-label { color: #26A9E0; }
     .g-text { background: linear-gradient(135deg, #4285F4, #4285F4cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Stacking card scroll ── */
+    .stack-section { margin-bottom: 80px; }
+    .stack-cards { position: relative; }
+    .stack-card {
+      position: sticky;
+      top: 72px;
+      width: 86%;
+      margin: 0 auto 28vh;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.12);
+      background: #fff;
+      will-change: transform;
+    }
+    .stack-card:last-child { margin-bottom: 0; }
+    .stack-card:nth-child(1) { z-index: 1; }
+    .stack-card:nth-child(2) { z-index: 2; }
+    .stack-card:nth-child(3) { z-index: 3; }
+    .stack-card:nth-child(4) { z-index: 4; }
+    .stack-card img, .stack-card video { width: 100%; display: block; }
+    .stack-card iframe { width: 100%; height: 580px; border: none; display: block; }
+    .stack-card .card-caption {
+      padding: 1.4rem 1.6rem;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border-solid);
+      background: rgba(255,255,255,0.9);
+    }
+    @media (max-width: 768px) {
+      .stack-card { width: 92%; top: 56px; }
+      .stack-card iframe { height: 380px; }
+    }
   </style>
 </head>
 <body>
@@ -48,43 +81,92 @@
 </div>
 
 <div class="cs-body">
-  <div class="container">
 
-    <!-- Overview -->
+  <div class="container">
     <div class="cs-section">
       <div class="cs-section-label">Overview</div>
       <h2 class="cs-section-title">DocuSign Digital Ad Campaigns</h2>
       <div class="cs-section-text">
-        <p>Digital advertising creative developed for DocuSign's partner and acquisition campaigns — spanning display, social, and paid search formats across multiple markets.</p>
+        <p>Digital advertising creative developed for DocuSign's partner and acquisition marketing — spanning display, social, and paid search across Google, LinkedIn, and programmatic channels.</p>
       </div>
     </div>
+  </div>
 
-    <!-- Behance gallery -->
-    <div class="cs-section behance-section">
-      <div class="cs-section-label">Full Project Gallery</div>
-      <h2 class="cs-section-title">View on Behance</h2>
-      <div class="behance-embed-wrap">
+  <div class="stack-section">
+    <div class="stack-cards">
+
+      <div class="stack-card">
         <iframe src="https://www.behance.net/embed/project/68436515?ilo0=1"
           allowfullscreen lazyload frameborder="0"
           allow="clipboard-write"
           referrerpolicy="strict-origin-when-cross-origin"
           title="DocuSign Digital Ad Campaigns — Behance"></iframe>
+        <div class="card-caption">DocuSign Digital Ad Campaigns — Partner &amp; Acquisition</div>
       </div>
-      <a href="https://www.behance.net/gallery/68436515/DocuSign-Digital-Ad-Campaigns" target="_blank" rel="noopener" class="behance-link">
-        <i class="fab fa-behance"></i> Open in Behance
-      </a>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cs-section">
+      <div class="cs-section-label">Approach</div>
+      <h2 class="cs-section-title">Enterprise Credibility, Human Warmth</h2>
+      <div class="cs-section-text">
+        <p>DocuSign's campaign creative needed to walk a fine line: enterprise-grade credibility without the coldness that often comes with it. The work focused on human moments — the relief of a deal closed, the confidence of a signature given — told through clean, high-contrast visual systems that performed across dozens of ad sizes and placements.</p>
+      </div>
+    </div>
+
+    <div class="cs-results">
+      <div class="cs-result-card">
+        <div class="cs-result-num">3</div>
+        <div class="cs-result-label">Google · LinkedIn · Programmatic</div>
+      </div>
+      <div class="cs-result-card">
+        <div class="cs-result-num">★</div>
+        <div class="cs-result-label">Multi-market rollout</div>
+      </div>
+      <div class="cs-result-card">
+        <div class="cs-result-num">3</div>
+        <div class="cs-result-label">Display + Social + Search</div>
+      </div>
     </div>
 
     <div class="cs-next">
       <div>
-        <div class="cs-next-label">Back</div>
-        <a href="../portfolio.html"><div class="cs-next-title">All Projects →</div></a>
+        <div class="cs-next-label">Next Project</div>
+        <a href="../portfolio.html">
+          <div class="cs-next-title">All Projects →</div>
+        </a>
       </div>
-      <a href="../portfolio.html"><div class="cs-next-arrow"><i class="fas fa-arrow-right"></i></div></a>
+      <a href="../portfolio.html">
+        <div class="cs-next-arrow"><i class="fas fa-arrow-right"></i></div>
+      </a>
     </div>
 
   </div>
 </div>
 
+<script>
+(function() {
+  function splitReveal(selector) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.add('heading-reveal');
+      const nodes = [...el.childNodes], lines = [[]];
+      nodes.forEach(node => { if (node.nodeName === 'BR') lines.push([]); else lines[lines.length-1].push(node.cloneNode(true)); });
+      el.innerHTML = '';
+      lines.forEach((ln, i) => {
+        if (!ln.length) return;
+        const w = document.createElement('span'); w.className = 'h-line';
+        const inner = document.createElement('span'); inner.className = 'h-line-inner';
+        inner.style.transitionDelay = (i * 85) + 'ms';
+        ln.forEach(n => inner.appendChild(n)); w.appendChild(inner); el.appendChild(w);
+      });
+    });
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } }), { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+    document.querySelectorAll('.heading-reveal').forEach(el => obs.observe(el));
+  }
+  splitReveal('.cs-section-title');
+})();
+</script>
 </body>
 </html>

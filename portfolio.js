@@ -14,12 +14,16 @@ gsap.registerPlugin(ScrollTrigger, Observer);
 /* ── Hero entrance timeline ── */
 const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 heroTl
-  .from('.hero-eyebrow',    { y: -20, opacity: 0, duration: 0.7 })
-  .from('.hero-name-inner', { yPercent: 106, duration: 1.1, stagger: 0.18 }, '-=0.4')
-  .from('.hero-sub',        { y: 24, opacity: 0, duration: 0.8 }, '-=0.6')
-  .from('.hero-typewriter', { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-cta',        { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-scroll',     { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
+  .from('.hero-eyebrow',         { y: -20, opacity: 0, duration: 0.7 })
+  .from('.hero-name-line .n-char', {
+    y: 80, opacity: 0, duration: 0.65,
+    stagger: { each: 0.038, from: 'start' },
+    ease: 'power4.out'
+  }, '-=0.3')
+  .from('.hero-sub',             { y: 24, opacity: 0, duration: 0.8 }, '-=0.2')
+  .from('.hero-typewriter',      { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
+  .from('.hero-cta',             { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
+  .from('.hero-scroll',          { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
 gsap.to('#hero-content', {
@@ -161,20 +165,22 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
   const LETTERS = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
   const SRCS = [
+    './images/ayo_wilderness_bw.jpg',
     './images/appomni/rsa-booth.png',
-    './images/mongodb/4ac51aab-9cc8-444c-8805-575ba5c01a61_rw_1920.png',
-    './images/appomni/IMG_7833.jpeg',
+    './images/ayo-music.png',
+    './images/appomni/Demo_Request_Click_Linkedin_LG_NA_M3.png',
+    './images/navan/hello-sustainability.jpeg',
     './images/mongodb/727a56dd-b489-4dc2-b29c-a0bb14210d81_rw_1920.png',
   ];
 
   /* Timing */
-  const REVEAL_DUR = 2400; /* ms — mask shrinks from full-image to letter edges  */
-  const HOLD_DUR   =  900; /* ms — show the letter clearly before transition      */
-  const FADE_DUR   =  800; /* ms — crossfade to next image (opacity, no squish)   */
+  const REVEAL_DUR = 2200; /* ms — mask shrinks from full-image to letter edges  */
+  const HOLD_DUR   =  700; /* ms — show the letter clearly before transition      */
+  const FADE_DUR   =  900; /* ms — crossfade to next image (opacity, no squish)   */
   /* At MASK_MAX the letter overflows the canvas entirely → full image visible     */
   const MASK_MAX   =  3.6;
   /* Each image zooms continuously from the moment it first appears                */
-  const ZOOM_RATE  = 0.000011; /* ~1.1 % larger per second                        */
+  const ZOOM_RATE  = 0.000015; /* ~1.5 % larger per second — visible on dense images */
 
   const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
   const dpr  = Math.min(window.devicePixelRatio || 1, 2);

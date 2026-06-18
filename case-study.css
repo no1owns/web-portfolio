@@ -2,8 +2,6 @@
    case-study.css — shared styles for all case study pages
    ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
-
 :root {
   --bg-deep:       #f7f6f3;
   --bg-dark:       #f0efec;
@@ -23,7 +21,7 @@
                     0 2px 8px rgba(0,0,0,0.04),
                     0 10px 30px rgba(0,0,0,0.07);
   --tr:            0.3s ease;
-  --font-display:  'Cormorant Garamond', Georgia, serif;
+  --font-display:  'Space Grotesk', sans-serif;
   --font-head:     'Space Grotesk', sans-serif;
   --font-body:     'Inter', sans-serif;
   --radius:        12px;
@@ -144,13 +142,13 @@ ul { list-style: none; }
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-sub);
 }
 .cs-title {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: clamp(3.2rem, 8vw, 7rem);
-  font-weight: 300;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1.0;
   margin-bottom: 1.25rem;
   color: var(--text-primary);
@@ -255,16 +253,16 @@ ul { list-style: none; }
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-sub);
   margin-bottom: 0.75rem;
 }
 .cs-section-title {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-  font-weight: 400;
+  font-weight: 700;
   margin-bottom: 1rem;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
   line-height: 1.1;
   text-wrap: balance;
 }
@@ -335,9 +333,9 @@ ul { list-style: none; }
   text-align: center;
 }
 .cs-result-num {
-  font-family: var(--font-display);
-  font-size: 3.2rem;
-  font-weight: 300;
+  font-family: var(--font-head);
+  font-size: 2.8rem;
+  font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
   margin-bottom: 0.4rem;
@@ -365,9 +363,9 @@ ul { list-style: none; }
   margin-bottom: 0.5rem;
 }
 .cs-next-title {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 400;
+  font-weight: 600;
   color: var(--text-primary);
   transition: color var(--tr);
 }
@@ -431,4 +429,100 @@ ul { list-style: none; }
 @media (max-width: 480px) {
   .cs-results { grid-template-columns: 1fr; }
   .cs-meta { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Animated gradient background ── */
+.cs-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cs-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+.cs-blob:nth-child(1) { animation: blobDrift1 24s ease-in-out infinite; }
+.cs-blob:nth-child(2) { animation: blobDrift2 31s ease-in-out infinite; }
+.cs-blob:nth-child(3) { animation: blobDrift3 38s ease-in-out infinite; }
+
+@keyframes blobDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(7%, 5%) scale(1.06); }
+}
+@keyframes blobDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(-6%, -8%) scale(0.94); }
+}
+@keyframes blobDrift3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(4%, -6%) scale(1.10); }
+}
+
+/* ── Light background mode ── */
+body.light-bg {
+  background: #f7f6f3;
+  color: #1a1714;
+}
+body.light-bg .cs-nav {
+  background: rgba(247, 246, 243, 0.88);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+body.light-bg .cs-nav-logo { color: #1a1714; }
+body.light-bg .cs-back { color: rgba(0, 0, 0, 0.45); }
+body.light-bg .cs-nav-right { color: rgba(0, 0, 0, 0.35); }
+body.light-bg .cs-breadcrumb { color: rgba(0, 0, 0, 0.38); }
+body.light-bg .cs-breadcrumb a { color: rgba(0, 0, 0, 0.50); }
+body.light-bg .cs-hero {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+body.light-bg .cs-meta {
+  background: transparent;
+  border-color: rgba(0, 0, 0, 0.07);
+}
+body.light-bg .cs-meta-cell {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+body.light-bg .cs-meta-label { color: rgba(0, 0, 0, 0.42); }
+body.light-bg .cs-meta-value { color: rgba(0, 0, 0, 0.85); }
+body.light-bg .cs-section-label { color: rgba(0, 0, 0, 0.42); }
+body.light-bg .cs-tag {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.14);
+  color: rgba(0, 0, 0, 0.58);
+}
+body.light-bg .cs-title { color: #1a1714; }
+body.light-bg .cs-summary { color: rgba(0, 0, 0, 0.60); }
+body.light-bg .cs-section-title { color: #1a1714; }
+body.light-bg .cs-section-text { color: rgba(0, 0, 0, 0.62); }
+body.light-bg .cs-body { background: transparent; }
+body.light-bg .cs-result-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.90);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+}
+body.light-bg .cs-result-num { color: #1a1714; }
+body.light-bg .cs-result-label { color: rgba(0, 0, 0, 0.55); }
+body.light-bg .cs-next { border-top-color: rgba(0, 0, 0, 0.08); }
+body.light-bg .cs-next-label { color: rgba(0, 0, 0, 0.38); }
+body.light-bg .cs-next-title { color: #1a1714; }
+body.light-bg .cs-next a:hover .cs-next-title { color: inherit; opacity: 0.6; }
+body.light-bg .cs-next-arrow {
+  border-color: rgba(0, 0, 0, 0.14);
+  color: rgba(0, 0, 0, 0.42);
+}
+body.light-bg .img-slot {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.35);
 }

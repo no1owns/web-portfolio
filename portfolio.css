@@ -2,8 +2,6 @@
    portfolio.css — Ayodeji Akintilo Portfolio
    ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
-
 :root {
   /* Backgrounds — each surface steps +8 per channel (warm bias: R > G > B) */
   --bg-deep:       #0c0a08;   /* (12, 10,  8)  — base */
@@ -36,7 +34,7 @@
   --tr-fast:      0.15s ease;
   --tr-med:       0.35s ease;
   --tr-slow:      0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --font-head:    'Space Grotesk', sans-serif;
   --font-body:    'Inter', sans-serif;
   --radius:       14px;
@@ -230,11 +228,11 @@ ul { list-style: none; }
   50%       { opacity: 0.5; transform: scale(0.6); }
 }
 .hero-name {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: clamp(4.5rem, 13vw, 10rem);
-  font-weight: 300;
+  font-weight: 700;
   line-height: 0.95;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.035em;
   margin-bottom: 1.5rem;
 }
 
@@ -338,14 +336,14 @@ ul { list-style: none; }
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-sub);
   margin-bottom: 0.9rem;
 }
 .section-title {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: clamp(2.4rem, 5vw, 4.2rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1.1;
   margin-bottom: 0.9rem;
   text-wrap: balance;
@@ -506,16 +504,16 @@ ul { list-style: none; }
   gap: 1px;
 }
 .stat-n {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: 3.4rem;
-  font-weight: 300;
+  font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
 }
 .stat-plus {
-  font-family: var(--font-display);
+  font-family: var(--font-head);
   font-size: 2.2rem;
-  font-weight: 300;
+  font-weight: 600;
   color: var(--text-sub);
 }
 .stat-lbl {
@@ -533,8 +531,8 @@ ul { list-style: none; }
 .marquee-strip {
   display: inline-block;
   white-space: nowrap;
-  font-family: var(--font-display);
-  font-style: italic;
+  font-family: var(--font-head);
+  font-style: normal;
   font-weight: 700;
   font-size: clamp(4rem, 8vw, 8rem);
   line-height: 1;
@@ -670,7 +668,7 @@ ul { list-style: none; }
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-sub);
 }
 .proj-foot-title {
   font-family: var(--font-head);
@@ -680,7 +678,7 @@ ul { list-style: none; }
 }
 .proj-year {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: var(--text-sub);
 }
 
 /* ── Experience ── */

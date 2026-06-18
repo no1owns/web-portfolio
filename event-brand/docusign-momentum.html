@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../case-study.css">
   <style>
-    .cs-hero-bg {
-      background: radial-gradient(ellipse 70% 50% at 10% 60%, rgba(30,60,120,0.12) 0%, transparent 55%);
-    }
+    .cs-hero-bg { background: radial-gradient(ellipse 70% 50% at 10% 60%, rgba(30,60,120,0.12) 0%, transparent 55%); }
+    .cs-tag { border-color: rgba(26,95,214,0.25); background: rgba(26,95,214,0.07); color: #1a5fd6; }
+    .cs-section-label { color: #1a5fd6; }
+    .g-text { background: linear-gradient(135deg, #1a5fd6, #4285F4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
     /* ── Bento grid ── */
     .bento-wrap {
@@ -103,7 +104,13 @@
     }
   </style>
 </head>
-<body>
+<body class="light-bg">
+
+<div class="cs-bg" aria-hidden="true">
+  <div class="cs-blob" style="width:78vw;height:78vw;top:-20%;right:-14%;background:radial-gradient(circle,rgba(26,95,214,0.13),transparent 65%);"></div>
+  <div class="cs-blob" style="width:62vw;height:62vw;bottom:-18%;left:-7%;background:radial-gradient(circle,rgba(66,133,244,0.09),transparent 65%);"></div>
+  <div class="cs-blob" style="width:50vw;height:50vw;top:38%;left:25%;background:radial-gradient(circle,rgba(30,60,160,0.06),transparent 70%);"></div>
+</div>
 
 <nav class="cs-nav">
   <div class="cs-nav-inner">

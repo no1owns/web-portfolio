@@ -293,6 +293,34 @@ ul { list-style: none; }
 }
 .hero-name-inner {
   display: block;
+  /* initial state set by GSAP */
+}
+
+/* Per-character spans for staggered animation */
+.n-char {
+  display: inline-block;
+}
+
+/* Animated gradient fill for first name */
+.n-gradient {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    hsl(33, 72%, 42%) 0%,
+    hsl(44, 88%, 68%) 35%,
+    hsl(38, 80%, 58%) 60%,
+    hsl(33, 72%, 42%) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: nameShimmer 5s ease-in-out infinite;
+}
+@keyframes nameShimmer {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 .hero-sub {
   font-size: clamp(1rem, 2.5vw, 1.25rem);

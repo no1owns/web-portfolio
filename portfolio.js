@@ -14,12 +14,16 @@ gsap.registerPlugin(ScrollTrigger, Observer);
 /* ── Hero entrance timeline ── */
 const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 heroTl
-  .from('.hero-eyebrow',    { y: -20, opacity: 0, duration: 0.7 })
-  .from('.hero-name-inner', { yPercent: 106, duration: 1.1, stagger: 0.18 }, '-=0.4')
-  .from('.hero-sub',        { y: 24, opacity: 0, duration: 0.8 }, '-=0.6')
-  .from('.hero-typewriter', { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-cta',        { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-scroll',     { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
+  .from('.hero-eyebrow',         { y: -20, opacity: 0, duration: 0.7 })
+  .from('.hero-name-line .n-char', {
+    y: 80, opacity: 0, duration: 0.65,
+    stagger: { each: 0.038, from: 'start' },
+    ease: 'power4.out'
+  }, '-=0.3')
+  .from('.hero-sub',             { y: 24, opacity: 0, duration: 0.8 }, '-=0.2')
+  .from('.hero-typewriter',      { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
+  .from('.hero-cta',             { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
+  .from('.hero-scroll',          { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
 gsap.to('#hero-content', {

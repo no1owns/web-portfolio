@@ -242,21 +242,23 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
   hero.addEventListener('mouseleave', () => { mouse.active = false; });
 
-  /* Fade canvas out as hero scrolls away */
-  gsap.to(canvas, {
-    opacity: 0,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: '45% top',
-      scrub: true
-    }
-  });
-
   window.addEventListener('resize', resize, { passive: true });
   resize();
   draw();
+
+  /* Fade canvas out as hero scrolls away — only once GSAP is confirmed loaded */
+  if (typeof gsap !== 'undefined') {
+    gsap.to(canvas, {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: '45% top',
+        scrub: true
+      }
+    });
+  }
 })();
 
 /* ── 3D card tilt (GSAP-smoothed) ── */

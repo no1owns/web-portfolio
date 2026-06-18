@@ -47,6 +47,7 @@
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
 body {
   font-family: var(--font-body);
   background: var(--bg-deep);
@@ -273,6 +274,11 @@ ul { list-style: none; }
   border-radius: 50%;
   animation: pulse-dot 2s ease infinite;
 }
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.4; transform: scale(0.65); }
@@ -710,7 +716,7 @@ ul { list-style: none; }
   display: flex;
   align-items: flex-end;
   padding: 1.25rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
+  background: linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,0.28) 100%);
   opacity: 0;
   transition: opacity var(--tr-med);
 }

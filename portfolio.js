@@ -532,7 +532,9 @@ filterBtns.forEach(btn => {
     const f = btn.dataset.f;
     projCards.forEach(card => {
       const cats = (card.dataset.cat || '').split(' ');
-      card.classList.toggle('faded', f !== 'all' && !cats.includes(f));
+      const hide = f !== 'all' && !cats.includes(f);
+      card.classList.toggle('faded', hide);
+      gsap.to(card, { opacity: hide ? 0.25 : 1, duration: 0.3, overwrite: 'auto' });
     });
   });
 });

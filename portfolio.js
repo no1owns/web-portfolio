@@ -150,6 +150,115 @@ document.querySelectorAll('.stat-n').forEach(el => {
   });
 });
 
+/* ── Hero line field ── */
+(function initLineField() {
+  const canvas = document.getElementById('hero-lines');
+  if (!canvas) return;
+  const ctx    = canvas.getContext('2d');
+  const hero   = document.getElementById('hero');
+
+  const SPACING      = 48;
+  const LEN          = 15;
+  const BASE_ALPHA   = 0.048;
+  const PEAK_ALPHA   = 0.22;
+  const RADIUS       = 260;   /* cursor influence radius px */
+  const SPRING       = 0.10;  /* how fast lines chase cursor */
+  const REST_SPRING  = 0.018; /* how fast lines drift back */
+
+  let mouse  = { x: -9999, y: -9999, active: false };
+  let lines  = [];
+  let rafId;
+
+  function resize() {
+    canvas.width  = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+    buildGrid();
+  }
+
+  function buildGrid() {
+    lines = [];
+    const cols = Math.ceil(canvas.width  / SPACING) + 1;
+    const rows = Math.ceil(canvas.height / SPACING) + 1;
+    for (let r = 0; r <= rows; r++) {
+      for (let c = 0; c <= cols; c++) {
+        const a = (Math.random() - 0.5) * Math.PI * 0.4; /* start near horizontal */
+        lines.push({ x: c * SPACING, y: r * SPACING, angle: a, rest: a });
+      }
+    }
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function shortAngleDist(a, b) {
+    let d = b - a;
+    while (d >  Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    return d;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 1;
+
+    for (const l of lines) {
+      const dx   = mouse.x - l.x;
+      const dy   = mouse.y - l.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      let target, speed;
+      if (mouse.active && dist < RADIUS) {
+        target = Math.atan2(dy, dx);
+        speed  = SPRING * (1 - dist / RADIUS);
+      } else {
+        target = l.rest;
+        speed  = REST_SPRING;
+      }
+
+      l.angle += shortAngleDist(l.angle, target) * speed;
+
+      const proximity = mouse.active ? Math.max(0, 1 - dist / RADIUS) : 0;
+      const alpha = lerp(BASE_ALPHA, PEAK_ALPHA, proximity * proximity);
+
+      const cos = Math.cos(l.angle);
+      const sin = Math.sin(l.angle);
+      const half = LEN / 2;
+
+      ctx.strokeStyle = `rgba(160, 96, 16, ${alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(l.x - cos * half, l.y - sin * half);
+      ctx.lineTo(l.x + cos * half, l.y + sin * half);
+      ctx.stroke();
+    }
+
+    rafId = requestAnimationFrame(draw);
+  }
+
+  hero.addEventListener('mousemove', e => {
+    const r   = hero.getBoundingClientRect();
+    mouse.x   = e.clientX - r.left;
+    mouse.y   = e.clientY - r.top;
+    mouse.active = true;
+  }, { passive: true });
+
+  hero.addEventListener('mouseleave', () => { mouse.active = false; });
+
+  /* Fade canvas out as hero scrolls away */
+  gsap.to(canvas, {
+    opacity: 0,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '45% top',
+      scrub: true
+    }
+  });
+
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+  draw();
+})();
+
 /* ── 3D card tilt (GSAP-smoothed) ── */
 document.querySelectorAll('.proj-card').forEach(card => {
   card.addEventListener('mousemove', e => {

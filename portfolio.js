@@ -153,58 +153,135 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 } /* end gsap guard */
 
-/* ── Text mask cycling showcase ── */
-(function initMask() {
-  const word = document.getElementById('hero-mask-word');
-  if (!word) return;
+/* ── Full-width image-mask canvas ── */
+(function initMaskCanvas() {
+  const canvas = document.getElementById('hero-mask-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
-  const slides = [
-    { text: 'BRAND',   img: './images/appomni/rsa-booth.png' },
-    { text: 'EVENTS',  img: './images/appomni/IMG_7833.jpeg' },
-    { text: 'DESIGN',  img: './images/appomni/Demo_Request_Click_Linkedin_LG_NA_M3.png' },
-    { text: 'SYSTEMS', img: './images/appomni/rsa-booth.png' },
+  const WORD = 'DESIGN';
+  const SRCS = [
+    './images/appomni/rsa-booth.png',
+    './images/mongodb/4ac51aab-9cc8-444c-8805-575ba5c01a61_rw_1920.png',
+    './images/appomni/IMG_7833.jpeg',
   ];
 
-  let current = 0;
-  let mouseX = 0.5; /* 0–1 normalised */
+  const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
+  const dpr  = Math.min(window.devicePixelRatio || 1, 2);
 
-  function applySlide(idx) {
-    const s = slides[idx];
-    word.textContent = s.text;
-    word.style.backgroundImage = `url('${s.img}')`;
+  let w = 0, h = 0, fs = 100, textY = 0;
+  let mouseXn = 0.5; /* 0–1 normalised */
+
+  /* Crossfade state */
+  let from = 0, to = 1, fadeT = 0, holdMs = 0, lastTs = 0;
+  const HOLD = 3400, FADE = 900; /* ms */
+
+  function resize() {
+    const cw = canvas.offsetWidth || window.innerWidth;
+    /* Measure base width at 100px to derive fill font-size */
+    ctx.font = `700 100px "Space Grotesk", sans-serif`;
+    const baseW = ctx.measureText(WORD).width;
+    fs = Math.floor(cw * 0.97 / baseW * 100);
+
+    /* Precise bounding box for canvas height */
+    ctx.font = `700 ${fs}px "Space Grotesk", sans-serif`;
+    const m   = ctx.measureText(WORD);
+    const asc = m.actualBoundingBoxAscent  || fs * 0.73;
+    const dsc = m.actualBoundingBoxDescent || fs * 0.08;
+    const pad = Math.ceil(fs * 0.07);
+    const ch  = Math.ceil(asc + dsc + pad * 2);
+    textY = pad + asc; /* baseline position in logical px */
+
+    canvas.width        = Math.round(cw * dpr);
+    canvas.height       = Math.round(ch * dpr);
+    canvas.style.height = ch + 'px';
+    w = cw; h = ch;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function updateBgPosition() {
-    /* pan image left↔right based on cursor/touch position */
-    const pct = 30 + mouseX * 40; /* 30%–70% */
-    word.style.backgroundPosition = `${pct}% center`;
+  function coverImg(img, shiftX) {
+    if (!img.naturalWidth) return;
+    const s  = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    const dw = img.naturalWidth  * s;
+    const dh = img.naturalHeight * s;
+    ctx.drawImage(img, (w - dw) / 2 + shiftX, (h - dh) / 2, dw, dh);
   }
 
-  function advance() {
-    word.style.opacity = '0';
-    setTimeout(() => {
-      current = (current + 1) % slides.length;
-      applySlide(current);
-      word.style.opacity = '1';
-    }, 220);
+  function frame(ts) {
+    const dt = Math.min(ts - lastTs, 80);
+    lastTs = ts;
+
+    ctx.clearRect(0, 0, w, h);
+    const imgA = imgs[from];
+    if (!imgA?.complete || !imgA.naturalWidth) { requestAnimationFrame(frame); return; }
+
+    /* Variable-font weight morph: 300 → 700 → 300 over 5 s */
+    const fw = Math.round(300 + ((Math.sin(ts / 5000 * Math.PI * 2) + 1) / 2) * 400);
+    /* Vertical scale breathe: 1.0 → 1.07 over 7 s, phase-shifted */
+    const sy = 1 + ((Math.sin(ts / 7000 * Math.PI * 2 + Math.PI * 0.5) + 1) / 2) * 0.07;
+    /* Mouse parallax: ±8 % of width */
+    const px = (mouseXn - 0.5) * w * 0.16;
+
+    /* Advance crossfade timer */
+    holdMs += dt;
+    if (holdMs > HOLD) {
+      fadeT = Math.min((holdMs - HOLD) / FADE, 1);
+      if (fadeT >= 1) {
+        from = to;
+        to   = (to + 1) % imgs.length;
+        fadeT = 0; holdMs = 0;
+      }
+    }
+
+    ctx.save();
+
+    /* Draw image(s) — no distortion, straight cover */
+    if (fadeT < 1) {
+      ctx.globalAlpha = 1 - fadeT;
+      coverImg(imgA, px);
+    }
+    const imgB = imgs[to];
+    if (fadeT > 0 && imgB?.complete && imgB.naturalWidth) {
+      ctx.globalAlpha = fadeT;
+      coverImg(imgB, -px * 0.4);
+    }
+    ctx.globalAlpha = 1;
+
+    /* Apply vertical morph to the text mask only */
+    ctx.translate(w / 2, h / 2);
+    ctx.scale(1, sy);
+    ctx.translate(-w / 2, -h / 2);
+
+    /* Clip image pixels to letter shapes */
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.font          = `${fw} ${fs}px "Space Grotesk", sans-serif`;
+    ctx.textAlign     = 'center';
+    ctx.textBaseline  = 'alphabetic';
+    ctx.fillStyle     = '#000';
+    ctx.fillText(WORD, w / 2, textY);
+
+    ctx.restore();
+    requestAnimationFrame(frame);
   }
 
-  /* Cursor parallax */
+  /* Mouse / touch parallax — listen on hero so pointer-events:none on canvas is fine */
   const hero = document.getElementById('hero');
   if (hero) {
     hero.addEventListener('mousemove', e => {
-      mouseX = e.clientX / window.innerWidth;
-      updateBgPosition();
+      mouseXn = e.clientX / window.innerWidth;
     }, { passive: true });
     hero.addEventListener('touchmove', e => {
-      mouseX = e.touches[0].clientX / window.innerWidth;
-      updateBgPosition();
+      mouseXn = e.touches[0].clientX / window.innerWidth;
     }, { passive: true });
   }
 
-  applySlide(0);
-  updateBgPosition();
-  setInterval(advance, 3200);
+  window.addEventListener('resize', resize, { passive: true });
+
+  /* Start after fonts are ready so measurement is accurate */
+  document.fonts.ready.then(() => {
+    resize();
+    requestAnimationFrame(frame);
+  });
 })();
 
 /* ── Hero line field ── */

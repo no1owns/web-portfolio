@@ -209,34 +209,20 @@ ul { list-style: none; }
   overflow: hidden;
   background: var(--bg-card);
 }
-/* ── Text mask showcase ── */
-.hero-mask {
+/* ── Full-width image-mask canvas ── */
+#hero-mask-canvas {
+  display: block;
+  /* Break out of .hero-content max-width constraint */
+  width: 100vw;
   position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 1.4rem 0 0.6rem;
+  /* height set dynamically by JS via canvas.style.height */
+  min-height: clamp(80px, 18vw, 280px);
   z-index: 2;
-  margin: 1.5rem 0 0.5rem;
-  height: clamp(5rem, 12vw, 9rem);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hero-mask-word {
-  font-family: var(--font-head);
-  font-size: clamp(5rem, 14vw, 11rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
-  color: transparent;
-  background-image: url('./images/appomni/rsa-booth.png');
-  background-size: cover;
-  background-position: center;
-  -webkit-background-clip: text;
-  background-clip: text;
-  will-change: background-position, opacity;
-  transition: opacity 0.2s ease;
+  pointer-events: none;
   user-select: none;
-  cursor: default;
 }
 
 /* Line field canvas */

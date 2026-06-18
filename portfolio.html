@@ -7,7 +7,7 @@
   <meta name="description" content="Ayo Akintilo — Creative Systems Leader, UX/UI Storyteller, Brand Architect. 15+ years crafting visual narratives for MongoDB, DocuSign, BetterUp, and more.">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="portfolio.css">
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
@@ -60,10 +60,8 @@
     </h1>
     <p class="hero-sub">Creative Systems Leader &nbsp;·&nbsp; UX/UI Storyteller &nbsp;·&nbsp; Brand Architect</p>
 
-    <!-- Text mask showcase -->
-    <div class="hero-mask" aria-hidden="true">
-      <div class="hero-mask-word" id="hero-mask-word">BRAND</div>
-    </div>
+    <!-- Full-width image-mask canvas -->
+    <canvas id="hero-mask-canvas" aria-hidden="true"></canvas>
 
     <p class="hero-typewriter">
       Currently: <span id="tw-text" class="tw-text"></span><span class="tw-cursor">|</span>

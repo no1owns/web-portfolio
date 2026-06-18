@@ -94,12 +94,23 @@ ul { list-style: none; }
   color: var(--text-muted);
 }
 
+/* ── Per-brand atmospheric backdrop ── */
+.cs-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* gradient set inline per page */
+}
+
 /* ── Hero ── */
 .cs-hero {
   padding: 140px 0 80px;
   position: relative;
   overflow: hidden;
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
 }
 .cs-hero-bg {
   position: absolute;
@@ -175,7 +186,9 @@ ul { list-style: none; }
 }
 .cs-meta-cell {
   padding: 1.5rem 1.25rem;
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 .cs-meta-label {
   font-size: 0.68rem;
@@ -232,7 +245,7 @@ ul { list-style: none; }
 .cs-body {
   padding-bottom: 100px;
   position: relative;
-  background: var(--bg-deep);
+  background: transparent;
 }
 .cs-body > * { position: relative; z-index: 1; }
 .cs-section { margin-bottom: 80px; }
@@ -313,9 +326,11 @@ ul { list-style: none; }
 }
 .cs-result-card {
   padding: 1.75rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-solid);
-  box-shadow: var(--surface-shadow);
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.80);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset, 0 4px 24px rgba(0,0,0,0.07), 0 12px 40px rgba(0,0,0,0.06);
   border-radius: var(--radius);
   text-align: center;
 }

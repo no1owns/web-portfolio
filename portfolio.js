@@ -153,118 +153,111 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 } /* end gsap guard */
 
-/* ── Full-width image-mask canvas ── */
+/* ── Single-letter image-mask with squish→bloom morph ── */
 (function initMaskCanvas() {
   const canvas = document.getElementById('hero-mask-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  const WORD = 'DESIGN';
+  /* Letters from "Ayodeji Akintilo" — each a distinct silhouette */
+  const LETTERS = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
   const SRCS = [
     './images/appomni/rsa-booth.png',
     './images/mongodb/4ac51aab-9cc8-444c-8805-575ba5c01a61_rw_1920.png',
     './images/appomni/IMG_7833.jpeg',
+    './images/mongodb/727a56dd-b489-4dc2-b29c-a0bb14210d81_rw_1920.png',
   ];
 
   const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
   const dpr  = Math.min(window.devicePixelRatio || 1, 2);
 
-  let w = 0, h = 0, fs = 100, textY = 0;
-  let mouseXn = 0.5; /* 0–1 normalised */
+  let w = 0, h = 0;
+  let li      = 0; /* current letter index */
+  let imgCur  = 0; /* current image index  */
+  let mouseXn = 0.5;
 
-  /* Crossfade state */
-  let from = 0, to = 1, fadeT = 0, holdMs = 0, lastTs = 0;
-  const HOLD = 3400, FADE = 900; /* ms */
+  /* Morph state — driven by GSAP between letter transitions */
+  const m = { sx: 1, sy: 1, rot: 0 };
+
+  function letterFs(letter) {
+    /* Scale font so letter fills ~88 % of canvas width, capped by canvas height */
+    ctx.font = `700 100px "Space Grotesk", sans-serif`;
+    const bw      = ctx.measureText(letter).width;
+    const byWidth = Math.floor(w * 0.88 / bw * 100);
+    const byHeight = Math.floor(h / 0.74); /* 0.74 ≈ cap-height / font-size ratio */
+    return Math.min(byWidth, byHeight);
+  }
 
   function resize() {
     const cw = canvas.offsetWidth || window.innerWidth;
-    /* Measure base width at 100px to derive fill font-size */
-    ctx.font = `700 100px "Space Grotesk", sans-serif`;
-    const baseW = ctx.measureText(WORD).width;
-    fs = Math.floor(cw * 0.97 / baseW * 100);
-
-    /* Precise bounding box for canvas height */
-    ctx.font = `700 ${fs}px "Space Grotesk", sans-serif`;
-    const m   = ctx.measureText(WORD);
-    const asc = m.actualBoundingBoxAscent  || fs * 0.73;
-    const dsc = m.actualBoundingBoxDescent || fs * 0.08;
-    const pad = Math.ceil(fs * 0.07);
-    const ch  = Math.ceil(asc + dsc + pad * 2);
-    textY = pad + asc; /* baseline position in logical px */
-
+    /* Canvas height = 48 % of viewport height, capped at 560 px */
+    const ch = Math.round(Math.min(window.innerHeight * 0.48, 560));
+    w = cw; h = ch;
     canvas.width        = Math.round(cw * dpr);
     canvas.height       = Math.round(ch * dpr);
     canvas.style.height = ch + 'px';
-    w = cw; h = ch;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function coverImg(img, shiftX) {
-    if (!img.naturalWidth) return;
+  function coverImg(img) {
+    if (!img?.complete || !img.naturalWidth) return;
+    const px = (mouseXn - 0.5) * w * 0.12; /* mouse parallax */
     const s  = Math.max(w / img.naturalWidth, h / img.naturalHeight);
     const dw = img.naturalWidth  * s;
     const dh = img.naturalHeight * s;
-    ctx.drawImage(img, (w - dw) / 2 + shiftX, (h - dh) / 2, dw, dh);
+    ctx.drawImage(img, (w - dw) / 2 + px, (h - dh) / 2, dw, dh);
   }
 
-  function frame(ts) {
-    const dt = Math.min(ts - lastTs, 80);
-    lastTs = ts;
-
+  function frame() {
     ctx.clearRect(0, 0, w, h);
-    const imgA = imgs[from];
-    if (!imgA?.complete || !imgA.naturalWidth) { requestAnimationFrame(frame); return; }
 
-    /* Variable-font weight morph: 300 → 700 → 300 over 5 s */
-    const fw = Math.round(300 + ((Math.sin(ts / 5000 * Math.PI * 2) + 1) / 2) * 400);
-    /* Vertical scale breathe: 1.0 → 1.07 over 7 s, phase-shifted */
-    const sy = 1 + ((Math.sin(ts / 7000 * Math.PI * 2 + Math.PI * 0.5) + 1) / 2) * 0.07;
-    /* Mouse parallax: ±8 % of width */
-    const px = (mouseXn - 0.5) * w * 0.16;
+    /* Draw portfolio image — full-canvas cover */
+    coverImg(imgs[imgCur % imgs.length]);
 
-    /* Advance crossfade timer */
-    holdMs += dt;
-    if (holdMs > HOLD) {
-      fadeT = Math.min((holdMs - HOLD) / FADE, 1);
-      if (fadeT >= 1) {
-        from = to;
-        to   = (to + 1) % imgs.length;
-        fadeT = 0; holdMs = 0;
-      }
-    }
-
+    /* Squish-morph transform applied only to the letter mask */
     ctx.save();
-
-    /* Draw image(s) — no distortion, straight cover */
-    if (fadeT < 1) {
-      ctx.globalAlpha = 1 - fadeT;
-      coverImg(imgA, px);
-    }
-    const imgB = imgs[to];
-    if (fadeT > 0 && imgB?.complete && imgB.naturalWidth) {
-      ctx.globalAlpha = fadeT;
-      coverImg(imgB, -px * 0.4);
-    }
-    ctx.globalAlpha = 1;
-
-    /* Apply vertical morph to the text mask only */
     ctx.translate(w / 2, h / 2);
-    ctx.scale(1, sy);
+    ctx.rotate(m.rot * Math.PI / 180);
+    ctx.scale(m.sx, m.sy);
     ctx.translate(-w / 2, -h / 2);
 
-    /* Clip image pixels to letter shapes */
+    /* Clip image to letter silhouette */
     ctx.globalCompositeOperation = 'destination-in';
-    ctx.font          = `${fw} ${fs}px "Space Grotesk", sans-serif`;
-    ctx.textAlign     = 'center';
-    ctx.textBaseline  = 'alphabetic';
-    ctx.fillStyle     = '#000';
-    ctx.fillText(WORD, w / 2, textY);
+    const fs = letterFs(LETTERS[li]);
+    ctx.font         = `700 ${fs}px "Space Grotesk", sans-serif`;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle    = '#000';
+    ctx.fillText(LETTERS[li], w / 2, h / 2);
 
     ctx.restore();
     requestAnimationFrame(frame);
   }
 
-  /* Mouse / touch parallax — listen on hero so pointer-events:none on canvas is fine */
+  let morphing = false;
+  function advance() {
+    if (morphing) return;
+    morphing = true;
+    const nextLi = (li + 1) % LETTERS.length;
+
+    if (typeof gsap === 'undefined') {
+      li = nextLi; imgCur++;
+      morphing = false;
+      setTimeout(advance, 2800);
+      return;
+    }
+
+    gsap.timeline({
+      onComplete: () => { morphing = false; setTimeout(advance, 2800); }
+    })
+      /* Phase 1 — squish out: compress horizontally, stretch vertically, tilt */
+      .to(m, { sx: 0.012, sy: 1.25, rot: 5,  duration: 0.38, ease: 'power3.in' })
+      /* Swap letter + image at the thinnest point (invisible seam) */
+      .call(() => { li = nextLi; imgCur++; })
+      /* Phase 2 — bloom in: elastic expand, tilt unwinds */
+      .to(m, { sx: 1,     sy: 1,    rot: 0,  duration: 0.70, ease: 'elastic.out(1, 0.65)' });
+  }
+
   const hero = document.getElementById('hero');
   if (hero) {
     hero.addEventListener('mousemove', e => {
@@ -277,10 +270,10 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
   window.addEventListener('resize', resize, { passive: true });
 
-  /* Start after fonts are ready so measurement is accurate */
   document.fonts.ready.then(() => {
     resize();
     requestAnimationFrame(frame);
+    setTimeout(advance, 2800);
   });
 })();
 

@@ -217,9 +217,9 @@ ul { list-style: none; }
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  margin: 1.4rem 0 0.6rem;
-  /* height set dynamically by JS via canvas.style.height */
-  min-height: clamp(80px, 18vw, 280px);
+  margin: 1.2rem 0 0.8rem;
+  /* height set dynamically by JS (~48vh); this is a pre-load fallback */
+  min-height: clamp(180px, 40vh, 520px);
   z-index: 2;
   pointer-events: none;
   user-select: none;

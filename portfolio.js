@@ -1,7 +1,5 @@
 'use strict';
 
-gsap.registerPlugin(ScrollTrigger, Observer);
-
 /* ── Refs ── */
 const nav      = document.getElementById('p-nav');
 const backTop  = document.getElementById('back-top');
@@ -9,6 +7,9 @@ const navToggle = document.getElementById('nav-toggle');
 const navLinks  = document.getElementById('nav-links');
 
 document.body.classList.add('loaded');
+
+if (typeof gsap !== 'undefined') {
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 /* ── Hero entrance timeline ── */
 const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -150,6 +151,8 @@ document.querySelectorAll('.stat-n').forEach(el => {
   });
 });
 
+} /* end gsap guard */
+
 /* ── Hero line field ── */
 (function initLineField() {
   const canvas = document.getElementById('hero-lines');
@@ -262,29 +265,31 @@ document.querySelectorAll('.stat-n').forEach(el => {
 })();
 
 /* ── 3D card tilt (GSAP-smoothed) ── */
-document.querySelectorAll('.proj-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    gsap.to(card, {
-      rotationY: x * 7,
-      rotationX: -y * 7,
-      transformPerspective: 900,
-      z: 6,
-      duration: 0.4,
-      ease: 'power2.out',
-      overwrite: 'auto'
+if (typeof gsap !== 'undefined') {
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      gsap.to(card, {
+        rotationY: x * 7,
+        rotationX: -y * 7,
+        transformPerspective: 900,
+        z: 6,
+        duration: 0.4,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, {
+        rotationY: 0, rotationX: 0, z: 0,
+        duration: 0.5, ease: 'power3.out',
+        overwrite: 'auto'
+      });
     });
   });
-  card.addEventListener('mouseleave', () => {
-    gsap.to(card, {
-      rotationY: 0, rotationX: 0, z: 0,
-      duration: 0.5, ease: 'power3.out',
-      overwrite: 'auto'
-    });
-  });
-});
+}
 
 /* ── Typewriter ── */
 const phrases = [

@@ -160,7 +160,7 @@ document.querySelectorAll('.stat-n').forEach(el => {
   const ctx = canvas.getContext('2d');
 
   /* Letters from "Ayodeji Akintilo" — each a distinct silhouette */
-  const LETTERS = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
+  const LETTERS  = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
   const SRCS = [
     './images/appomni/rsa-booth.png',
     './images/mongodb/4ac51aab-9cc8-444c-8805-575ba5c01a61_rw_1920.png',
@@ -171,26 +171,30 @@ document.querySelectorAll('.stat-n').forEach(el => {
   const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
   const dpr  = Math.min(window.devicePixelRatio || 1, 2);
 
-  let w = 0, h = 0;
-  let li      = 0; /* current letter index */
-  let imgCur  = 0; /* current image index  */
-  let mouseXn = 0.5;
+  /* Timing — morph fires exactly when the zoom reaches its peak */
+  const HOLD_MS   = 3600; /* ms image is shown while zooming in */
+  const ZOOM_FROM = 1.00;
+  const ZOOM_TO   = 1.15; /* how much the image grows during the hold */
 
-  /* Morph state — driven by GSAP between letter transitions */
+  let w = 0, h = 0;
+  let li         = 0;   /* current letter index */
+  let imgCur     = 0;   /* current image index  */
+  let imgStartTs = 0;   /* rAF timestamp when current image began */
+  let mouseXn    = 0.5;
+
+  /* Morph state — driven by GSAP between transitions */
   const m = { sx: 1, sy: 1, rot: 0 };
 
   function letterFs(letter) {
-    /* Scale font so letter fills ~88 % of canvas width, capped by canvas height */
     ctx.font = `700 100px "Space Grotesk", sans-serif`;
-    const bw      = ctx.measureText(letter).width;
-    const byWidth = Math.floor(w * 0.88 / bw * 100);
-    const byHeight = Math.floor(h / 0.74); /* 0.74 ≈ cap-height / font-size ratio */
+    const bw       = ctx.measureText(letter).width;
+    const byWidth  = Math.floor(w * 0.88 / bw * 100);
+    const byHeight = Math.floor(h / 0.74);
     return Math.min(byWidth, byHeight);
   }
 
   function resize() {
     const cw = canvas.offsetWidth || window.innerWidth;
-    /* Canvas height = 48 % of viewport height, capped at 560 px */
     const ch = Math.round(Math.min(window.innerHeight * 0.48, 560));
     w = cw; h = ch;
     canvas.width        = Math.round(cw * dpr);
@@ -199,29 +203,32 @@ document.querySelectorAll('.stat-n').forEach(el => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function coverImg(img) {
+  function coverImg(img, zoomT) {
     if (!img?.complete || !img.naturalWidth) return;
-    const px = (mouseXn - 0.5) * w * 0.12; /* mouse parallax */
-    const s  = Math.max(w / img.naturalWidth, h / img.naturalHeight);
-    const dw = img.naturalWidth  * s;
-    const dh = img.naturalHeight * s;
+    /* Ease the zoom with a simple cubic so growth feels organic */
+    const eased = zoomT * zoomT * (3 - 2 * zoomT); /* smoothstep */
+    const zoom  = ZOOM_FROM + (ZOOM_TO - ZOOM_FROM) * eased;
+    const px    = (mouseXn - 0.5) * w * 0.12;
+    const s     = Math.max(w / img.naturalWidth, h / img.naturalHeight) * zoom;
+    const dw    = img.naturalWidth  * s;
+    const dh    = img.naturalHeight * s;
     ctx.drawImage(img, (w - dw) / 2 + px, (h - dh) / 2, dw, dh);
   }
 
-  function frame() {
+  function frame(ts) {
     ctx.clearRect(0, 0, w, h);
 
-    /* Draw portfolio image — full-canvas cover */
-    coverImg(imgs[imgCur % imgs.length]);
+    /* zoomT 0→1 over the hold period, clamped so it never exceeds 1 */
+    const zoomT = Math.min((ts - imgStartTs) / HOLD_MS, 1);
+    coverImg(imgs[imgCur % imgs.length], zoomT);
 
-    /* Squish-morph transform applied only to the letter mask */
+    /* Squish-morph transform on the letter mask only */
     ctx.save();
     ctx.translate(w / 2, h / 2);
     ctx.rotate(m.rot * Math.PI / 180);
     ctx.scale(m.sx, m.sy);
     ctx.translate(-w / 2, -h / 2);
 
-    /* Clip image to letter silhouette */
     ctx.globalCompositeOperation = 'destination-in';
     const fs = letterFs(LETTERS[li]);
     ctx.font         = `700 ${fs}px "Space Grotesk", sans-serif`;
@@ -242,38 +249,40 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
     if (typeof gsap === 'undefined') {
       li = nextLi; imgCur++;
+      imgStartTs = performance.now();
       morphing = false;
-      setTimeout(advance, 2800);
+      setTimeout(advance, HOLD_MS);
       return;
     }
 
     gsap.timeline({
-      onComplete: () => { morphing = false; setTimeout(advance, 2800); }
+      onComplete: () => { morphing = false; setTimeout(advance, HOLD_MS); }
     })
-      /* Phase 1 — squish out: compress horizontally, stretch vertically, tilt */
+      /* Squish out as zoom peaks — letter compresses to a sliver */
       .to(m, { sx: 0.012, sy: 1.25, rot: 5,  duration: 0.38, ease: 'power3.in' })
-      /* Swap letter + image at the thinnest point (invisible seam) */
-      .call(() => { li = nextLi; imgCur++; })
-      /* Phase 2 — bloom in: elastic expand, tilt unwinds */
+      /* Swap at zero-width seam; new image resets to zoom 1.0 */
+      .call(() => {
+        li         = nextLi;
+        imgCur++;
+        imgStartTs = performance.now(); /* new image starts its own grow cycle */
+      })
+      /* Bloom in with elastic overshoot */
       .to(m, { sx: 1,     sy: 1,    rot: 0,  duration: 0.70, ease: 'elastic.out(1, 0.65)' });
   }
 
   const hero = document.getElementById('hero');
   if (hero) {
-    hero.addEventListener('mousemove', e => {
-      mouseXn = e.clientX / window.innerWidth;
-    }, { passive: true });
-    hero.addEventListener('touchmove', e => {
-      mouseXn = e.touches[0].clientX / window.innerWidth;
-    }, { passive: true });
+    hero.addEventListener('mousemove',  e => { mouseXn = e.clientX / window.innerWidth; }, { passive: true });
+    hero.addEventListener('touchmove',  e => { mouseXn = e.touches[0].clientX / window.innerWidth; }, { passive: true });
   }
 
   window.addEventListener('resize', resize, { passive: true });
 
   document.fonts.ready.then(() => {
     resize();
+    imgStartTs = performance.now();
     requestAnimationFrame(frame);
-    setTimeout(advance, 2800);
+    setTimeout(advance, HOLD_MS); /* first morph fires exactly when zoom peaks */
   });
 })();
 

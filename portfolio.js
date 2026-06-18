@@ -153,6 +153,60 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 } /* end gsap guard */
 
+/* ── Text mask cycling showcase ── */
+(function initMask() {
+  const word = document.getElementById('hero-mask-word');
+  if (!word) return;
+
+  const slides = [
+    { text: 'BRAND',   img: './images/appomni/rsa-booth.png' },
+    { text: 'EVENTS',  img: './images/appomni/IMG_7833.jpeg' },
+    { text: 'DESIGN',  img: './images/appomni/Demo_Request_Click_Linkedin_LG_NA_M3.png' },
+    { text: 'SYSTEMS', img: './images/appomni/rsa-booth.png' },
+  ];
+
+  let current = 0;
+  let mouseX = 0.5; /* 0–1 normalised */
+
+  function applySlide(idx) {
+    const s = slides[idx];
+    word.textContent = s.text;
+    word.style.backgroundImage = `url('${s.img}')`;
+  }
+
+  function updateBgPosition() {
+    /* pan image left↔right based on cursor/touch position */
+    const pct = 30 + mouseX * 40; /* 30%–70% */
+    word.style.backgroundPosition = `${pct}% center`;
+  }
+
+  function advance() {
+    word.style.opacity = '0';
+    setTimeout(() => {
+      current = (current + 1) % slides.length;
+      applySlide(current);
+      word.style.opacity = '1';
+    }, 220);
+  }
+
+  /* Cursor parallax */
+  const hero = document.getElementById('hero');
+  if (hero) {
+    hero.addEventListener('mousemove', e => {
+      mouseX = e.clientX / window.innerWidth;
+      updateBgPosition();
+    }, { passive: true });
+    hero.addEventListener('touchmove', e => {
+      mouseX = e.touches[0].clientX / window.innerWidth;
+      updateBgPosition();
+    }, { passive: true });
+  }
+
+  applySlide(0);
+  updateBgPosition();
+  setInterval(advance, 3200);
+})();
+
 /* ── Hero line field ── */
 (function initLineField() {
   const canvas = document.getElementById('hero-lines');
@@ -162,11 +216,11 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
   const SPACING      = 48;
   const LEN          = 15;
-  const BASE_ALPHA   = 0.048;
-  const PEAK_ALPHA   = 0.22;
-  const RADIUS       = 260;   /* cursor influence radius px */
-  const SPRING       = 0.10;  /* how fast lines chase cursor */
-  const REST_SPRING  = 0.018; /* how fast lines drift back */
+  const BASE_ALPHA   = 0.11;
+  const PEAK_ALPHA   = 0.30;
+  const RADIUS       = 280;
+  const SPRING       = 0.10;
+  const REST_SPRING  = 0.018;
 
   let mouse  = { x: -9999, y: -9999, active: false };
   let lines  = [];
@@ -237,13 +291,24 @@ document.querySelectorAll('.stat-n').forEach(el => {
   }
 
   hero.addEventListener('mousemove', e => {
-    const r   = hero.getBoundingClientRect();
-    mouse.x   = e.clientX - r.left;
-    mouse.y   = e.clientY - r.top;
+    const r  = hero.getBoundingClientRect();
+    mouse.x  = e.clientX - r.left;
+    mouse.y  = e.clientY - r.top;
     mouse.active = true;
   }, { passive: true });
 
   hero.addEventListener('mouseleave', () => { mouse.active = false; });
+
+  /* Touch support for mobile */
+  hero.addEventListener('touchmove', e => {
+    const r  = hero.getBoundingClientRect();
+    const t  = e.touches[0];
+    mouse.x  = t.clientX - r.left;
+    mouse.y  = t.clientY - r.top;
+    mouse.active = true;
+  }, { passive: true });
+
+  hero.addEventListener('touchend', () => { mouse.active = false; }, { passive: true });
 
   window.addEventListener('resize', resize, { passive: true });
   resize();

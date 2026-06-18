@@ -202,12 +202,43 @@ ul { list-style: none; }
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh; /* excludes mobile browser chrome */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   background: var(--bg-card);
 }
+/* ── Text mask showcase ── */
+.hero-mask {
+  position: relative;
+  z-index: 2;
+  margin: 1.5rem 0 0.5rem;
+  height: clamp(5rem, 12vw, 9rem);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-mask-word {
+  font-family: var(--font-head);
+  font-size: clamp(5rem, 14vw, 11rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  color: transparent;
+  background-image: url('./images/appomni/rsa-booth.png');
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  will-change: background-position, opacity;
+  transition: opacity 0.2s ease;
+  user-select: none;
+  cursor: default;
+}
+
 /* Line field canvas */
 #hero-lines {
   position: absolute;
@@ -995,7 +1026,8 @@ ul { list-style: none; }
     color: var(--text-primary);
   }
   .nav-toggle { display: flex; }
-  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .about-section { padding: 50px 0 80px; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-img-badge { right: 0; bottom: -12px; }
   .stats-band { grid-template-columns: repeat(2, 1fr); }
   .proj-grid { grid-template-columns: 1fr; }

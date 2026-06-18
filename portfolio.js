@@ -153,14 +153,13 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 } /* end gsap guard */
 
-/* ── Single-letter image-mask with squish→bloom morph ── */
+/* ── Single-letter image-mask: reveal → hold → crossfade ── */
 (function initMaskCanvas() {
   const canvas = document.getElementById('hero-mask-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  /* Letters from "Ayodeji Akintilo" — each a distinct silhouette */
-  const LETTERS  = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
+  const LETTERS = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
   const SRCS = [
     './images/appomni/rsa-booth.png',
     './images/mongodb/4ac51aab-9cc8-444c-8805-575ba5c01a61_rw_1920.png',
@@ -168,121 +167,150 @@ document.querySelectorAll('.stat-n').forEach(el => {
     './images/mongodb/727a56dd-b489-4dc2-b29c-a0bb14210d81_rw_1920.png',
   ];
 
+  /* Timing */
+  const REVEAL_DUR = 2400; /* ms — mask shrinks from full-image to letter edges  */
+  const HOLD_DUR   =  900; /* ms — show the letter clearly before transition      */
+  const FADE_DUR   =  800; /* ms — crossfade to next image (opacity, no squish)   */
+  /* At MASK_MAX the letter overflows the canvas entirely → full image visible     */
+  const MASK_MAX   =  3.6;
+  /* Each image zooms continuously from the moment it first appears                */
+  const ZOOM_RATE  = 0.000011; /* ~1.1 % larger per second                        */
+
   const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
   const dpr  = Math.min(window.devicePixelRatio || 1, 2);
 
-  /* Timing — morph fires exactly when the zoom reaches its peak */
-  const HOLD_MS   = 3600; /* ms image is shown while zooming in */
-  const ZOOM_FROM = 1.00;
-  const ZOOM_TO   = 1.15; /* how much the image grows during the hold */
+  let w = 0, h = 0, mouseXn = 0.5;
 
-  let w = 0, h = 0;
-  let li         = 0;   /* current letter index */
-  let imgCur     = 0;   /* current image index  */
-  let imgStartTs = 0;   /* rAF timestamp when current image began */
-  let mouseXn    = 0.5;
+  /* Two off-screen canvases so we can alpha-composite two masked layers cleanly   */
+  let offA = null, offB = null;
 
-  /* Morph state — driven by GSAP between transitions */
-  const m = { sx: 1, sy: 1, rot: 0 };
+  function makeOff(pw, ph) {
+    const c  = document.createElement('canvas');
+    c.width  = pw; c.height = ph;
+    const cx = c.getContext('2d');
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { canvas: c, ctx: cx };
+  }
+
+  /* Active letter / image state */
+  let curLi = 0, curImg = 0, curImgTs = 0;
+  let nxtLi = 1, nxtImg = 1, nxtImgTs = 0;
+
+  /* Phase state machine */
+  let phase = 'reveal', phaseStart = 0, maskScale = MASK_MAX, fadeT = 0;
 
   function letterFs(letter) {
     ctx.font = `700 100px "Space Grotesk", sans-serif`;
-    const bw       = ctx.measureText(letter).width;
-    const byWidth  = Math.floor(w * 0.88 / bw * 100);
-    const byHeight = Math.floor(h / 0.74);
-    return Math.min(byWidth, byHeight);
+    const byW = Math.floor(w * 0.88 / ctx.measureText(letter).width * 100);
+    const byH = Math.floor(h / 0.74);
+    return Math.min(byW, byH);
   }
 
   function resize() {
     const cw = canvas.offsetWidth || window.innerWidth;
     const ch = Math.round(Math.min(window.innerHeight * 0.48, 560));
     w = cw; h = ch;
-    canvas.width        = Math.round(cw * dpr);
-    canvas.height       = Math.round(ch * dpr);
+    const pw = Math.round(cw * dpr), ph = Math.round(ch * dpr);
+    canvas.width = pw; canvas.height = ph;
     canvas.style.height = ch + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    offA = makeOff(pw, ph);
+    offB = makeOff(pw, ph);
   }
 
-  function coverImg(img, zoomT) {
+  /* Draw one masked layer onto an off-screen context */
+  function renderLayer(off, img, imgTs, ts, mScale, letter) {
+    const oc = off.ctx;
+    oc.clearRect(0, 0, w + 1, h + 1);
     if (!img?.complete || !img.naturalWidth) return;
-    /* Ease the zoom with a simple cubic so growth feels organic */
-    const eased = zoomT * zoomT * (3 - 2 * zoomT); /* smoothstep */
-    const zoom  = ZOOM_FROM + (ZOOM_TO - ZOOM_FROM) * eased;
-    const px    = (mouseXn - 0.5) * w * 0.12;
-    const s     = Math.max(w / img.naturalWidth, h / img.naturalHeight) * zoom;
-    const dw    = img.naturalWidth  * s;
-    const dh    = img.naturalHeight * s;
-    ctx.drawImage(img, (w - dw) / 2 + px, (h - dh) / 2, dw, dh);
+
+    /* Continuous per-image zoom — never pauses or resets within a display cycle */
+    const zoom = 1.0 + Math.max(0, ts - imgTs) * ZOOM_RATE;
+    const px   = (mouseXn - 0.5) * w * 0.12;
+    const s    = Math.max(w / img.naturalWidth, h / img.naturalHeight) * zoom;
+    oc.drawImage(img,
+      (w - img.naturalWidth  * s) / 2 + px,
+      (h - img.naturalHeight * s) / 2,
+      img.naturalWidth * s, img.naturalHeight * s);
+
+    /* Letter silhouette mask — scale around canvas centre */
+    oc.save();
+    oc.translate(w / 2, h / 2);
+    oc.scale(mScale, mScale);
+    oc.translate(-w / 2, -h / 2);
+    oc.globalCompositeOperation = 'destination-in';
+    oc.font = `700 ${letterFs(letter)}px "Space Grotesk", sans-serif`;
+    oc.textAlign = 'center'; oc.textBaseline = 'middle';
+    oc.fillStyle = '#000';
+    oc.fillText(letter, w / 2, h / 2);
+    oc.restore();
   }
 
   function frame(ts) {
-    ctx.clearRect(0, 0, w, h);
+    if (!offA || !offB) { requestAnimationFrame(frame); return; }
+    const elapsed = ts - phaseStart;
 
-    /* zoomT 0→1 over the hold period, clamped so it never exceeds 1 */
-    const zoomT = Math.min((ts - imgStartTs) / HOLD_MS, 1);
-    coverImg(imgs[imgCur % imgs.length], zoomT);
+    /* ── State machine ── */
+    if (phase === 'reveal') {
+      /* ease-out-quad: letter edges appear quickly then settle */
+      const t = Math.min(elapsed / REVEAL_DUR, 1);
+      const e = 1 - (1 - t) * (1 - t);
+      maskScale = MASK_MAX + (1.0 - MASK_MAX) * e;
+      if (t >= 1) { maskScale = 1.0; phase = 'hold'; phaseStart = ts; }
 
-    /* Squish-morph transform on the letter mask only */
-    ctx.save();
-    ctx.translate(w / 2, h / 2);
-    ctx.rotate(m.rot * Math.PI / 180);
-    ctx.scale(m.sx, m.sy);
-    ctx.translate(-w / 2, -h / 2);
+    } else if (phase === 'hold') {
+      maskScale = 1.0;
+      if (elapsed >= HOLD_DUR) {
+        phase = 'fade'; phaseStart = ts;
+        nxtLi = (curLi + 1) % LETTERS.length;
+        nxtImg = (curImg + 1) % imgs.length;
+        nxtImgTs = ts; /* next image starts zooming from zero */
+      }
 
-    ctx.globalCompositeOperation = 'destination-in';
-    const fs = letterFs(LETTERS[li]);
-    ctx.font         = `700 ${fs}px "Space Grotesk", sans-serif`;
-    ctx.textAlign    = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle    = '#000';
-    ctx.fillText(LETTERS[li], w / 2, h / 2);
-
-    ctx.restore();
-    requestAnimationFrame(frame);
-  }
-
-  let morphing = false;
-  function advance() {
-    if (morphing) return;
-    morphing = true;
-    const nextLi = (li + 1) % LETTERS.length;
-
-    if (typeof gsap === 'undefined') {
-      li = nextLi; imgCur++;
-      imgStartTs = performance.now();
-      morphing = false;
-      setTimeout(advance, HOLD_MS);
-      return;
+    } else if (phase === 'fade') {
+      /* smooth crossfade — no squish, just opacity */
+      fadeT = Math.min(elapsed / FADE_DUR, 1);
+      if (fadeT >= 1) {
+        curLi = nxtLi; curImg = nxtImg; curImgTs = nxtImgTs;
+        phase = 'reveal'; phaseStart = ts; maskScale = MASK_MAX; fadeT = 0;
+      }
     }
 
-    gsap.timeline({
-      onComplete: () => { morphing = false; setTimeout(advance, HOLD_MS); }
-    })
-      /* Squish out as zoom peaks — letter compresses to a sliver */
-      .to(m, { sx: 0.012, sy: 1.25, rot: 5,  duration: 0.38, ease: 'power3.in' })
-      /* Swap at zero-width seam; new image resets to zoom 1.0 */
-      .call(() => {
-        li         = nextLi;
-        imgCur++;
-        imgStartTs = performance.now(); /* new image starts its own grow cycle */
-      })
-      /* Bloom in with elastic overshoot */
-      .to(m, { sx: 1,     sy: 1,    rot: 0,  duration: 0.70, ease: 'elastic.out(1, 0.65)' });
+    /* ── Composite ── */
+    ctx.clearRect(0, 0, w, h);
+
+    if (phase !== 'fade') {
+      renderLayer(offA, imgs[curImg % imgs.length], curImgTs, ts, maskScale, LETTERS[curLi]);
+      ctx.drawImage(offA.canvas, 0, 0, w, h);
+
+    } else {
+      /* Outgoing: letter at 1.0 scale, fading out */
+      renderLayer(offA, imgs[curImg % imgs.length], curImgTs, ts, 1.0, LETTERS[curLi]);
+      /* Incoming: starts at MASK_MAX (full image visible), fading in */
+      renderLayer(offB, imgs[nxtImg % imgs.length], nxtImgTs, ts, MASK_MAX, LETTERS[nxtLi]);
+
+      ctx.globalAlpha = 1 - fadeT;
+      ctx.drawImage(offA.canvas, 0, 0, w, h);
+      ctx.globalAlpha = fadeT;
+      ctx.drawImage(offB.canvas, 0, 0, w, h);
+      ctx.globalAlpha = 1;
+    }
+
+    requestAnimationFrame(frame);
   }
 
   const hero = document.getElementById('hero');
   if (hero) {
-    hero.addEventListener('mousemove',  e => { mouseXn = e.clientX / window.innerWidth; }, { passive: true });
-    hero.addEventListener('touchmove',  e => { mouseXn = e.touches[0].clientX / window.innerWidth; }, { passive: true });
+    hero.addEventListener('mousemove', e => { mouseXn = e.clientX / window.innerWidth; }, { passive: true });
+    hero.addEventListener('touchmove', e => { mouseXn = e.touches[0].clientX / window.innerWidth; }, { passive: true });
   }
-
   window.addEventListener('resize', resize, { passive: true });
 
   document.fonts.ready.then(() => {
     resize();
-    imgStartTs = performance.now();
+    curImgTs = performance.now();
+    phaseStart = performance.now();
     requestAnimationFrame(frame);
-    setTimeout(advance, HOLD_MS); /* first morph fires exactly when zoom peaks */
   });
 })();
 

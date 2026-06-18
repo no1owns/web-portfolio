@@ -404,7 +404,7 @@ ul { list-style: none; }
 
 /* ── About ── */
 .about-section {
-  padding: 130px 0 100px;
+  padding: 80px 0 100px;
   background: var(--bg-card);
 }
 .about-grid {

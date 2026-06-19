@@ -157,168 +157,93 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 } /* end gsap guard */
 
-/* ── Single-letter image-mask: reveal → hold → crossfade ── */
-(function initMaskCanvas() {
-  const canvas = document.getElementById('hero-mask-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+/* ── AYO Reveal: scroll-driven morph A → Y → O + video clip ── */
+async function initAYOReveal() {
+  const section   = document.getElementById('ayo-reveal');
+  const morphPath = document.getElementById('ayo-morph-path');
+  const ayoBg     = document.querySelector('.ayo-bg');
+  const videoWrap = document.querySelector('.ayo-video-wrap');
+  if (!section || !morphPath) return;
+  if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
 
-  const LETTERS = ['A', 'Y', 'O', 'K', 'N', 'T', 'I'];
-  const SRCS = [
-    './images/ayo_wilderness_bw.jpg',
-    './images/appomni/rsa-booth.png',
-    './images/ayo-music.png',
-    './images/appomni/Demo_Request_Click_Linkedin_LG_NA_M3.png',
-    './images/navan/hello-sustainability.jpeg',
-    './images/mongodb/727a56dd-b489-4dc2-b29c-a0bb14210d81_rw_1920.png',
-  ];
+  let font;
+  try { font = await opentype.load('./fonts/SpaceGrotesk-Bold.ttf'); }
+  catch (e) { console.warn('AYO: font failed', e); return; }
 
-  /* Timing */
-  const REVEAL_DUR = 2200; /* ms — mask shrinks from full-image to letter edges  */
-  const HOLD_DUR   =  700; /* ms — show the letter clearly before transition      */
-  const FADE_DUR   =  900; /* ms — crossfade to next image (opacity, no squish)   */
-  /* At MASK_MAX the letter overflows the canvas entirely → full image visible     */
-  const MASK_MAX   =  3.6;
-  /* Each image zooms continuously from the moment it first appears                */
-  const ZOOM_RATE  = 0.000015; /* ~1.5 % larger per second — visible on dense images */
-
-  const imgs = SRCS.map(s => { const i = new Image(); i.src = s; return i; });
-  const dpr  = Math.min(window.devicePixelRatio || 1, 2);
-
-  let w = 0, h = 0, mouseXn = 0.5;
-
-  /* Two off-screen canvases so we can alpha-composite two masked layers cleanly   */
-  let offA = null, offB = null;
-
-  function makeOff(pw, ph) {
-    const c  = document.createElement('canvas');
-    c.width  = pw; c.height = ph;
-    const cx = c.getContext('2d');
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { canvas: c, ctx: cx };
+  function getLetterPath(letter, vw, vh) {
+    const targetH = vh * 0.70;
+    const sz0 = 1000;
+    const p0  = font.getPath(letter, 0, sz0 * 0.82, sz0);
+    const b0  = p0.getBoundingBox();
+    const h0  = b0.y2 - b0.y1;
+    if (h0 <= 0) return '';
+    const sz  = sz0 * (targetH / h0);
+    const p1  = font.getPath(letter, 0, sz * 0.82, sz);
+    const b1  = p1.getBoundingBox();
+    const dx  = vw / 2 - (b1.x1 + b1.x2) / 2;
+    const dy  = vh / 2 - (b1.y1 + b1.y2) / 2;
+    return font.getPath(letter, dx, sz * 0.82 + dy, sz).toPathData(2);
   }
 
-  /* Active letter / image state */
-  let curLi = 0, curImg = 0, curImgTs = 0;
-  let nxtLi = 1, nxtImg = 1, nxtImgTs = 0;
-
-  /* Phase state machine */
-  let phase = 'reveal', phaseStart = 0, maskScale = MASK_MAX, fadeT = 0;
-
-  function letterFs(letter) {
-    ctx.font = `700 100px "Space Grotesk", sans-serif`;
-    const byW = Math.floor(w * 0.88 / ctx.measureText(letter).width * 100);
-    const byH = Math.floor(h / 0.74);
-    return Math.min(byW, byH);
+  function bigCirclePath(vw, vh) {
+    const cx = vw / 2, cy = vh / 2;
+    const r  = Math.hypot(vw, vh) * 0.6;
+    const k  = 0.5523;
+    return `M${cx} ${cy-r} C${cx+r*k} ${cy-r} ${cx+r} ${cy-r*k} ${cx+r} ${cy} C${cx+r} ${cy+r*k} ${cx+r*k} ${cy+r} ${cx} ${cy+r} C${cx-r*k} ${cy+r} ${cx-r} ${cy+r*k} ${cx-r} ${cy} C${cx-r} ${cy-r*k} ${cx-r*k} ${cy-r} ${cx} ${cy-r}Z`;
   }
 
-  function resize() {
-    const cw = canvas.offsetWidth || window.innerWidth;
-    const ch = Math.round(Math.min(window.innerHeight * 0.48, 560));
-    w = cw; h = ch;
-    const pw = Math.round(cw * dpr), ph = Math.round(ch * dpr);
-    canvas.width = pw; canvas.height = ph;
-    canvas.style.height = ch + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    offA = makeOff(pw, ph);
-    offB = makeOff(pw, ph);
+  let vw, vh, pathA, pathY, pathO, pathFull, iAY, iYO, iOF;
+
+  function rebuild() {
+    vw = window.innerWidth; vh = window.innerHeight;
+    pathA = getLetterPath('A', vw, vh);
+    pathY = getLetterPath('Y', vw, vh);
+    pathO = getLetterPath('O', vw, vh);
+    pathFull = bigCirclePath(vw, vh);
+    iAY  = flubber.interpolate(pathA, pathY,    { maxSegmentLength: 4 });
+    iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
+    iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });
+    morphPath.setAttribute('d', pathA);
   }
 
-  /* Draw one masked layer onto an off-screen context */
-  function renderLayer(off, img, imgTs, ts, mScale, letter) {
-    const oc = off.ctx;
-    oc.clearRect(0, 0, w + 1, h + 1);
-    if (!img?.complete || !img.naturalWidth) return;
+  rebuild();
+  window.addEventListener('resize', rebuild, { passive: true });
 
-    /* Continuous per-image zoom — never pauses or resets within a display cycle */
-    const zoom = 1.0 + Math.max(0, ts - imgTs) * ZOOM_RATE;
-    const px   = (mouseXn - 0.5) * w * 0.12;
-    const s    = Math.max(w / img.naturalWidth, h / img.naturalHeight) * zoom;
-    oc.drawImage(img,
-      (w - img.naturalWidth  * s) / 2 + px,
-      (h - img.naturalHeight * s) / 2,
-      img.naturalWidth * s, img.naturalHeight * s);
-
-    /* Letter silhouette mask — scale around canvas centre */
-    oc.save();
-    oc.translate(w / 2, h / 2);
-    oc.scale(mScale, mScale);
-    oc.translate(-w / 2, -h / 2);
-    oc.globalCompositeOperation = 'destination-in';
-    oc.font = `700 ${letterFs(letter)}px "Space Grotesk", sans-serif`;
-    oc.textAlign = 'center'; oc.textBaseline = 'middle';
-    oc.fillStyle = '#000';
-    oc.fillText(letter, w / 2, h / 2);
-    oc.restore();
+  /* Background color stops: warm amber → navy → indigo */
+  const STOPS = [[32,45,5],[215,45,6],[250,50,6]];
+  function bgAt(p) {
+    const t = Math.min(p / 0.82, 1) * 2; /* maps 0-0.82 → 0-2 */
+    const i = Math.min(Math.floor(t), 1);
+    const f = t - i;
+    const a = STOPS[i], b = STOPS[i+1];
+    return `hsl(${(a[0]+(b[0]-a[0])*f)|0},${(a[1]+(b[1]-a[1])*f)|0}%,${+(a[2]+(b[2]-a[2])*f).toFixed(1)}%)`;
   }
 
-  function frame(ts) {
-    if (!offA || !offB) { requestAnimationFrame(frame); return; }
-    const elapsed = ts - phaseStart;
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1.2,
+    onUpdate(self) {
+      const p = self.progress;
 
-    /* ── State machine ── */
-    if (phase === 'reveal') {
-      /* ease-out-quad: letter edges appear quickly then settle */
-      const t = Math.min(elapsed / REVEAL_DUR, 1);
-      const e = 1 - (1 - t) * (1 - t);
-      maskScale = MASK_MAX + (1.0 - MASK_MAX) * e;
-      if (t >= 1) { maskScale = 1.0; phase = 'hold'; phaseStart = ts; }
+      /* Morph path */
+      let d;
+      if      (p < 0.10) { d = pathA; }
+      else if (p < 0.48) { d = iAY(Math.min((p-0.10)/0.38, 1)); }
+      else if (p < 0.82) { d = iYO(Math.min((p-0.48)/0.34, 1)); }
+      else               { d = iOF(Math.min((p-0.82)/0.18, 1)); }
+      morphPath.setAttribute('d', d);
 
-    } else if (phase === 'hold') {
-      maskScale = 1.0;
-      if (elapsed >= HOLD_DUR) {
-        phase = 'fade'; phaseStart = ts;
-        nxtLi = (curLi + 1) % LETTERS.length;
-        nxtImg = (curImg + 1) % imgs.length;
-        nxtImgTs = ts; /* next image starts zooming from zero */
-      }
+      /* Video fade-in on entrance */
+      if (videoWrap) videoWrap.style.opacity = p < 0.08 ? p/0.08 : 1;
 
-    } else if (phase === 'fade') {
-      /* smooth crossfade — no squish, just opacity */
-      fadeT = Math.min(elapsed / FADE_DUR, 1);
-      if (fadeT >= 1) {
-        curLi = nxtLi; curImg = nxtImg; curImgTs = nxtImgTs;
-        phase = 'reveal'; phaseStart = ts; maskScale = MASK_MAX; fadeT = 0;
-      }
+      /* Background colour */
+      if (ayoBg) ayoBg.style.background = bgAt(p);
     }
-
-    /* ── Composite ── */
-    ctx.clearRect(0, 0, w, h);
-
-    if (phase !== 'fade') {
-      renderLayer(offA, imgs[curImg % imgs.length], curImgTs, ts, maskScale, LETTERS[curLi]);
-      ctx.drawImage(offA.canvas, 0, 0, w, h);
-
-    } else {
-      /* Outgoing: letter at 1.0 scale, fading out */
-      renderLayer(offA, imgs[curImg % imgs.length], curImgTs, ts, 1.0, LETTERS[curLi]);
-      /* Incoming: starts at MASK_MAX (full image visible), fading in */
-      renderLayer(offB, imgs[nxtImg % imgs.length], nxtImgTs, ts, MASK_MAX, LETTERS[nxtLi]);
-
-      ctx.globalAlpha = 1 - fadeT;
-      ctx.drawImage(offA.canvas, 0, 0, w, h);
-      ctx.globalAlpha = fadeT;
-      ctx.drawImage(offB.canvas, 0, 0, w, h);
-      ctx.globalAlpha = 1;
-    }
-
-    requestAnimationFrame(frame);
-  }
-
-  const hero = document.getElementById('hero');
-  if (hero) {
-    hero.addEventListener('mousemove', e => { mouseXn = e.clientX / window.innerWidth; }, { passive: true });
-    hero.addEventListener('touchmove', e => { mouseXn = e.touches[0].clientX / window.innerWidth; }, { passive: true });
-  }
-  window.addEventListener('resize', resize, { passive: true });
-
-  document.fonts.ready.then(() => {
-    resize();
-    curImgTs = performance.now();
-    phaseStart = performance.now();
-    requestAnimationFrame(frame);
   });
-})();
+}
+initAYOReveal();
 
 /* ── Hero line field ── */
 (function initLineField() {

@@ -13,6 +13,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Observer.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
 </head>
 <body>
 
@@ -44,6 +46,25 @@
   </div>
 </nav>
 
+<!-- ── AYO Reveal ─────────────────────────────────── -->
+<section id="ayo-reveal" class="ayo-reveal" aria-hidden="true">
+  <div class="ayo-pin">
+    <div class="ayo-bg"></div>
+    <svg class="ayo-clip-svg" focusable="false">
+      <defs>
+        <clipPath id="ayo-clip" clipPathUnits="userSpaceOnUse">
+          <path id="ayo-morph-path" d=""/>
+        </clipPath>
+      </defs>
+    </svg>
+    <div class="ayo-video-wrap">
+      <video class="ayo-video" autoplay muted loop playsinline>
+        <source src="./images/appomni/firefly-spheres.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
 <!-- ── Hero ───────────────────────────────────────── -->
 <section id="hero" class="hero">
 
@@ -63,9 +84,6 @@
       </span>
     </h1>
     <p class="hero-sub">Creative Systems Leader &nbsp;·&nbsp; UX/UI Storyteller &nbsp;·&nbsp; Brand Architect</p>
-
-    <!-- Full-width image-mask canvas -->
-    <canvas id="hero-mask-canvas" aria-hidden="true"></canvas>
 
     <p class="hero-typewriter">
       Currently: <span id="tw-text" class="tw-text"></span><span class="tw-cursor">|</span>
@@ -417,11 +435,11 @@
           <div class="tl-dot">01</div>
           <div class="tl-body">
             <div class="tl-header">
-              <span class="tl-role">Senior Visual Designer</span>
-              <span class="tl-dates">2023 – Present</span>
+              <span class="tl-role">Senior Visual Designer, Brand Systems & Web</span>
+              <span class="tl-dates">Dec 2024 – Present</span>
             </div>
             <div class="tl-company">AppOmni</div>
-            <p class="tl-desc">Driving visual design strategy for a leading cloud security platform, building scalable brand and product design systems for enterprise audiences.</p>
+            <p class="tl-desc">Sole senior brand designer at a Series-stage SaaS security company. Built visual systems, campaign frameworks, and modular web components adopted as shared infrastructure — reducing page build time from 10 days to 3 days.</p>
           </div>
         </div>
 
@@ -429,11 +447,11 @@
           <div class="tl-dot">02</div>
           <div class="tl-body">
             <div class="tl-header">
-              <span class="tl-role">Principal Designer</span>
-              <span class="tl-dates">2021 – 2023</span>
+              <span class="tl-role">Creative Consultant, Keynote Storytelling</span>
+              <span class="tl-dates">2025 · Contract</span>
             </div>
-            <div class="tl-company">Secureframe</div>
-            <p class="tl-desc">Guided teams to develop scalable design systems and unforgettable brand experiences for a fast-growing compliance automation startup.</p>
+            <div class="tl-company">Meta (via TEKSystems)</div>
+            <p class="tl-desc">Developed narrative structure and visual direction for the Meta Connect 2025 developer keynote opening segment. Earned co-lead on the broader intro sequence through concept clarity across a high-stakes, time-compressed production.</p>
           </div>
         </div>
 
@@ -441,11 +459,11 @@
           <div class="tl-dot">03</div>
           <div class="tl-body">
             <div class="tl-header">
-              <span class="tl-role">Visual Designer</span>
-              <span class="tl-dates">2020 – 2021</span>
+              <span class="tl-role">Founder, Creative Director</span>
+              <span class="tl-dates">2020 – Present</span>
             </div>
-            <div class="tl-company">Navan (formerly TripActions)</div>
-            <p class="tl-desc">Created compelling visual assets and campaign materials for one of corporate travel's fastest-growing unicorns.</p>
+            <div class="tl-company">Forge HQ (Independent Studio)</div>
+            <p class="tl-desc">Founder-led studio serving SaaS and developer-facing clients including Apollo GraphQL, BetterUp, Gong, and Lyft Business. Full creative direction, scoping, and stakeholder alignment on every engagement.</p>
           </div>
         </div>
 
@@ -453,11 +471,11 @@
           <div class="tl-dot">04</div>
           <div class="tl-body">
             <div class="tl-header">
-              <span class="tl-role">Creative Director</span>
-              <span class="tl-dates">2015 – 2020</span>
+              <span class="tl-role">Principal Designer, Brand Systems & Growth</span>
+              <span class="tl-dates">2022 – 2024</span>
             </div>
-            <div class="tl-company">MongoDB</div>
-            <p class="tl-desc">Led global event creative across major conferences. Spearheaded visual storytelling for the MongoDB IPO launch alongside the CEO, CTO, and CMO — spanning outdoor, TV, digital, and print.</p>
+            <div class="tl-company">Secureframe</div>
+            <p class="tl-desc">Built brand governance, conversion systems, and modular templates from scratch. Increased landing page conversion 30% in 3 months through design-led A/B testing and reduced ad hoc design requests by 40%.</p>
           </div>
         </div>
 
@@ -465,11 +483,35 @@
           <div class="tl-dot">05</div>
           <div class="tl-body">
             <div class="tl-header">
-              <span class="tl-role">Creative Director / Founder</span>
-              <span class="tl-dates">2010 – 2015</span>
+              <span class="tl-role">Director of Design</span>
+              <span class="tl-dates">2019 – 2022</span>
             </div>
-            <div class="tl-company">Forge HQ (Independent Studio)</div>
-            <p class="tl-desc">Founded an independent creative studio serving startups and cultural organizations with branding, UX, and art direction across the US and UK.</p>
+            <div class="tl-company">Navan (TripActions)</div>
+            <p class="tl-desc">Led the global TripActions-to-Navan rebrand across 12 countries and 8 field teams. Managed a $500K annual OOH program including a $150K Visa co-funded campaign.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d1">
+          <div class="tl-dot">06</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Creative Director</span>
+              <span class="tl-dates">2015 – 2019</span>
+            </div>
+            <div class="tl-company">MongoDB</div>
+            <p class="tl-desc">Led creative direction for MongoDB World and the IPO launch alongside the CEO, CTO, and CMO. Reduced site drop-off 30% through developer-first redesigns and decreased project cycle time 20% through reusable campaign systems.</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal d2">
+          <div class="tl-dot">07</div>
+          <div class="tl-body">
+            <div class="tl-header">
+              <span class="tl-role">Director of Creative Services</span>
+              <span class="tl-dates">2012 – 2015</span>
+            </div>
+            <div class="tl-company">DocuSign</div>
+            <p class="tl-desc">Built the creative function and led integration campaigns for Salesforce, Microsoft, and Google partnerships. Increased platform adoption 30% through co-marketing campaigns spanning print, digital, and OOH.</p>
           </div>
         </div>
       </div>

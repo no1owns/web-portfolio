@@ -15,51 +15,6 @@
     .cs-section-label { color: #F97316; }
     .g-text { background: linear-gradient(135deg, #F97316, #F97316cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ── Sticky card stack ── */
-    .stack-section {
-      margin-bottom: 80px;
-    }
-
-    .stack-cards {
-      position: relative;
-    }
-
-    .stack-card {
-      position: sticky;
-      top: 64px; /* sits just below the fixed nav */
-      width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 60vh;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.65);
-      background: #0d0d1a;
-      will-change: transform;
-    }
-
-    .stack-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .stack-card:nth-child(1) { z-index: 1; }
-    .stack-card:nth-child(2) { z-index: 2; }
-    .stack-card:nth-child(3) { z-index: 3; }
-    .stack-card:nth-child(4) { z-index: 4; }
-    .stack-card:nth-child(5) { z-index: 5; }
-
-    .stack-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .stack-card video {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
     /* iframe embed (Vimeo / YouTube) */
     .stack-card .embed-wrap {
       position: relative;
@@ -87,10 +42,6 @@
     }
     .stack-card-ph i { font-size: 2.5rem; opacity: 0.4; }
     .stack-card-ph span { font-size: 0.82rem; }
-
-    @media (max-width: 768px) {
-      .stack-card { width: 92%; top: 56px; }
-    }
   </style>
 </head>
 <body>

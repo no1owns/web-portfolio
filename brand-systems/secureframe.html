@@ -14,53 +14,6 @@
     .cs-tag { border-color: rgba(10,112,85,0.25); background: rgba(10,112,85,0.08); color: #0a7055; }
     .cs-section-label { color: #0a7055; }
     .g-text { background: linear-gradient(135deg, #0a7055, #10B981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
-    /* ── Sticky card stack ── */
-    .stack-section {
-      margin-bottom: 80px;
-    }
-
-    .stack-cards {
-      position: relative;
-    }
-
-    .stack-card {
-      position: sticky;
-      top: 72px;
-      width: 86%;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 28vh;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.12);
-      background: #111118;
-      will-change: transform;
-    }
-
-    .stack-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .stack-card:nth-child(1) { z-index: 1; }
-    .stack-card:nth-child(2) { z-index: 2; }
-    .stack-card:nth-child(3) { z-index: 3; }
-
-    .stack-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .stack-card video {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    @media (max-width: 768px) {
-      .stack-card { width: 92%; top: 56px; }
-    }
   </style>
 </head>
 <body class="light-bg">

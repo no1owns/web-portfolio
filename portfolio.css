@@ -93,6 +93,8 @@ ul { list-style: none; }
   position: relative;
   height: 200vh;
   background: transparent;
+  margin-bottom: -100vh;
+  z-index: 2;
 }
 .ayo-pin {
   position: sticky;
@@ -241,6 +243,7 @@ ul { list-style: none; }
 /* ── Hero ── */
 .hero {
   position: relative;
+  z-index: 1;
   min-height: 100vh;
   min-height: 100svh; /* excludes mobile browser chrome */
   display: flex;

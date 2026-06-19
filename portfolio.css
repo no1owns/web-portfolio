@@ -91,8 +91,8 @@ ul { list-style: none; }
 /* ── AYO Reveal Section ── */
 .ayo-reveal {
   position: relative;
-  height: 240vh;
-  background: #ffffff;
+  height: 200vh;
+  background: transparent;
 }
 .ayo-pin {
   position: sticky;

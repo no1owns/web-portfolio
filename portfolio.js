@@ -163,6 +163,7 @@ async function initAYOReveal() {
   const morphPath = document.getElementById('ayo-morph-path');
   const ayoPin    = document.querySelector('.ayo-pin');
   const videoWrap = document.querySelector('.ayo-video-wrap');
+  const videoEl   = document.querySelector('.ayo-video');
   if (!section || !morphPath) return;
   if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
 
@@ -228,8 +229,11 @@ async function initAYOReveal() {
       /* Video fade-in on entrance */
       if (videoWrap) videoWrap.style.opacity = p < 0.08 ? p/0.08 : 1;
 
-      /* Fade entire pin out as scroll completes (O expands → dissolve to white) */
-      if (ayoPin) ayoPin.style.opacity = p >= 0.82 ? Math.max(0, 1 - (p - 0.82) / 0.18) : 1;
+      /* Video zoom: scale 1.0 → 1.7 as mask expands */
+      if (videoEl) videoEl.style.transform = `scale(${1 + p * 0.7})`;
+
+      /* Fade pin out over last 20% of scroll */
+      if (ayoPin) ayoPin.style.opacity = p >= 0.80 ? Math.max(0, 1 - (p - 0.80) / 0.20) : 1;
     }
   });
 }

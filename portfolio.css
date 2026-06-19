@@ -103,7 +103,7 @@ ul { list-style: none; }
 .ayo-bg {
   position: absolute;
   inset: 0;
-  background: hsl(32, 45%, 5%);
+  background: #ffffff;
   transition: none;
   z-index: 0;
 }

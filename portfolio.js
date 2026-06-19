@@ -161,7 +161,7 @@ document.querySelectorAll('.stat-n').forEach(el => {
 async function initAYOReveal() {
   const section   = document.getElementById('ayo-reveal');
   const morphPath = document.getElementById('ayo-morph-path');
-  const ayoBg     = document.querySelector('.ayo-bg');
+  const ayoPin    = document.querySelector('.ayo-pin');
   const videoWrap = document.querySelector('.ayo-video-wrap');
   if (!section || !morphPath) return;
   if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
@@ -209,16 +209,6 @@ async function initAYOReveal() {
   rebuild();
   window.addEventListener('resize', rebuild, { passive: true });
 
-  /* Background color stops: warm amber → navy → indigo */
-  const STOPS = [[32,45,5],[215,45,6],[250,50,6]];
-  function bgAt(p) {
-    const t = Math.min(p / 0.82, 1) * 2; /* maps 0-0.82 → 0-2 */
-    const i = Math.min(Math.floor(t), 1);
-    const f = t - i;
-    const a = STOPS[i], b = STOPS[i+1];
-    return `hsl(${(a[0]+(b[0]-a[0])*f)|0},${(a[1]+(b[1]-a[1])*f)|0}%,${+(a[2]+(b[2]-a[2])*f).toFixed(1)}%)`;
-  }
-
   ScrollTrigger.create({
     trigger: section,
     start: 'top top',
@@ -238,8 +228,8 @@ async function initAYOReveal() {
       /* Video fade-in on entrance */
       if (videoWrap) videoWrap.style.opacity = p < 0.08 ? p/0.08 : 1;
 
-      /* Background colour */
-      if (ayoBg) ayoBg.style.background = bgAt(p);
+      /* Fade entire pin out as scroll completes (O expands → dissolve to white) */
+      if (ayoPin) ayoPin.style.opacity = p >= 0.82 ? Math.max(0, 1 - (p - 0.82) / 0.18) : 1;
     }
   });
 }

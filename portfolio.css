@@ -509,10 +509,11 @@ ul { list-style: none; }
 }
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   align-items: start;
   margin-bottom: 80px;
+  max-width: 760px;
 }
 .about-img-wrap { position: relative; }
 .about-img-frame {

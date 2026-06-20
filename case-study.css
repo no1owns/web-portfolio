@@ -50,6 +50,42 @@ ul { list-style: none; }
 .stack-cards {
   position: relative;
 }
+
+/* ── Horizontal scroll gallery ── */
+.scroll-gallery {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 5vw 20px;
+  margin: 0 0 80px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200,146,42,0.35) transparent;
+}
+.scroll-gallery::-webkit-scrollbar { height: 4px; }
+.scroll-gallery::-webkit-scrollbar-track { background: transparent; }
+.scroll-gallery::-webkit-scrollbar-thumb { background: rgba(200,146,42,0.35); border-radius: 2px; }
+
+.scroll-gallery img,
+.scroll-gallery video {
+  height: 58vh;
+  width: auto;
+  flex-shrink: 0;
+  display: block;
+  border-radius: 8px;
+  scroll-snap-align: start;
+  object-fit: cover;
+}
+@media (max-width: 768px) {
+  .scroll-gallery img,
+  .scroll-gallery video { height: 38vh; }
+  .scroll-gallery { gap: 8px; padding: 0 4vw 16px; }
+}
+
 .stack-card {
   position: sticky;
   top: 80px;

@@ -433,6 +433,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
+/* ── Card click-through ── */
+document.querySelectorAll('.proj-card').forEach(card => {
+  const link = card.querySelector('.proj-ov-link');
+  if (!link) return;
+  card.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    window.location.href = link.href;
+  });
+});
+
 /* ── Project filter ── */
 const filterBtns = document.querySelectorAll('.flt-btn');
 const projCards  = document.querySelectorAll('.proj-card');

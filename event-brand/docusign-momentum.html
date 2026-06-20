@@ -186,5 +186,63 @@
   splitReveal('.cs-section-title');
 })();
 </script>
+
+<script>
+(function () {
+  document.querySelectorAll('.scroll-gallery').forEach(function (gallery) {
+    /* Clone all items for seamless looping */
+    var originals = Array.from(gallery.children);
+    originals.forEach(function (child) {
+      gallery.appendChild(child.cloneNode(true));
+    });
+
+    var speed     = 0.55; /* px per frame at 60fps ≈ 33px/s */
+    var paused    = false;
+    var userTimer = null;
+
+    function resume() { paused = false; }
+
+    function softPause(ms) {
+      paused = true;
+      clearTimeout(userTimer);
+      userTimer = setTimeout(resume, ms || 1800);
+    }
+
+    gallery.addEventListener('mouseenter', function () { paused = true; });
+    gallery.addEventListener('mouseleave', resume);
+    gallery.addEventListener('wheel',      function () { softPause(1800); }, { passive: true });
+    gallery.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+    gallery.addEventListener('touchend',   function () { softPause(1800); }, { passive: true });
+
+    function tick() {
+      if (!paused) {
+        gallery.scrollLeft += speed;
+        /* Seamless loop: jump back by half the total width (the originals' width) */
+        var half = gallery.scrollWidth / 2;
+        if (gallery.scrollLeft >= half) {
+          gallery.scrollLeft -= half;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* Wait for images to load so scrollWidth is accurate */
+    var imgs = Array.from(gallery.querySelectorAll('img, video'));
+    var loaded = 0;
+    function onLoad() {
+      loaded++;
+      if (loaded >= imgs.length) requestAnimationFrame(tick);
+    }
+    if (imgs.length === 0) {
+      requestAnimationFrame(tick);
+    } else {
+      imgs.forEach(function (el) {
+        if (el.tagName === 'VIDEO' || el.complete) { onLoad(); }
+        else { el.addEventListener('load', onLoad); el.addEventListener('error', onLoad); }
+      });
+    }
+  });
+})();
+</script>
 </body>
 </html>

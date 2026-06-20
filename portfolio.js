@@ -80,27 +80,26 @@ ScrollTrigger.create({
 
 /* ── Scroll reveals ── */
 ScrollTrigger.batch('.reveal', {
-  onEnter: els => gsap.from(els, { y: 44, opacity: 0, duration: 0.85, stagger: 0.08, ease: 'power3.out' }),
-  start: 'top 88%'
+  onEnter: els => gsap.from(els, { y: 44, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-l', {
-  onEnter: els => gsap.from(els, { x: -56, opacity: 0, duration: 0.85, stagger: 0.08, ease: 'power3.out' }),
-  start: 'top 88%'
+  onEnter: els => gsap.from(els, { x: -56, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-r', {
-  onEnter: els => gsap.from(els, { x: 56, opacity: 0, duration: 0.85, stagger: 0.08, ease: 'power3.out' }),
-  start: 'top 88%'
+  onEnter: els => gsap.from(els, { x: 56, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-s', {
-  onEnter: els => gsap.from(els, { scale: 0.86, opacity: 0, duration: 0.85, stagger: 0.1, ease: 'back.out(1.4)' }),
-  start: 'top 88%'
+  onEnter: els => gsap.from(els, { scale: 0.94, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  start: 'top 88%', once: true
 });
 
-/* ── Image card stagger ── */
+/* ── Image card reveal ── */
 ScrollTrigger.batch('.img-rise', {
   onEnter: els => gsap.from(els, {
-    y: 40, scale: 0.95, opacity: 0,
-    duration: 0.9, stagger: 0.1, ease: 'power3.out'
+    y: 28, opacity: 0, duration: 0.8, ease: 'power3.out'
   }),
   start: 'top 90%',
   once: true

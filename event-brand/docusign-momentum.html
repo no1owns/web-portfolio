@@ -214,11 +214,12 @@
     gallery.addEventListener('touchstart', function () { paused = true; }, { passive: true });
     gallery.addEventListener('touchend',   function () { softPause(1800); }, { passive: true });
 
+    var half = 0; /* computed once after layout, not per-frame */
+
     function tick() {
-      if (!paused) {
+      if (!paused && half > 0) {
         gallery.scrollLeft += speed;
         /* Seamless loop: jump back by half the total width (the originals' width) */
-        var half = gallery.scrollWidth / 2;
         if (gallery.scrollLeft >= half) {
           gallery.scrollLeft -= half;
         }
@@ -231,10 +232,19 @@
     var loaded = 0;
     function onLoad() {
       loaded++;
-      if (loaded >= imgs.length) requestAnimationFrame(tick);
+      if (loaded >= imgs.length) {
+        /* Extra rAF ensures the browser has finished layout before reading scrollWidth */
+        requestAnimationFrame(function () {
+          half = gallery.scrollWidth / 2;
+          requestAnimationFrame(tick);
+        });
+      }
     }
     if (imgs.length === 0) {
-      requestAnimationFrame(tick);
+      requestAnimationFrame(function () {
+        half = gallery.scrollWidth / 2;
+        requestAnimationFrame(tick);
+      });
     } else {
       imgs.forEach(function (el) {
         if (el.tagName === 'VIDEO' || el.complete) { onLoad(); }

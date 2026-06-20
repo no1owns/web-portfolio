@@ -226,9 +226,6 @@ async function initAYOReveal() {
       else               { d = iOF(Math.min((p-0.82)/0.18, 1)); }
       morphPath.setAttribute('d', d);
 
-      /* Video fade-in on entrance */
-      if (videoWrap) videoWrap.style.opacity = p < 0.08 ? p/0.08 : 1;
-
       /* Video zoom: 1.25 → 1.40 push (CSS base already 1.25x, so no render upscaling) */
       if (videoEl) videoEl.style.transform = `scale(${1.25 + p * 0.15})`;
 

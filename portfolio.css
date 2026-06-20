@@ -129,6 +129,8 @@ ul { list-style: none; }
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.25); /* headroom so JS zoom stays in 1.0–1.15 range */
+  will-change: transform;
 }
 
 /* ── Navigation ── */

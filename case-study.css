@@ -61,7 +61,6 @@ ul { list-style: none; }
   overflow-y: hidden;
   padding: 0 5vw 20px;
   margin: 0 0 80px;
-  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(200,146,42,0.35) transparent;
@@ -77,7 +76,6 @@ ul { list-style: none; }
   flex-shrink: 0;
   display: block;
   border-radius: 8px;
-  scroll-snap-align: start;
   object-fit: cover;
 }
 @media (max-width: 768px) {

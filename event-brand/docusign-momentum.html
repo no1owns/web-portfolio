@@ -189,69 +189,57 @@
 
 <script>
 (function () {
-  document.querySelectorAll('.scroll-gallery').forEach(function (gallery) {
-    /* Clone all items for seamless looping */
-    var originals = Array.from(gallery.children);
-    originals.forEach(function (child) {
+  function initGallery(gallery) {
+    /* Clone originals for seamless loop */
+    Array.from(gallery.children).forEach(function (child) {
       gallery.appendChild(child.cloneNode(true));
     });
 
-    var speed     = 0.55; /* px per frame at 60fps ≈ 33px/s */
-    var paused    = false;
-    var userTimer = null;
+    var speed  = 0.6;
+    var paused = false;
+    var timer  = null;
+    var half   = 0;
 
-    function resume() { paused = false; }
-
-    function softPause(ms) {
-      paused = true;
-      clearTimeout(userTimer);
-      userTimer = setTimeout(resume, ms || 1800);
-    }
+    function resume()    { paused = false; }
+    function softPause() { paused = true; clearTimeout(timer); timer = setTimeout(resume, 1800); }
 
     gallery.addEventListener('mouseenter', function () { paused = true; });
     gallery.addEventListener('mouseleave', resume);
-    gallery.addEventListener('wheel',      function () { softPause(1800); }, { passive: true });
+    gallery.addEventListener('wheel',      softPause, { passive: true });
     gallery.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-    gallery.addEventListener('touchend',   function () { softPause(1800); }, { passive: true });
-
-    var half = 0; /* computed once after layout, not per-frame */
+    gallery.addEventListener('touchend',   softPause, { passive: true });
 
     function tick() {
-      if (!paused && half > 0) {
+      if (!paused) {
         gallery.scrollLeft += speed;
-        /* Seamless loop: jump back by half the total width (the originals' width) */
-        if (gallery.scrollLeft >= half) {
-          gallery.scrollLeft -= half;
-        }
+        if (gallery.scrollLeft >= half) { gallery.scrollLeft -= half; }
       }
       requestAnimationFrame(tick);
     }
 
-    /* Wait for images to load so scrollWidth is accurate */
-    var imgs = Array.from(gallery.querySelectorAll('img, video'));
-    var loaded = 0;
-    function onLoad() {
-      loaded++;
-      if (loaded >= imgs.length) {
-        /* Extra rAF ensures the browser has finished layout before reading scrollWidth */
-        requestAnimationFrame(function () {
-          half = gallery.scrollWidth / 2;
-          requestAnimationFrame(tick);
-        });
+    function start() {
+      half = gallery.scrollWidth / 2;
+      if (half > 0) {
+        requestAnimationFrame(tick);
+      } else {
+        /* Layout not ready yet — retry shortly */
+        setTimeout(start, 250);
       }
     }
-    if (imgs.length === 0) {
-      requestAnimationFrame(function () {
-        half = gallery.scrollWidth / 2;
-        requestAnimationFrame(tick);
-      });
-    } else {
-      imgs.forEach(function (el) {
-        if (el.tagName === 'VIDEO' || el.complete) { onLoad(); }
-        else { el.addEventListener('load', onLoad); el.addEventListener('error', onLoad); }
-      });
-    }
+
+    return start;
+  }
+
+  /* Collect start functions while DOM is available */
+  var starters = [];
+  document.querySelectorAll('.scroll-gallery').forEach(function (gallery) {
+    starters.push(initGallery(gallery));
   });
+
+  /* Fire after all images/videos have loaded so scrollWidth is accurate */
+  function run() { starters.forEach(function (s) { s(); }); }
+  if (document.readyState === 'complete') { run(); }
+  else { window.addEventListener('load', run); }
 })();
 </script>
 </body>

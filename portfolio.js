@@ -97,19 +97,6 @@ ScrollTrigger.batch('.reveal-s', {
 });
 
 
-/* ── Skills word cloud ── */
-ScrollTrigger.create({
-  trigger: '.skills-cloud',
-  start: 'top 82%',
-  once: true,
-  onEnter() {
-    gsap.from('.cw', {
-      y: 22, opacity: 0, duration: 0.55,
-      stagger: { each: 0.032, from: 'random' },
-      ease: 'power3.out'
-    });
-  }
-});
 
 /* ── Heading line-mask reveal ── */
 function splitReveal(selector) {

@@ -582,26 +582,6 @@ ul { list-style: none; }
 .edu-item:last-child { margin-bottom: 0; }
 .edu-item strong { display: block; font-size: 0.92rem; color: var(--text-primary); }
 .edu-item span { font-size: 0.82rem; color: var(--text-sub); }
-.skills-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 1.5rem;
-}
-.skill-tag {
-  padding: 5px 13px;
-  background: var(--bg-card);
-  border: 1.5px solid var(--border-solid);
-  border-radius: 100px;
-  font-size: 0.78rem;
-  color: var(--text-sub);
-  transition: all var(--tr-fast);
-}
-.skill-tag:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(180, 110, 20, 0.05);
-}
 
 /* ── Stats ── */
 .stats-band {
@@ -907,43 +887,53 @@ ul { list-style: none; }
   line-height: 1.6;
 }
 
-/* ── Skills — word cloud ── */
+/* ── Skills — scrolling marquee rows ── */
 .skills-section {
   padding: 100px 0;
   background: var(--bg-deep);
 }
-.skills-cloud {
+.skills-marquee {
+  margin-top: 3rem;
+  overflow: hidden;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.45rem 1.1rem;
-  max-width: 1000px;
+  flex-direction: column;
+  gap: 0;
 }
-.cw {
-  display: inline-block;
+.sm-row {
+  overflow: hidden;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--border);
+}
+.sm-row:last-child { border-bottom: 1px solid var(--border); }
+.sm-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+  white-space: nowrap;
   font-family: var(--font-head);
-  line-height: 1.2;
-  cursor: default;
-  transition: color 0.2s ease;
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  font-weight: 600;
+  color: var(--text-sub);
+  letter-spacing: 0.01em;
+  animation: sm-scroll-left 28s linear infinite;
+  will-change: transform;
 }
-.cw-xl {
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
-  font-weight: 800;
-  font-style: italic;
-  color: var(--accent-warm);
-  letter-spacing: -0.02em;
+.sm-strip--med  { animation-duration: 38s; }
+.sm-strip--slow { animation-duration: 46s; }
+.sm-row--reverse .sm-strip { animation-direction: reverse; }
+.sm-sep {
+  color: var(--accent);
+  font-weight: 400;
+  opacity: 0.6;
+  flex-shrink: 0;
 }
-.cw-lg {
-  font-size: clamp(1.1rem, 2.2vw, 1.75rem);
-  font-weight: 700;
-  color: var(--text-primary);
+@keyframes sm-scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
-.cw-md {
-  font-size: clamp(0.78rem, 1.1vw, 0.95rem);
-  font-weight: 500;
-  color: var(--text-muted);
+@media (prefers-reduced-motion: reduce) {
+  .sm-strip { animation: none; }
 }
-.cw:hover { color: var(--accent-warm); }
 
 /* ── Contact ── */
 .contact-section {

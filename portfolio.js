@@ -457,3 +457,64 @@ filterBtns.forEach(btn => {
     });
   });
 });
+
+/* ── Company name flip grid ── */
+function initFlipGrid() {
+  const NAMES = [
+    'MongoDB', 'DocuSign', 'AppOmni', 'Navan',
+    'Secureframe', 'BetterUp', 'Loft', 'Visa',
+    'Lufthansa', 'Salesforce', 'Google', 'Microsoft', 'Apple'
+  ];
+  const cells = Array.from(document.querySelectorAll('.flip-cell'));
+  if (!cells.length) return;
+
+  const n = cells.length;
+  let globalIdx = 0;
+
+  cells.forEach(cell => {
+    cell.querySelector('.flip-front').textContent = NAMES[globalIdx++ % NAMES.length];
+  });
+
+  let cellQueue = 0;
+  let flipping = new Set();
+
+  function nextName() {
+    const visible = new Set(cells.map(c => c.querySelector('.flip-front').textContent));
+    let name, idx = globalIdx, guard = 0;
+    do {
+      name = NAMES[idx++ % NAMES.length];
+      guard++;
+    } while (visible.has(name) && guard < NAMES.length);
+    globalIdx = idx;
+    return name;
+  }
+
+  function flip() {
+    const idx  = cellQueue++ % n;
+    const cell  = cells[idx];
+    if (flipping.has(idx)) return;
+
+    const front = cell.querySelector('.flip-front');
+    const back  = cell.querySelector('.flip-back');
+    const inner = cell.querySelector('.flip-inner');
+
+    back.textContent = nextName();
+    flipping.add(idx);
+    cell.classList.add('is-flipped');
+
+    function onEnd() {
+      inner.removeEventListener('transitionend', onEnd);
+      inner.style.transition = 'none';
+      front.textContent = back.textContent;
+      cell.classList.remove('is-flipped');
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        inner.style.transition = '';
+        flipping.delete(idx);
+      }));
+    }
+    inner.addEventListener('transitionend', onEnd);
+  }
+
+  setTimeout(() => setInterval(flip, 1800), 2000);
+}
+initFlipGrid();

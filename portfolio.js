@@ -96,14 +96,6 @@ ScrollTrigger.batch('.reveal-s', {
   start: 'top 88%', once: true
 });
 
-/* ── Image card reveal ── */
-ScrollTrigger.batch('.img-rise', {
-  onEnter: els => gsap.from(els, {
-    y: 28, opacity: 0, duration: 0.8, ease: 'power3.out'
-  }),
-  start: 'top 90%',
-  once: true
-});
 
 /* ── Heading line-mask reveal ── */
 function splitReveal(selector) {

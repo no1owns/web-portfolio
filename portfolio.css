@@ -117,6 +117,22 @@ ul { list-style: none; }
   pointer-events: none;
   z-index: 1;
 }
+.ayo-stroke-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 4;
+}
+#ayo-stroke-path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  opacity: 0.55;
+  transform: translate(12px, 12px);
+}
 .ayo-video-wrap {
   position: absolute;
   inset: 0;

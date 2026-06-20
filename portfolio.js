@@ -152,10 +152,11 @@ document.querySelectorAll('.stat-n').forEach(el => {
 /* ── AYO Reveal: scroll-driven morph A → Y → O + video clip ── */
 async function initAYOReveal() {
   const section   = document.getElementById('ayo-reveal');
-  const morphPath = document.getElementById('ayo-morph-path');
-  const ayoPin    = document.querySelector('.ayo-pin');
-  const videoWrap = document.querySelector('.ayo-video-wrap');
-  const videoEl   = document.querySelector('.ayo-video');
+  const morphPath  = document.getElementById('ayo-morph-path');
+  const strokePath = document.getElementById('ayo-stroke-path');
+  const ayoPin     = document.querySelector('.ayo-pin');
+  const videoWrap  = document.querySelector('.ayo-video-wrap');
+  const videoEl    = document.querySelector('.ayo-video');
   if (!section || !morphPath) return;
   if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
 
@@ -197,6 +198,7 @@ async function initAYOReveal() {
     iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
     iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });
     morphPath.setAttribute('d', pathA);
+    if (strokePath) strokePath.setAttribute('d', pathA);
   }
 
   rebuild();
@@ -217,6 +219,7 @@ async function initAYOReveal() {
       else if (p < 0.82) { d = iYO(Math.min((p-0.48)/0.34, 1)); }
       else               { d = iOF(Math.min((p-0.82)/0.18, 1)); }
       morphPath.setAttribute('d', d);
+      if (strokePath) strokePath.setAttribute('d', d);
 
       /* Video zoom: 1.25 → 1.40 push (CSS base already 1.25x, so no render upscaling) */
       if (videoEl) videoEl.style.transform = `scale(${1.25 + p * 0.15})`;

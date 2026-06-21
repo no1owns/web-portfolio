@@ -224,8 +224,8 @@ async function initAYOReveal() {
       /* Video zoom: 1.25 → 1.40 push (CSS base already 1.25x, so no render upscaling) */
       if (videoEl) videoEl.style.transform = `scale(${1.25 + p * 0.15})`;
 
-      /* Fade pin out over last 20% of scroll */
-      if (ayoPin) ayoPin.style.opacity = p >= 0.80 ? Math.max(0, 1 - (p - 0.80) / 0.20) : 1;
+      /* Keep pin fully visible at all scroll positions */
+      if (ayoPin) ayoPin.style.opacity = 1;
     }
   });
 }

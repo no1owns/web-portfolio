@@ -520,3 +520,57 @@ function initFlipGrid() {
   setTimeout(() => setInterval(flip, 1800), 2000);
 }
 initFlipGrid();
+
+/* ── Skills Marquee (JS rAF — CSS animation broken on iOS Safari) ── */
+(function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  var strips = Array.from(document.querySelectorAll('.sm-strip'));
+  if (!strips.length) return;
+
+  /* speed px/frame, reverse flag, fractional start offset (0–1 of half-width) */
+  var configs = [
+    { speed: 0.5,  reverse: false, startFrac: 0 },
+    { speed: 0.35, reverse: true,  startFrac: 0.33 },
+    { speed: 0.28, reverse: false, startFrac: 0.66 }
+  ];
+
+  function initStrip(strip, cfg) {
+    var half = strip.scrollWidth / 2;
+    if (half <= 0) { setTimeout(function () { initStrip(strip, cfg); }, 250); return; }
+
+    var pos = half * cfg.startFrac;
+    var paused = false;
+    var row = strip.parentElement;
+
+    row.addEventListener('mouseenter', function () { paused = true; });
+    row.addEventListener('mouseleave', function () { paused = false; });
+
+    function tick() {
+      if (!paused) {
+        if (cfg.reverse) {
+          pos -= cfg.speed;
+          if (pos <= 0) pos += half;
+        } else {
+          pos += cfg.speed;
+          if (pos >= half) pos -= half;
+        }
+        var val = 'translateX(-' + pos + 'px)';
+        strip.style.webkitTransform = val;
+        strip.style.transform = val;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function init() {
+    strips.forEach(function (strip, i) {
+      initStrip(strip, configs[i] || configs[0]);
+    });
+  }
+
+  if (document.readyState === 'complete') { init(); }
+  else { window.addEventListener('load', init); }
+})();

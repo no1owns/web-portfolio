@@ -962,38 +962,19 @@ ul { list-style: none; }
   font-weight: 600;
   color: var(--text-sub);
   letter-spacing: 0.01em;
-  -webkit-animation: sm-scroll-left 28s linear infinite;
-  animation: sm-scroll-left 28s linear infinite;
+  will-change: transform;
 }
-.sm-strip--med  { -webkit-animation-duration: 38s; animation-duration: 38s; -webkit-animation-delay: -9s; animation-delay: -9s; }
-.sm-strip--slow { -webkit-animation-duration: 46s; animation-duration: 46s; -webkit-animation-delay: -20s; animation-delay: -20s; }
-.sm-row--reverse .sm-strip { -webkit-animation-direction: reverse; animation-direction: reverse; }
 .sm-sep {
   color: var(--accent);
   font-weight: 400;
   opacity: 0.6;
   flex-shrink: 0;
 }
-@-webkit-keyframes sm-scroll-left {
-  from { -webkit-transform: translateX(0); transform: translateX(0); }
-  to   { -webkit-transform: translateX(-50%); transform: translateX(-50%); }
-}
-@keyframes sm-scroll-left {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
 @media (prefers-reduced-motion: reduce) {
-  .sm-strip { -webkit-animation: none; animation: none; }
+  .sm-strip { animation: none !important; }
 }
 @media (max-width: 768px) {
-  .sm-strip {
-    font-size: 0.95rem;
-    gap: 1.4rem;
-    -webkit-animation-duration: 16s;
-    animation-duration: 16s;
-  }
-  .sm-strip--med  { -webkit-animation-duration: 21s; animation-duration: 21s; -webkit-animation-delay: -5s; animation-delay: -5s; }
-  .sm-strip--slow { -webkit-animation-duration: 27s; animation-duration: 27s; -webkit-animation-delay: -10s; animation-delay: -10s; }
+  .sm-strip { font-size: 0.95rem; gap: 1.4rem; }
   .sm-row { padding: 0.75rem 0; }
 }
 

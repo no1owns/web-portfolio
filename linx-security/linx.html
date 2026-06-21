@@ -28,7 +28,7 @@
   <div class="cs-nav-inner">
     <a href="../portfolio.html" class="cs-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
     <a href="../portfolio.html" class="cs-nav-logo">AYO<span>.</span></a>
-    <span class="cs-nav-right">2023 · Brand & Product Design</span>
+    <span class="cs-nav-right">2026 · Brand Character</span>
   </div>
 </nav>
 
@@ -42,12 +42,11 @@
     </div>
     <div class="cs-tags">
       <span class="cs-tag">Brand Character</span>
-      <span class="cs-tag">Product Design</span>
-      <span class="cs-tag">UX</span>
-      <span class="cs-tag">Gamification</span>
+      <span class="cs-tag">Visual Identity</span>
+      <span class="cs-tag">Visual System</span>
     </div>
     <h1 class="cs-title">Linx<br><span class="g-text">Security</span></h1>
-    <p class="cs-summary">Brand character and gamified onboarding design for Linx Security — building a visual identity and level-based UX system that made enterprise security training feel less like compliance and more like progression.</p>
+    <p class="cs-summary">Brand character and visual identity for Linx Security — a four-level design system, each level with its own color language and visual personality, escalating in complexity and prestige.</p>
   </div>
 </section>
 
@@ -62,11 +61,11 @@
   </div>
   <div class="cs-meta-cell">
     <div class="cs-meta-label">Year</div>
-    <div class="cs-meta-value">2023</div>
+    <div class="cs-meta-value">2026</div>
   </div>
   <div class="cs-meta-cell">
     <div class="cs-meta-label">Deliverables</div>
-    <div class="cs-meta-value">Brand · UX · Visual System · Motion</div>
+    <div class="cs-meta-value">Brand · Visual System</div>
   </div>
 </div>
 
@@ -75,9 +74,9 @@
   <div class="container">
     <div class="cs-section">
       <div class="cs-section-label">Overview</div>
-      <h2 class="cs-section-title">Making Security Feel Like Progress</h2>
+      <h2 class="cs-section-title">Brand Character With Built-In Progression</h2>
       <div class="cs-section-text">
-        <p>Linx Security needed to solve a familiar enterprise problem: how do you get people to actually engage with security training? The answer was gamification — a level-based system that gave users a clear sense of progression, achievement, and reward. The creative work spanned brand character development, moodboard exploration, and a full visual system for the level UI.</p>
+        <p>Linx Security needed a visual identity that could do more than look good — it had to carry meaning through levels. The creative work spanned brand character development, moodboard exploration, and a full visual system built around four distinct stages, each with its own personality and sense of earned prestige.</p>
       </div>
     </div>
   </div>
@@ -119,11 +118,11 @@
       </div>
       <div class="cs-result-card">
         <div class="cs-result-num">★</div>
-        <div class="cs-result-label">Gamified enterprise security onboarding</div>
+        <div class="cs-result-label">Brand character with built-in progression</div>
       </div>
       <div class="cs-result-card">
         <div class="cs-result-num">Full</div>
-        <div class="cs-result-label">Brand · UX · Motion system</div>
+        <div class="cs-result-label">Brand · Visual System</div>
       </div>
     </div>
 
@@ -168,7 +167,6 @@
 <script>
 (function () {
   function initGallery(gallery) {
-    /* Clone originals for seamless loop */
     Array.from(gallery.children).forEach(function (child) {
       gallery.appendChild(child.cloneNode(true));
     });
@@ -200,7 +198,6 @@
       if (half > 0) {
         requestAnimationFrame(tick);
       } else {
-        /* Layout not ready yet — retry shortly */
         setTimeout(start, 250);
       }
     }
@@ -208,13 +205,11 @@
     return start;
   }
 
-  /* Collect start functions while DOM is available */
   var starters = [];
   document.querySelectorAll('.scroll-gallery').forEach(function (gallery) {
     starters.push(initGallery(gallery));
   });
 
-  /* Fire after all images/videos have loaded so scrollWidth is accurate */
   function run() { starters.forEach(function (s) { s(); }); }
   if (document.readyState === 'complete') { run(); }
   else { window.addEventListener('load', run); }

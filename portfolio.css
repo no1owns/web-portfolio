@@ -987,6 +987,50 @@ ul { list-style: none; }
   .sm-row { padding: 0.75rem 0; }
 }
 
+/* ── Stat prefix ($) ── */
+.stat-prefix {
+  font-family: var(--font-head);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+/* ── Testimonial ── */
+.testimonial-section {
+  padding: 80px 0;
+  background: var(--bg-dark);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.testimonial-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+.testimonial-mark {
+  font-family: var(--font-head);
+  font-size: 6rem;
+  line-height: 0.6;
+  color: var(--accent);
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+.testimonial-quote {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem;
+  font-weight: 400;
+}
+.testimonial-attr {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 /* ── Contact ── */
 .contact-section {
   position: relative;

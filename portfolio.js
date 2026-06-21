@@ -385,7 +385,7 @@ const phrases = [
   'Senior Visual Designer @ AppOmni',
   'Former Creative Director @ MongoDB',
   'Brand Architect for Modern Teams',
-  'Visual Storyteller for 15+ Years'
+  'UX/UI Storyteller & Brand Architect'
 ];
 const twEl = document.getElementById('tw-text');
 let pi = 0, ci = 0, del = false;

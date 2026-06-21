@@ -543,6 +543,8 @@ ul { list-style: none; }
 @media (max-width: 480px) {
   .cs-results { grid-template-columns: 1fr; }
   .cs-meta { grid-template-columns: 1fr 1fr; }
+  .cs-nav-right { display: none; }
+  .scroll-gallery img, .scroll-gallery video { height: 32vh; }
 }
 
 /* ── Animated gradient background ── */

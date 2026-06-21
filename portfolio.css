@@ -96,6 +96,9 @@ ul { list-style: none; }
   margin-bottom: -100vh;
   z-index: 2;
 }
+@media (max-width: 768px) {
+  .ayo-reveal { height: 130vh; margin-bottom: -50vh; }
+}
 .ayo-pin {
   position: sticky;
   top: 0;
@@ -1120,9 +1123,13 @@ ul { list-style: none; }
   .hero-cta { gap: 0.5rem; }
   .btn { padding: 11px 22px; font-size: 0.84rem; }
 }
+@media (max-width: 768px) {
+  .contact-actions { flex-direction: column; align-items: center; }
+  .name-flip-grid { display: none; }
+}
 @media (max-width: 480px) {
   .stats-band { grid-template-columns: repeat(2, 1fr); }
-  .hero-cta, .contact-actions { flex-direction: column; align-items: center; }
+  .hero-cta { flex-direction: column; align-items: center; }
   .about-grid { gap: 2rem; }
   .section-head { margin-bottom: 2.5rem; }
 }

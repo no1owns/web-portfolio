@@ -948,7 +948,8 @@ ul { list-style: none; }
 }
 .sm-row:last-child { border-bottom: 1px solid var(--border); }
 .sm-strip {
-  display: inline-flex;
+  display: flex;
+  width: max-content;
   align-items: center;
   gap: 1.4rem;
   white-space: nowrap;

@@ -139,17 +139,10 @@ ul { list-style: none; }
 }
 .ayo-video-wrap {
   position: absolute;
-  width: 72vw;
-  aspect-ratio: 16 / 9;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
   z-index: 2;
   clip-path: url(#ayo-clip);
   -webkit-clip-path: url(#ayo-clip);
-}
-@media (max-width: 768px) {
-  .ayo-video-wrap { width: 92vw; }
 }
 .ayo-video {
   width: 100%;

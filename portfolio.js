@@ -186,11 +186,15 @@ async function initAYOReveal() {
     return `M${cx} ${cy-r} C${cx+r*k} ${cy-r} ${cx+r} ${cy-r*k} ${cx+r} ${cy} C${cx+r} ${cy+r*k} ${cx+r*k} ${cy+r} ${cx} ${cy+r} C${cx-r*k} ${cy+r} ${cx-r} ${cy+r*k} ${cx-r} ${cy} C${cx-r} ${cy-r*k} ${cx-r*k} ${cy-r} ${cx} ${cy-r}Z`;
   }
 
-  function videoWrapRectPath() {
-    if (!videoWrap) return null;
-    const r = videoWrap.getBoundingClientRect();
-    if (r.width <= 0) return null;
-    return `M${r.left},${r.top} L${r.right},${r.top} L${r.right},${r.bottom} L${r.left},${r.bottom} Z`;
+  function frameRectPath(vw, vh) {
+    const mobile = vw < 768;
+    const fw = vw * (mobile ? 0.92 : 0.72);
+    const fh = fw * 9 / 16;
+    const left   = (vw - fw) / 2;
+    const top    = (vh - fh) / 2;
+    const right  = left + fw;
+    const bottom = top  + fh;
+    return `M${left},${top} L${right},${top} L${right},${bottom} L${left},${bottom} Z`;
   }
 
   let vw, vh, pathA, pathY, pathO, pathFull, iAY, iYO, iOF;
@@ -200,7 +204,7 @@ async function initAYOReveal() {
     pathA = getLetterPath('A', vw, vh);
     pathY = getLetterPath('Y', vw, vh);
     pathO = getLetterPath('O', vw, vh);
-    pathFull = videoWrapRectPath() || bigCirclePath(vw, vh);
+    pathFull = frameRectPath(vw, vh);
     iAY  = flubber.interpolate(pathA, pathY,    { maxSegmentLength: 4 });
     iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
     iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });

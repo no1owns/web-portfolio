@@ -460,27 +460,24 @@ filterBtns.forEach(btn => {
   });
 });
 
-/* ── Client name tickertape ── */
+/* ── Client name tickertape (scrollLeft — works on iOS Safari) ── */
 (function () {
-  var strip = document.querySelector('.name-ticker-strip');
-  if (!strip) return;
+  var ticker = document.querySelector('.name-ticker');
+  var strip  = ticker && ticker.querySelector('.name-ticker-strip');
+  if (!ticker || !strip) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var pos = 0;
-  var speed = 0.55;
-  var paused = false;
-  var half = 0;
-  var ticker = strip.parentElement;
+  var speed = 0.55, paused = false, half = 0;
 
   ticker.addEventListener('mouseenter', function () { paused = true; });
   ticker.addEventListener('mouseleave', function () { paused = false; });
+  ticker.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+  ticker.addEventListener('touchend',   function () { setTimeout(function () { paused = false; }, 1200); }, { passive: true });
 
   function tick() {
     if (!paused) {
-      pos += speed;
-      if (pos >= half) pos -= half;
-      strip.style.webkitTransform = 'translateX(-' + pos + 'px)';
-      strip.style.transform = 'translateX(-' + pos + 'px)';
+      ticker.scrollLeft += speed;
+      if (ticker.scrollLeft >= half) ticker.scrollLeft -= half;
     }
     requestAnimationFrame(tick);
   }
@@ -495,44 +492,41 @@ filterBtns.forEach(btn => {
   else { window.addEventListener('load', start); }
 })();
 
-/* ── Skills Marquee (JS rAF — CSS animation broken on iOS Safari) ── */
+/* ── Skills Marquee (scrollLeft — works on iOS Safari) ── */
 (function () {
-  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var strips = Array.from(document.querySelectorAll('.sm-strip'));
   if (!strips.length) return;
 
-  /* speed px/frame, reverse flag, fractional start offset (0–1 of half-width) */
+  /* speed px/frame, reverse flag, fractional start offset within half-width */
   var configs = [
     { speed: 0.5,  reverse: false, startFrac: 0 },
     { speed: 0.35, reverse: true,  startFrac: 0.33 },
     { speed: 0.28, reverse: false, startFrac: 0.66 }
   ];
 
-  function initStrip(strip, cfg) {
-    var half = strip.scrollWidth / 2;
-    if (half <= 0) { setTimeout(function () { initStrip(strip, cfg); }, 250); return; }
+  function initRow(row, cfg) {
+    var half = row.scrollWidth / 2;
+    if (half <= 0) { setTimeout(function () { initRow(row, cfg); }, 250); return; }
 
-    var pos = half * cfg.startFrac;
+    row.scrollLeft = half * cfg.startFrac;
     var paused = false;
-    var row = strip.parentElement;
 
     row.addEventListener('mouseenter', function () { paused = true; });
     row.addEventListener('mouseleave', function () { paused = false; });
+    row.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+    row.addEventListener('touchend',   function () { setTimeout(function () { paused = false; }, 1200); }, { passive: true });
 
     function tick() {
       if (!paused) {
         if (cfg.reverse) {
-          pos -= cfg.speed;
-          if (pos <= 0) pos += half;
+          row.scrollLeft -= cfg.speed;
+          if (row.scrollLeft <= 0) row.scrollLeft += half;
         } else {
-          pos += cfg.speed;
-          if (pos >= half) pos -= half;
+          row.scrollLeft += cfg.speed;
+          if (row.scrollLeft >= half) row.scrollLeft -= half;
         }
-        var val = 'translateX(-' + pos + 'px)';
-        strip.style.webkitTransform = val;
-        strip.style.transform = val;
       }
       requestAnimationFrame(tick);
     }
@@ -541,7 +535,7 @@ filterBtns.forEach(btn => {
 
   function init() {
     strips.forEach(function (strip, i) {
-      initStrip(strip, configs[i] || configs[0]);
+      initRow(strip.parentElement, configs[i] || configs[0]);
     });
   }
 

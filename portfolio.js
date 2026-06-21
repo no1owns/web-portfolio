@@ -460,66 +460,40 @@ filterBtns.forEach(btn => {
   });
 });
 
-/* ── Company name flip grid ── */
-function initFlipGrid() {
-  const NAMES = [
-    'MongoDB', 'DocuSign', 'AppOmni', 'Navan',
-    'Secureframe', 'BetterUp', 'Loft', 'Visa',
-    'Lufthansa', 'Salesforce', 'Google', 'Microsoft', 'Apple'
-  ];
-  const cells = Array.from(document.querySelectorAll('.flip-cell'));
-  if (!cells.length) return;
+/* ── Client name tickertape ── */
+(function () {
+  var strip = document.querySelector('.name-ticker-strip');
+  if (!strip) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const n = cells.length;
-  let globalIdx = 0;
+  var pos = 0;
+  var speed = 0.55;
+  var paused = false;
+  var half = 0;
+  var ticker = strip.parentElement;
 
-  cells.forEach(cell => {
-    cell.querySelector('.flip-front').textContent = NAMES[globalIdx++ % NAMES.length];
-  });
+  ticker.addEventListener('mouseenter', function () { paused = true; });
+  ticker.addEventListener('mouseleave', function () { paused = false; });
 
-  let cellQueue = 0;
-  let flipping = new Set();
-
-  function nextName() {
-    const visible = new Set(cells.map(c => c.querySelector('.flip-front').textContent));
-    let name, idx = globalIdx, guard = 0;
-    do {
-      name = NAMES[idx++ % NAMES.length];
-      guard++;
-    } while (visible.has(name) && guard < NAMES.length);
-    globalIdx = idx;
-    return name;
-  }
-
-  function flip() {
-    const idx  = cellQueue++ % n;
-    const cell  = cells[idx];
-    if (flipping.has(idx)) return;
-
-    const front = cell.querySelector('.flip-front');
-    const back  = cell.querySelector('.flip-back');
-    const inner = cell.querySelector('.flip-inner');
-
-    back.textContent = nextName();
-    flipping.add(idx);
-    cell.classList.add('is-flipped');
-
-    function onEnd() {
-      inner.removeEventListener('transitionend', onEnd);
-      inner.style.transition = 'none';
-      front.textContent = back.textContent;
-      cell.classList.remove('is-flipped');
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        inner.style.transition = '';
-        flipping.delete(idx);
-      }));
+  function tick() {
+    if (!paused) {
+      pos += speed;
+      if (pos >= half) pos -= half;
+      strip.style.webkitTransform = 'translateX(-' + pos + 'px)';
+      strip.style.transform = 'translateX(-' + pos + 'px)';
     }
-    inner.addEventListener('transitionend', onEnd);
+    requestAnimationFrame(tick);
   }
 
-  setTimeout(() => setInterval(flip, 1800), 2000);
-}
-initFlipGrid();
+  function start() {
+    half = strip.scrollWidth / 2;
+    if (half > 0) { requestAnimationFrame(tick); }
+    else { setTimeout(start, 250); }
+  }
+
+  if (document.readyState === 'complete') { start(); }
+  else { window.addEventListener('load', start); }
+})();
 
 /* ── Skills Marquee (JS rAF — CSS animation broken on iOS Safari) ── */
 (function () {

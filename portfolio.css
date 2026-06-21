@@ -960,8 +960,8 @@ ul { list-style: none; }
   animation: sm-scroll-left 28s linear infinite;
   will-change: transform;
 }
-.sm-strip--med  { animation-duration: 38s; }
-.sm-strip--slow { animation-duration: 46s; }
+.sm-strip--med  { animation-duration: 38s; animation-delay: -9s; }
+.sm-strip--slow { animation-duration: 46s; animation-delay: -20s; }
 .sm-row--reverse .sm-strip { animation-direction: reverse; }
 .sm-sep {
   color: var(--accent);
@@ -975,6 +975,16 @@ ul { list-style: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sm-strip { animation: none; }
+}
+@media (max-width: 768px) {
+  .sm-strip {
+    font-size: 0.95rem;
+    gap: 1.4rem;
+    animation-duration: 16s;
+  }
+  .sm-strip--med  { animation-duration: 21s; animation-delay: -5s; }
+  .sm-strip--slow { animation-duration: 27s; animation-delay: -10s; }
+  .sm-row { padding: 0.75rem 0; }
 }
 
 /* ── Contact ── */

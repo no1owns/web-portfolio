@@ -97,7 +97,7 @@ ul { list-style: none; }
   z-index: 2;
 }
 @media (max-width: 768px) {
-  .ayo-reveal { height: 130vh; margin-bottom: -50vh; }
+  .ayo-reveal { height: 130vh; margin-bottom: -100vh; }
 }
 .ayo-pin {
   position: sticky;

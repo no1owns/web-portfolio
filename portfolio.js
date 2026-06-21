@@ -186,6 +186,13 @@ async function initAYOReveal() {
     return `M${cx} ${cy-r} C${cx+r*k} ${cy-r} ${cx+r} ${cy-r*k} ${cx+r} ${cy} C${cx+r} ${cy+r*k} ${cx+r*k} ${cy+r} ${cx} ${cy+r} C${cx-r*k} ${cy+r} ${cx-r} ${cy+r*k} ${cx-r} ${cy} C${cx-r} ${cy-r*k} ${cx-r*k} ${cy-r} ${cx} ${cy-r}Z`;
   }
 
+  function videoWrapRectPath() {
+    if (!videoWrap) return null;
+    const r = videoWrap.getBoundingClientRect();
+    if (r.width <= 0) return null;
+    return `M${r.left},${r.top} L${r.right},${r.top} L${r.right},${r.bottom} L${r.left},${r.bottom} Z`;
+  }
+
   let vw, vh, pathA, pathY, pathO, pathFull, iAY, iYO, iOF;
 
   function rebuild() {
@@ -193,7 +200,7 @@ async function initAYOReveal() {
     pathA = getLetterPath('A', vw, vh);
     pathY = getLetterPath('Y', vw, vh);
     pathO = getLetterPath('O', vw, vh);
-    pathFull = bigCirclePath(vw, vh);
+    pathFull = videoWrapRectPath() || bigCirclePath(vw, vh);
     iAY  = flubber.interpolate(pathA, pathY,    { maxSegmentLength: 4 });
     iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
     iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });

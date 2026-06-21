@@ -3,11 +3,11 @@
    ========================================================== */
 
 :root {
-  /* Backgrounds — warm off-white base, steps of -6 per channel */
-  --bg-deep:       #f7f6f3;   /* (247, 246, 243) — page body */
-  --bg-dark:       #f0efec;   /* (240, 239, 236) — alternate sections */
-  --bg-card:       #ffffff;   /* white card surfaces */
-  --bg-elevated:   #eae9e6;   /* (234, 233, 230) — elevated surfaces */
+  /* Backgrounds — neutral off-white, equal RGB channels */
+  --bg-deep:       #f5f5f5;
+  --bg-dark:       #efefef;
+  --bg-card:       #ffffff;
+  --bg-elevated:   #e8e8e8;
 
   /* Accent — vivid amber for keyword highlights only */
   --accent:        hsl(33, 90%, 46%);
@@ -17,15 +17,15 @@
   /* Gradient — hue +10° start→end, lightness +12%, same saturation */
   --gradient:      linear-gradient(135deg, hsl(28, 90%, 46%) 0%, hsl(43, 86%, 58%) 100%);
 
-  /* Text — dark on white, three steps */
-  --text-primary:  hsl(30, 12%, 10%);   /* near-black */
-  --text-sub:      hsl(30,  6%, 38%);   /* warm mid-grey */
-  --text-muted:    hsl(30,  4%, 58%);   /* light grey */
+  /* Text — neutral grey scale, no warm tint */
+  --text-primary:  hsl(0, 0%, 10%);
+  --text-sub:      hsl(0, 0%, 38%);
+  --text-muted:    hsl(0, 0%, 58%);
 
   /* Borders */
   --border:        rgba(0, 0, 0, 0.07);
   --border-lit:    rgba(180, 110, 20, 0.28);
-  --border-solid:  #dddbd7;
+  --border-solid:  #e0e0e0;
 
   /* Surface shadow — soft depth on white */
   --surface-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset,
@@ -139,10 +139,17 @@ ul { list-style: none; }
 }
 .ayo-video-wrap {
   position: absolute;
-  inset: 0;
+  width: 72vw;
+  aspect-ratio: 16 / 9;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
   clip-path: url(#ayo-clip);
   -webkit-clip-path: url(#ayo-clip);
+}
+@media (max-width: 768px) {
+  .ayo-video-wrap { width: 92vw; }
 }
 .ayo-video {
   width: 100%;

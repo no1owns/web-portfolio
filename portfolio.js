@@ -239,8 +239,11 @@ async function initAYOReveal() {
       morphPath.setAttribute('d', d);
       if (strokePath) strokePath.setAttribute('d', d);
 
-      /* Video zoom: 1.25 → 1.40 push (CSS base already 1.25x, so no render upscaling) */
-      if (videoEl) videoEl.style.transform = `scale(${1.25 + p * 0.15})`;
+      /* Video zoom: arc up to 1.15 at 50% progress, back to 1.0 at end */
+      if (videoEl) {
+        const zf = p < 0.5 ? p / 0.5 : Math.max(0, 1 - (p - 0.5) / 0.5);
+        videoEl.style.transform = `scale(${1.0 + zf * 0.15})`;
+      }
 
       /* Keep pin fully visible at all scroll positions */
       if (ayoPin) ayoPin.style.opacity = 1;

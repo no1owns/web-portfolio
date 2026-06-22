@@ -149,7 +149,7 @@ ul { list-style: none; }
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scale(1.25); /* headroom so JS zoom stays in 1.0–1.15 range */
+  transform: scale(1.0);
   will-change: transform;
 }
 
@@ -594,27 +594,74 @@ ul { list-style: none; }
   font-weight: 500;
   color: var(--text-sub);
 }
-.about-edu {
-  margin-top: 1.75rem;
+.credentials {
+  margin-top: 2rem;
   margin-bottom: 2rem;
-  padding: 1.25rem;
-  background: var(--bg-deep);
-  border: 1px solid var(--border-solid);
-  box-shadow: var(--surface-shadow);
-  border-radius: var(--radius);
+  text-align: left;
 }
-.about-edu h4 {
-  font-size: 0.78rem;
+.cred-label {
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
-.edu-item { margin-bottom: 0.9rem; }
-.edu-item:last-child { margin-bottom: 0; }
-.edu-item strong { display: block; font-size: 0.92rem; color: var(--text-primary); }
-.edu-item span { font-size: 0.82rem; color: var(--text-sub); }
+.cred-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.cred-row:last-child { border-bottom: none; }
+.cred-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--bg-deep);
+}
+.cred-dot {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cred-dot::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-solid);
+}
+.cred-body { flex: 1; min-width: 0; }
+.cred-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.cred-sub {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  margin-top: 0.15rem;
+}
+.cred-year {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.cred-divider {
+  height: 1px;
+  background: var(--border-solid);
+  margin: 0.5rem 0;
+}
 
 /* ── Stats ── */
 .stats-band {

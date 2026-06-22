@@ -228,6 +228,7 @@ ul { list-style: none; }
   border-color: var(--border-lit);
   background: rgba(180, 110, 20, 0.06);
 }
+.nav-hire-mobile { display: none; }
 .nav-hire {
   padding: 7px 18px;
   background: var(--text-primary);
@@ -1156,6 +1157,7 @@ ul { list-style: none; }
     border-bottom: 1px solid var(--border-solid);
     box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
+  .nav-links.open .nav-hire-mobile { display: list-item; }
   .nav-links.open a {
     padding: 10px 14px;
     font-size: 0.95rem;

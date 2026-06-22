@@ -188,8 +188,15 @@ async function initAYOReveal() {
 
   function frameRectPath(vw, vh) {
     const mobile = vw < 768;
-    const fw = vw * (mobile ? 0.92 : 0.72);
-    const fh = fw * 9 / 16;
+    /* 9:16 portrait video — constrain to fit within viewport */
+    const maxW = vw * (mobile ? 0.72 : 0.40);
+    const maxH = vh * 0.82;
+    let fw, fh;
+    if (maxW * 16 / 9 <= maxH) {
+      fw = maxW; fh = fw * 16 / 9;
+    } else {
+      fh = maxH; fw = fh * 9 / 16;
+    }
     const left   = (vw - fw) / 2;
     const top    = (vh - fh) / 2;
     const right  = left + fw;

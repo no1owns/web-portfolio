@@ -644,7 +644,7 @@ ul { list-style: none; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
-  background: linear-gradient(135deg, #0d1117 0%, #161b27 60%, #1a1f35 100%);
+  background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
   padding: 0 max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
   margin-top: 3rem;
 }
@@ -779,7 +779,7 @@ ul { list-style: none; }
 }
 .proj-thumb {
   position: relative;
-  aspect-ratio: 3/2;
+  aspect-ratio: 4/5;
   overflow: hidden;
 }
 .proj-thumb-bg {
@@ -1197,7 +1197,7 @@ ul { list-style: none; }
   .name-ticker { padding: 0.75rem 0; }
 }
 @media (max-width: 480px) {
-  .stats-band { grid-template-columns: repeat(2, 1fr); }
+  .stats-band { grid-template-columns: 1fr; }
   .hero-cta { flex-direction: column; align-items: center; }
   .about-grid { gap: 2rem; }
   .section-head { margin-bottom: 2.5rem; }

@@ -73,6 +73,7 @@ ul { list-style: none; }
 .scroll-gallery video {
   height: 58vh;
   width: auto;
+  max-width: none;
   flex-shrink: 0;
   display: block;
   border-radius: 8px;

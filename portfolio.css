@@ -643,42 +643,47 @@ ul { list-style: none; }
 .stats-band {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border-solid);
+  gap: 0;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--border-solid);
-  box-shadow: var(--surface-shadow);
+  background: linear-gradient(135deg, #0d1117 0%, #161b27 60%, #1a1f35 100%);
+  padding: 0.5rem 0;
 }
 .stat-cell {
-  padding: 2rem 1.5rem;
-  background: var(--bg-card);
-  text-align: center;
+  padding: 2.5rem 2rem;
+  text-align: left;
+  border-right: 1px solid rgba(255,255,255,0.07);
 }
+.stat-cell:last-child { border-right: none; }
 .stat-val {
   display: flex;
   align-items: baseline;
-  justify-content: center;
-  gap: 1px;
+  gap: 2px;
 }
 .stat-n {
   font-family: var(--font-head);
-  font-size: 3.4rem;
+  font-size: 3.6rem;
   font-weight: 700;
-  color: var(--text-primary);
   line-height: 1;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .stat-plus {
   font-family: var(--font-head);
   font-size: 2.2rem;
   font-weight: 600;
-  color: var(--text-sub);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .stat-lbl {
   font-size: 0.78rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.42);
+  margin-top: 6px;
+  letter-spacing: 0.03em;
 }
 
 /* ── Client name tickertape ── */
@@ -747,8 +752,8 @@ ul { list-style: none; }
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-card);
-  border: 1px solid var(--border-solid);
-  box-shadow: var(--surface-shadow);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   transition: border-color var(--tr-med), box-shadow var(--tr-med), transform var(--tr-med), opacity var(--tr-med);
   transform-style: preserve-3d;
   will-change: transform;
@@ -775,7 +780,7 @@ ul { list-style: none; }
 }
 .proj-thumb {
   position: relative;
-  aspect-ratio: 16/10;
+  aspect-ratio: 3/2;
   overflow: hidden;
 }
 .proj-thumb-bg {
@@ -836,27 +841,27 @@ ul { list-style: none; }
 }
 .proj-ov-link:hover { gap: 9px; }
 .proj-foot {
-  padding: 0.9rem 1.1rem;
+  padding: 0.7rem 0.9rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .proj-foot-tag {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-sub);
+  color: var(--text-muted);
 }
 .proj-foot-title {
   font-family: var(--font-head);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 .proj-year {
-  font-size: 0.72rem;
-  color: var(--text-sub);
+  font-size: 0.68rem;
+  color: var(--text-muted);
 }
 
 /* ── Experience ── */
@@ -997,7 +1002,10 @@ ul { list-style: none; }
   font-family: var(--font-head);
   font-size: 2.2rem;
   font-weight: 600;
-  color: var(--text-sub);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ── Testimonial ── */
@@ -1173,6 +1181,8 @@ ul { list-style: none; }
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-img-badge { right: 0; bottom: -12px; }
   .stats-band { grid-template-columns: repeat(2, 1fr); }
+  .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .stat-cell:last-child { border-bottom: none; }
   .proj-grid { grid-template-columns: 1fr; }
   /* skills-cloud: wraps naturally on small screens */
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }

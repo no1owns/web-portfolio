@@ -683,7 +683,7 @@ ul { list-style: none; }
 
 /* ── Client name tickertape ── */
 .name-ticker {
-  clip-path: inset(0);
+  overflow: hidden;
   padding: 1rem 0;
   margin-bottom: 3rem;
   border-top: 1px solid var(--border);
@@ -951,7 +951,7 @@ ul { list-style: none; }
   gap: 0;
 }
 .sm-row {
-  clip-path: inset(0);
+  overflow: hidden;
   padding: 0.55rem 0;
   border-top: 1px solid var(--border);
 }

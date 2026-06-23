@@ -55,7 +55,7 @@ ul { list-style: none; }
 .scroll-gallery {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;

@@ -683,25 +683,20 @@ ul { list-style: none; }
 
 /* ── Client name tickertape ── */
 .name-ticker {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  touch-action: pan-x;
-  will-change: scroll-position;
+  clip-path: inset(0);
   padding: 1rem 0;
   margin-bottom: 3rem;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   user-select: none;
 }
-.name-ticker::-webkit-scrollbar { display: none; }
+.name-ticker:hover .name-ticker-strip { animation-play-state: paused; }
 .name-ticker-strip {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
   user-select: none;
+  animation: marquee-fwd 38s linear infinite;
   font-family: var(--font-head);
   font-size: clamp(0.85rem, 1.4vw, 1.1rem);
   font-weight: 700;
@@ -956,18 +951,12 @@ ul { list-style: none; }
   gap: 0;
 }
 .sm-row {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  touch-action: pan-x;
-  will-change: scroll-position;
+  clip-path: inset(0);
   padding: 0.55rem 0;
   border-top: 1px solid var(--border);
 }
-.sm-row::-webkit-scrollbar { display: none; }
 .sm-row:last-child { border-bottom: 1px solid var(--border); }
+.sm-row:hover .sm-strip { animation-play-state: paused; }
 .sm-strip {
   display: inline-flex;
   align-items: center;
@@ -978,6 +967,14 @@ ul { list-style: none; }
   font-weight: 600;
   color: var(--text-sub);
   letter-spacing: 0.01em;
+  animation: marquee-fwd 40s linear infinite;
+}
+.sm-strip--med  { animation-duration: 55s; animation-direction: reverse; }
+.sm-strip--slow { animation-duration: 70s; }
+
+@keyframes marquee-fwd {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .sm-sep {
   color: var(--accent);
@@ -986,7 +983,7 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .sm-strip { animation: none !important; }
+  .sm-strip, .name-ticker-strip { animation: none !important; }
 }
 @media (max-width: 768px) {
   .sm-strip { font-size: 0.95rem; gap: 1.4rem; }

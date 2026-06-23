@@ -524,7 +524,7 @@ ul { list-style: none; }
 
 /* ── About ── */
 .about-section {
-  padding: 80px 0 100px;
+  padding: 80px 0 0;
   background: var(--bg-card);
 }
 .about-grid {
@@ -645,7 +645,8 @@ ul { list-style: none; }
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
   background: linear-gradient(135deg, #0d1117 0%, #161b27 60%, #1a1f35 100%);
-  padding: 0.5rem max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
+  padding: 0 max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
+  margin-top: 3rem;
 }
 .stat-cell {
   padding: 2.5rem 2rem;

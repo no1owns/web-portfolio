@@ -646,10 +646,10 @@ ul { list-style: none; }
   gap: 0;
   background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
   padding: 0 max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
-  margin-top: 1rem;
+  margin-top: 0;
 }
 .stat-cell {
-  padding: 3.5rem 2rem;
+  padding: 5rem 2rem;
   text-align: left;
   border-right: 1px solid rgba(255,255,255,0.07);
 }
@@ -1010,9 +1010,7 @@ ul { list-style: none; }
 /* ── Testimonial ── */
 .testimonial-section {
   padding: 80px 0;
-  background: var(--bg-dark);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
 }
 .testimonial-inner {
   max-width: 780px;
@@ -1176,13 +1174,13 @@ ul { list-style: none; }
     color: var(--text-primary);
   }
   .nav-toggle { display: flex; }
-  .about-section { padding: 50px 0 80px; }
+  .about-section { padding: 50px 0 0; }
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; text-align: left; }
   .about-img-badge { right: 0; bottom: -12px; }
   .section-head { text-align: left; }
   .section-head .section-body { margin-left: 0; }
   .stats-band { grid-template-columns: 1fr; padding: 0 5%; }
-  .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 2.5rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 3.5rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
   .stat-cell:last-child { border-bottom: none; }
   .proj-grid { grid-template-columns: 1fr; }
   /* skills-cloud: wraps naturally on small screens */

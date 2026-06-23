@@ -542,7 +542,7 @@ ul { list-style: none; }
 @media (max-width: 768px) {
   .cs-meta { grid-template-columns: repeat(2, 1fr); }
   .cs-results { grid-template-columns: 1fr 1fr; padding: 0 5%; }
-  .cs-result-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .cs-result-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); text-align: center; }
   .cs-result-card:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.07); }
   .cs-result-card:last-child, .cs-result-card:nth-last-child(2):nth-child(odd) { border-bottom: none; }
   .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }

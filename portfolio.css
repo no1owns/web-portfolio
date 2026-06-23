@@ -644,7 +644,7 @@ ul { list-style: none; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
-  background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
+  background: #07091a;
   padding: 0 max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
   margin-top: 0;
 }
@@ -1010,7 +1010,7 @@ ul { list-style: none; }
 /* ── Testimonial ── */
 .testimonial-section {
   padding: 80px 0;
-  background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
+  background: #07091a;
 }
 .testimonial-inner {
   max-width: 780px;
@@ -1021,8 +1021,7 @@ ul { list-style: none; }
   font-family: var(--font-head);
   font-size: 6rem;
   line-height: 0.6;
-  color: var(--accent);
-  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.25);
   margin-bottom: 1.5rem;
   user-select: none;
 }
@@ -1030,7 +1029,7 @@ ul { list-style: none; }
   font-size: clamp(1.1rem, 2vw, 1.35rem);
   font-style: italic;
   line-height: 1.7;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.88);
   margin: 0 0 1.5rem;
   font-weight: 400;
 }
@@ -1038,7 +1037,7 @@ ul { list-style: none; }
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.38);
 }
 
 /* ── Contact ── */

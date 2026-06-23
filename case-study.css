@@ -440,7 +440,7 @@ ul { list-style: none; }
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
+  background: #07091a;
   padding: 0 max(4vw, calc((100vw - var(--max-w)) / 2));
 }
 .cs-result-card {

@@ -646,10 +646,10 @@ ul { list-style: none; }
   gap: 0;
   background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
   padding: 0 max(1.5rem, calc((100% - var(--max-w)) / 2 + 4%));
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 .stat-cell {
-  padding: 2.5rem 2rem;
+  padding: 3.5rem 2rem;
   text-align: left;
   border-right: 1px solid rgba(255,255,255,0.07);
 }
@@ -1180,7 +1180,7 @@ ul { list-style: none; }
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about-img-badge { right: 0; bottom: -12px; }
   .stats-band { grid-template-columns: 1fr; padding: 0 5%; }
-  .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 1.5rem 1rem; }
+  .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 2.5rem 1.25rem; }
   .stat-cell:last-child { border-bottom: none; }
   .proj-grid { grid-template-columns: 1fr; }
   /* skills-cloud: wraps naturally on small screens */

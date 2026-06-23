@@ -433,17 +433,17 @@ ul { list-style: none; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
   /* full-width breakout from .container */
   width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, #05070d 0%, #0e1525 55%, #1a2240 100%);
-  padding: 0.5rem max(4vw, calc((100vw - var(--max-w)) / 2));
+  padding: 0 max(4vw, calc((100vw - var(--max-w)) / 2));
 }
 .cs-result-card {
-  padding: 2.5rem 2rem;
+  padding: 3.5rem 2rem;
   text-align: left;
   border-right: 1px solid rgba(255,255,255,0.07);
 }
@@ -540,7 +540,7 @@ ul { list-style: none; }
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .cs-meta { grid-template-columns: repeat(2, 1fr); }
-  .cs-results { grid-template-columns: 1fr 1fr; padding: 0.5rem 5%; }
+  .cs-results { grid-template-columns: 1fr 1fr; padding: 0 5%; }
   .cs-result-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .cs-result-card:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.07); }
   .cs-result-card:last-child, .cs-result-card:nth-last-child(2):nth-child(odd) { border-bottom: none; }

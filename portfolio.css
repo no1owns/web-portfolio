@@ -1202,5 +1202,6 @@ ul { list-style: none; }
   .stats-band { grid-template-columns: 1fr; }
   .hero-cta { flex-direction: column; align-items: center; }
   .about-grid { gap: 2rem; }
-  .section-head { margin-bottom: 2.5rem; }
+  .section-head { margin-bottom: 2.5rem; text-align: left; }
+  .section-head .section-body { margin-left: 0; margin-right: 0; }
 }

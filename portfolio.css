@@ -684,9 +684,12 @@ ul { list-style: none; }
 /* ── Client name tickertape ── */
 .name-ticker {
   overflow-x: scroll;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  touch-action: pan-x;
+  will-change: scroll-position;
   padding: 1rem 0;
   margin-bottom: 3rem;
   border-top: 1px solid var(--border);
@@ -698,6 +701,7 @@ ul { list-style: none; }
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
+  user-select: none;
   font-family: var(--font-head);
   font-size: clamp(0.85rem, 1.4vw, 1.1rem);
   font-weight: 700;
@@ -953,17 +957,19 @@ ul { list-style: none; }
 }
 .sm-row {
   overflow-x: scroll;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  touch-action: pan-x;
+  will-change: scroll-position;
   padding: 0.55rem 0;
   border-top: 1px solid var(--border);
 }
 .sm-row::-webkit-scrollbar { display: none; }
 .sm-row:last-child { border-bottom: 1px solid var(--border); }
 .sm-strip {
-  display: flex;
-  width: max-content;
+  display: inline-flex;
   align-items: center;
   gap: 1.4rem;
   white-space: nowrap;

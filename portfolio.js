@@ -374,8 +374,8 @@ initAYOReveal();
   }
 })();
 
-/* ── 3D card tilt (GSAP-smoothed) ── */
-if (typeof gsap !== 'undefined') {
+/* ── 3D card tilt (GSAP-smoothed, hover-capable devices only) ── */
+if (typeof gsap !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
   document.querySelectorAll('.proj-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();

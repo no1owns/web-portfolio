@@ -154,7 +154,7 @@ ul { list-style: none; }
 }
 @media (max-width: 768px) {
   .stack-card { width: 94%; top: 56px; }
-  .stack-card iframe { height: 360px; }
+  .stack-card iframe { height: 100%; }
 }
 
 /* ── Nav ── */

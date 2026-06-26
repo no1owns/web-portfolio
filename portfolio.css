@@ -97,7 +97,7 @@ ul { list-style: none; }
   z-index: 2;
 }
 @media (max-width: 768px) {
-  .ayo-reveal { height: 100vh; margin-bottom: -100vh; }
+  .ayo-reveal { height: 130vh; margin-bottom: -100vh; }
 }
 .ayo-pin {
   position: sticky;
@@ -689,7 +689,8 @@ ul { list-style: none; }
 
 /* ── Client name tickertape ── */
 .name-ticker {
-  overflow: hidden;
+  clip-path: inset(0);
+  -webkit-clip-path: inset(0);
   transform: translateZ(0);
   padding: 1rem 0;
   margin-bottom: 3rem;
@@ -703,6 +704,7 @@ ul { list-style: none; }
   align-items: center;
   white-space: nowrap;
   user-select: none;
+  will-change: transform;
   animation: marquee-fwd 38s linear infinite;
   font-family: var(--font-head);
   font-size: clamp(0.85rem, 1.4vw, 1.1rem);
@@ -940,6 +942,7 @@ ul { list-style: none; }
   inset: 0;
   background: linear-gradient(135deg, #0d0f14 0%, #141820 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -962,6 +965,14 @@ ul { list-style: none; }
   letter-spacing: 0.12em;
   text-align: center;
   padding: 1rem;
+}
+.lab-ph-icon {
+  position: relative;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: rgba(255,255,255,0.12);
+  margin-bottom: 0.6rem;
+  display: block;
+  line-height: 1;
 }
 
 /* Status badge */
@@ -1131,7 +1142,8 @@ ul { list-style: none; }
   gap: 0;
 }
 .sm-row {
-  overflow: hidden;
+  clip-path: inset(0);
+  -webkit-clip-path: inset(0);
   transform: translateZ(0);
   padding: 0.55rem 0;
   border-top: 1px solid var(--border);
@@ -1155,8 +1167,8 @@ ul { list-style: none; }
 .sm-strip--slow { animation-duration: 70s; }
 
 @keyframes marquee-fwd {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 .sm-sep {
   color: var(--accent);

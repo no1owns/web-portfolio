@@ -481,5 +481,28 @@ filterBtns.forEach(btn => {
   });
 });
 
+/* ── Lab tab filtering ── */
+const labTabs  = document.querySelectorAll('.lab-tab');
+const labCards = document.querySelectorAll('.lab-card');
+labTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    labTabs.forEach(t => { t.classList.remove('on'); t.setAttribute('aria-selected', 'false'); });
+    tab.classList.add('on');
+    tab.setAttribute('aria-selected', 'true');
+    const cat = tab.dataset.lab;
+    labCards.forEach(card => {
+      const show = cat === 'all' || card.dataset.category === cat;
+      card.style.display = show ? '' : 'none';
+      if (show) {
+        card.style.opacity = '0';
+        requestAnimationFrame(() => {
+          card.style.transition = 'opacity 0.15s ease';
+          card.style.opacity = '1';
+        });
+      }
+    });
+  });
+});
+
 /* Ticker and skills marquee use CSS animation (clip-path: inset(0) parent,
    translateX(-50%) on doubled strip content). Pause on hover handled in CSS. */

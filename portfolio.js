@@ -151,11 +151,12 @@ document.querySelectorAll('.stat-n').forEach(el => {
 
 /* ── AYO Reveal: scroll-driven morph A → Y → O + video clip ── */
 async function initAYOReveal() {
-  const section   = document.getElementById('ayo-reveal');
+  const section    = document.getElementById('ayo-reveal');
   const morphPath  = document.getElementById('ayo-morph-path');
   const strokePath = document.getElementById('ayo-stroke-path');
   const ayoPin     = document.querySelector('.ayo-pin');
   const videoWrap  = document.querySelector('.ayo-video-wrap');
+  const videoFrame = document.querySelector('.ayo-video-frame');
   const videoEl    = document.querySelector('.ayo-video');
   if (!section || !morphPath) return;
   if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
@@ -205,6 +206,7 @@ async function initAYOReveal() {
   }
 
   let vw, vh, pathA, pathY, pathO, pathFull, iAY, iYO, iOF;
+  let rectLeft, rectTop, rectW, rectH;
 
   function rebuild() {
     vw = window.innerWidth; vh = window.innerHeight;
@@ -212,6 +214,14 @@ async function initAYOReveal() {
     pathY = getLetterPath('Y', vw, vh);
     pathO = getLetterPath('O', vw, vh);
     pathFull = frameRectPath(vw, vh);
+    /* Precompute portrait frame dimensions for video animation */
+    const mobile = vw < 768;
+    const maxW = vw * (mobile ? 0.72 : 0.40);
+    const maxH = vh * 0.82;
+    if (maxW * 16 / 9 <= maxH) { rectW = maxW; rectH = rectW * 16 / 9; }
+    else                        { rectH = maxH; rectW = rectH * 9 / 16; }
+    rectLeft = (vw - rectW) / 2;
+    rectTop  = (vh - rectH) / 2;
     iAY  = flubber.interpolate(pathA, pathY,    { maxSegmentLength: 4 });
     iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
     iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });
@@ -243,6 +253,27 @@ async function initAYOReveal() {
       if (videoEl) {
         const zf = p < 0.5 ? p / 0.5 : Math.max(0, 1 - (p - 0.5) / 0.5);
         videoEl.style.transform = `scale(${1.0 + zf * 0.15})`;
+      }
+
+      /* Video frame: shrink from full-viewport to portrait rect during O→frame */
+      if (videoFrame) {
+        const rp = p < 0.82 ? 0 : Math.min((p - 0.82) / 0.18, 1);
+        if (rp > 0) {
+          videoFrame.style.position = 'absolute';
+          videoFrame.style.left   = (rectLeft * rp) + 'px';
+          videoFrame.style.top    = (rectTop  * rp) + 'px';
+          videoFrame.style.width  = (vw + (rectW - vw) * rp) + 'px';
+          videoFrame.style.height = (vh + (rectH - vh) * rp) + 'px';
+          videoFrame.style.right  = 'auto';
+          videoFrame.style.bottom = 'auto';
+        } else {
+          videoFrame.style.left   = '';
+          videoFrame.style.top    = '';
+          videoFrame.style.width  = '';
+          videoFrame.style.height = '';
+          videoFrame.style.right  = '';
+          videoFrame.style.bottom = '';
+        }
       }
 
       /* Keep pin fully visible at all scroll positions */

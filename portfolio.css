@@ -965,7 +965,7 @@ ul { list-style: none; }
   font-family: var(--font-head);
   font-size: clamp(0.8rem, 1.5vw, 1rem);
   font-weight: 400;
-  color: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.38);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   text-align: center;
@@ -1045,6 +1045,18 @@ ul { list-style: none; }
   transition: color var(--tr-fast);
 }
 .lab-cta:hover { color: var(--accent-warm); }
+
+/* Cards without a link = inactive: grayscale + reduced opacity */
+.lab-card:not(:has(.lab-cta)) {
+  filter: grayscale(1);
+  opacity: 0.45;
+  cursor: default;
+}
+.lab-card:not(:has(.lab-cta)):hover {
+  opacity: 0.58;
+  border-color: rgba(255,255,255,0.10);
+  box-shadow: none;
+}
 
 @media (max-width: 768px) {
   .lab-section { padding: 60px 0; }
@@ -1187,8 +1199,30 @@ ul { list-style: none; }
   .sm-strip, .name-ticker-strip { animation: none !important; }
 }
 @media (max-width: 768px) {
-  .sm-strip { font-size: 0.95rem; gap: 1.4rem; }
-  .sm-row { padding: 0.75rem 0; }
+  /* Convert skills marquee to static wrapping grid */
+  .sm-row {
+    overflow: hidden;
+    clip-path: none;
+    -webkit-clip-path: none;
+    padding: 0;
+    border-top: none;
+  }
+  .sm-row:first-child { border-top: 1px solid var(--border); }
+  .skills-marquee { padding: 0 5%; gap: 0; }
+  .sm-strip {
+    animation: none !important;
+    white-space: normal;
+    flex-wrap: wrap;
+    gap: 0.45rem 1rem;
+    justify-content: center;
+    transform: none !important;
+    will-change: auto;
+    font-size: 0.9rem;
+    padding: 0.9rem 0;
+  }
+  .sm-sep { display: none; }
+  /* Hide duplicate second half (each row has ≤9 skills × 2 = 18 elements) */
+  .sm-strip > *:nth-child(n+19) { display: none; }
 }
 
 /* ── Stat prefix ($) ── */
@@ -1390,7 +1424,26 @@ ul { list-style: none; }
 }
 @media (max-width: 768px) {
   .contact-actions { flex-direction: column; align-items: center; }
-  .name-ticker { padding: 0.75rem 0; }
+  /* Convert client ticker to static wrapping layout */
+  .name-ticker {
+    overflow: hidden;
+    clip-path: none;
+    -webkit-clip-path: none;
+    padding: 1rem 5%;
+  }
+  .name-ticker-strip {
+    animation: none !important;
+    white-space: normal;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    justify-content: center;
+    transform: none !important;
+    will-change: auto;
+    font-size: 0.85rem;
+  }
+  .ticker-sep { display: none; }
+  /* Hide duplicate second half (12 names × 2 = 24, so hide from 25th) */
+  .name-ticker-strip > *:nth-child(n+25) { display: none; }
 }
 @media (max-width: 480px) {
   .stats-band { grid-template-columns: 1fr; }

@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Disallow: /.claude/
+
+Sitemap: https://work.akintilo.com/sitemap.xml
+
+# AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Googlebot
+Allow: /

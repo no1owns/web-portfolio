@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://work.akintilo.com/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Brand Systems -->
+  <url>
+    <loc>https://work.akintilo.com/brand-systems/appomni.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://work.akintilo.com/brand-systems/secureframe.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Event Brand -->
+  <url>
+    <loc>https://work.akintilo.com/event-brand/mongodb-world.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://work.akintilo.com/event-brand/navan.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://work.akintilo.com/event-brand/apollo-summit.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://work.akintilo.com/event-brand/docusign-momentum.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Campaign -->
+  <url>
+    <loc>https://work.akintilo.com/campaign-partner/docusign-campaigns.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Technical Developer -->
+  <url>
+    <loc>https://work.akintilo.com/technical-developer/mongodb-ipo.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Brand Character -->
+  <url>
+    <loc>https://work.akintilo.com/brand-character/mongodb-dream-big.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://work.akintilo.com/brand-character/mongodb-values.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Presentation Design -->
+  <url>
+    <loc>https://work.akintilo.com/presentation-design/betterup.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Linx Security -->
+  <url>
+    <loc>https://work.akintilo.com/linx-security/linx.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

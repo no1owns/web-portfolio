@@ -329,20 +329,20 @@ ul { list-style: none; }
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  background: rgba(180, 110, 20, 0.07);
-  border: 1px solid rgba(180, 110, 20, 0.20);
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.22);
   border-radius: 100px;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: #10b981;
   margin-bottom: 1.75rem;
-  opacity: 0;
+  /* opacity managed by GSAP */
 }
 .hero-eyebrow-dot {
   width: 6px; height: 6px;
-  background: var(--accent);
+  background: #10b981;
   border-radius: 50%;
   animation: pulse-dot 2s ease infinite;
 }
@@ -399,7 +399,7 @@ ul { list-style: none; }
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   color: var(--text-sub);
   margin-bottom: 1rem;
-  opacity: 0;
+  /* opacity managed by GSAP */
   white-space: normal;
 }
 .hero-typewriter {
@@ -407,12 +407,19 @@ ul { list-style: none; }
   color: var(--text-sub);
   min-height: 1.8em;
   margin-bottom: 2.5rem;
-  opacity: 0;
+  /* opacity managed by GSAP */
   word-break: break-word;
 }
-.tw-text { color: var(--accent); font-weight: 600; }
+.tw-text {
+  background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
 .tw-cursor {
-  color: var(--accent);
+  color: #10b981;
+  -webkit-text-fill-color: #10b981;
   animation: blink 0.9s step-end infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -421,7 +428,7 @@ ul { list-style: none; }
   gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
-  opacity: 0;
+  /* opacity managed by GSAP */
 }
 .btn {
   display: inline-flex;
@@ -467,7 +474,7 @@ ul { list-style: none; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
-  opacity: 0;
+  /* opacity managed by GSAP */
   z-index: 3;
 }
 .scroll-ring {

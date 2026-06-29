@@ -11,8 +11,18 @@ document.body.classList.add('loaded');
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
 
-/* ── Hero entrance timeline ── */
-const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+/* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
+gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-scroll'], { opacity: 0 });
+
+/* ── Hero entrance timeline — scroll-triggered so it's ready when hero is visible ── */
+const heroTl = gsap.timeline({
+  defaults: { ease: 'power3.out' },
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top 60%',
+    once: true
+  }
+});
 heroTl
   .from('.hero-eyebrow',         { y: -20, opacity: 0, duration: 0.7 })
   .from('.hero-name-line .n-char', {

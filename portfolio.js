@@ -244,9 +244,12 @@ async function initAYOReveal() {
 
   ScrollTrigger.create({
     trigger: section,
+    pin: ayoPin,
+    pinSpacing: false,
     start: 'top top',
     end: 'bottom bottom',
     scrub: 1.2,
+    invalidateOnRefresh: true,
     onUpdate(self) {
       const p = self.progress;
 

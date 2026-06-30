@@ -101,11 +101,12 @@ ul { list-style: none; }
   .ayo-reveal { height: 200vh; margin-bottom: -100vh; }
 }
 .ayo-pin {
-  position: sticky;
-  top: 0;
+  /* Pinning is handled by GSAP ScrollTrigger (avoids overflow-x:hidden breaking CSS sticky) */
+  position: relative;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  z-index: 2;
 }
 .ayo-bg {
   position: absolute;
@@ -273,10 +274,12 @@ ul { list-style: none; }
   position: relative;
   z-index: 1;
   min-height: 100vh;
-  min-height: 100svh; /* excludes mobile browser chrome */
+  min-height: 100svh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: clamp(90px, 16vh, 160px);
+  padding-bottom: clamp(80px, 12vh, 140px);
   overflow: hidden;
   background: var(--bg-card);
 }

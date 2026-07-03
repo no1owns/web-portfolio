@@ -1,5 +1,7 @@
 'use strict';
 
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ── Refs ── */
 const nav      = document.getElementById('p-nav');
 const backTop  = document.getElementById('back-top');
@@ -10,6 +12,17 @@ document.body.classList.add('loaded');
 
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
+
+/* ── Functional: nav scroll state + back-to-top (always active) ── */
+ScrollTrigger.create({
+  start: 'top -60',
+  onUpdate: self => {
+    nav.classList.toggle('scrolled', self.scroll() > 60);
+    backTop.classList.toggle('show', self.scroll() > 400);
+  }
+});
+
+if (!reducedMotion) {
 
 /* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
 gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-scroll'], { opacity: 0 });
@@ -79,34 +92,40 @@ gsap.to('#progress-bar', {
   }
 });
 
-/* ── Nav scroll state + back-to-top ── */
-ScrollTrigger.create({
-  start: 'top -60',
-  onUpdate: self => {
-    nav.classList.toggle('scrolled', self.scroll() > 60);
-    backTop.classList.toggle('show', self.scroll() > 400);
-  }
-});
+/* ── Scroll reveals (expo.out ease, scale, mobile-tuned stagger) ── */
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+const revY   = isMobile ? 16  : 44;
+const revDur = isMobile ? 0.4 : 0.75;
+const revStg = isMobile ? 0.05 : 0.08;
 
-/* ── Scroll reveals ── */
 ScrollTrigger.batch('.reveal', {
-  onEnter: els => gsap.from(els, { y: 44, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  onEnter: els => gsap.from(els, {
+    y: revY, scale: 0.96, opacity: 0, duration: revDur,
+    stagger: revStg, ease: 'expo.out'
+  }),
   start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-l', {
-  onEnter: els => gsap.from(els, { x: -56, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  onEnter: els => gsap.from(els, {
+    x: isMobile ? -24 : -56, opacity: 0, duration: revDur,
+    stagger: revStg, ease: 'expo.out'
+  }),
   start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-r', {
-  onEnter: els => gsap.from(els, { x: 56, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  onEnter: els => gsap.from(els, {
+    x: isMobile ? 24 : 56, opacity: 0, duration: revDur,
+    stagger: revStg, ease: 'expo.out'
+  }),
   start: 'top 88%', once: true
 });
 ScrollTrigger.batch('.reveal-s', {
-  onEnter: els => gsap.from(els, { scale: 0.94, opacity: 0, duration: 0.75, ease: 'power3.out' }),
+  onEnter: els => gsap.from(els, {
+    scale: isMobile ? 0.97 : 0.94, opacity: 0, duration: revDur,
+    stagger: revStg, ease: 'expo.out'
+  }),
   start: 'top 88%', once: true
 });
-
-
 
 /* ── Heading line-mask reveal ── */
 function splitReveal(selector) {
@@ -157,6 +176,7 @@ document.querySelectorAll('.stat-n').forEach(el => {
   });
 });
 
+} /* end !reducedMotion */
 } /* end gsap guard */
 
 /* ── AYO Reveal: scroll-driven morph A → Y → O + video clip ── */
@@ -419,17 +439,17 @@ initAYOReveal();
 })();
 
 /* ── 3D card tilt (GSAP-smoothed, hover-capable devices only) ── */
-if (typeof gsap !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
-  document.querySelectorAll('.proj-card').forEach(card => {
+if (typeof gsap !== 'undefined' && !reducedMotion && window.matchMedia('(hover: hover)').matches) {
+  function addCardTilt(card, deg, perspective, z) {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width  - 0.5;
       const y = (e.clientY - r.top)  / r.height - 0.5;
       gsap.to(card, {
-        rotationY: x * 7,
-        rotationX: -y * 7,
-        transformPerspective: 900,
-        z: 6,
+        rotationY: x * deg,
+        rotationX: -y * deg,
+        transformPerspective: perspective,
+        z,
         duration: 0.4,
         ease: 'power2.out',
         overwrite: 'auto'
@@ -442,7 +462,46 @@ if (typeof gsap !== 'undefined' && window.matchMedia('(hover: hover)').matches) 
         overwrite: 'auto'
       });
     });
-  });
+  }
+  document.querySelectorAll('.proj-card').forEach(c => addCardTilt(c, 7, 900, 6));
+  document.querySelectorAll('.lab-card').forEach(c => addCardTilt(c, 8, 800, 8));
+}
+
+/* ── Magnetic lag-trail cursor (fine-pointer, no reduced motion) ── */
+if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+  const cursorDot  = document.createElement('div');
+  const cursorRing = document.createElement('div');
+  cursorDot.className  = 'cursor-dot';
+  cursorRing.className = 'cursor-ring';
+  document.body.appendChild(cursorDot);
+  document.body.appendChild(cursorRing);
+
+  let mx = -200, my = -200;
+  let rx = -200, ry = -200;
+
+  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+  /* Event delegation — handles dynamically shown/hidden elements */
+  document.addEventListener('mouseenter', e => {
+    if (e.target.closest('a, button, .proj-card, .lab-card')) {
+      cursorDot.classList.add('hovering');
+      cursorRing.classList.add('hovering');
+    }
+  }, true);
+  document.addEventListener('mouseleave', e => {
+    if (e.target.closest('a, button, .proj-card, .lab-card')) {
+      cursorDot.classList.remove('hovering');
+      cursorRing.classList.remove('hovering');
+    }
+  }, true);
+
+  (function raf() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursorDot.style.transform  = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+    cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(raf);
+  })();
 }
 
 /* ── Typewriter ── */

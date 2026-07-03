@@ -46,3 +46,156 @@ const PROJECTS = [
   titleEl.textContent = text;
   linkEls.forEach(el => { el.href = href; });
 })();
+
+/**
+ * Gallery: hero + masonry layout, built from filename convention.
+ * - Any .bento-item whose media filename contains "hero" is featured at the top.
+ * - Everything else flows into a CSS-columns masonry grid below.
+ * - Auto-initializes on every .bento-gallery found on the page — no per-page config.
+ */
+(function () {
+  function altFromFilename(src) {
+    const name = (src || '').split('/').pop()
+      .replace(/\.[^.]+$/, '')
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\d{4,}\b/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return name ? name.charAt(0).toUpperCase() + name.slice(1) : '';
+  }
+
+  function getMediaEl(item) {
+    return item.querySelector('img, video');
+  }
+
+  function getSrc(mediaEl) {
+    if (!mediaEl) return '';
+    if (mediaEl.tagName === 'IMG') return mediaEl.getAttribute('src') || '';
+    const source = mediaEl.querySelector('source');
+    return (source && source.getAttribute('src')) || '';
+  }
+
+  function buildGallery(gallery) {
+    const items = Array.from(gallery.querySelectorAll(':scope > .bento-item'));
+    if (!items.length) return;
+
+    items.forEach(item => {
+      item.classList.remove('span-2', 'span-3');
+      const mediaEl = getMediaEl(item);
+      if (mediaEl && mediaEl.tagName === 'IMG') {
+        const alt = altFromFilename(getSrc(mediaEl).split('/').pop());
+        if (alt) mediaEl.setAttribute('alt', alt);
+      }
+    });
+
+    const heroes = items.filter(item => {
+      const filename = getSrc(getMediaEl(item)).split('/').pop().toLowerCase();
+      return filename.indexOf('hero') !== -1;
+    });
+    const supporting = items.filter(item => heroes.indexOf(item) === -1);
+
+    gallery.innerHTML = '';
+
+    if (heroes.length > 0) {
+      const heroSection = document.createElement('div');
+      heroSection.className = 'gallery-heroes';
+
+      if (heroes.length === 1) {
+        heroSection.classList.add('gallery-heroes--single');
+        heroSection.appendChild(heroes[0]);
+      } else {
+        const firstWrap = document.createElement('div');
+        firstWrap.className = 'gallery-hero-full';
+        firstWrap.appendChild(heroes[0]);
+        heroSection.appendChild(firstWrap);
+
+        const heroRow = document.createElement('div');
+        heroRow.className = 'gallery-hero-row';
+        heroes.slice(1).forEach(item => heroRow.appendChild(item));
+        heroSection.appendChild(heroRow);
+      }
+
+      gallery.appendChild(heroSection);
+    }
+
+    if (supporting.length > 0) {
+      const masonry = document.createElement('div');
+      masonry.className = 'gallery-masonry';
+      supporting.forEach(item => {
+        item.classList.add('gallery-masonry__item');
+        masonry.appendChild(item);
+      });
+      gallery.appendChild(masonry);
+    }
+
+    gallery.classList.add('gallery-built');
+  }
+
+  function initLightbox(gallery) {
+    const entries = Array.from(gallery.querySelectorAll('.bento-item'))
+      .map(item => {
+        const mediaEl = getMediaEl(item);
+        return mediaEl && mediaEl.tagName === 'IMG' ? mediaEl : null;
+      })
+      .filter(Boolean);
+
+    if (!entries.length) return;
+
+    let currentIndex = 0;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.innerHTML =
+      '<button class="lightbox-close" aria-label="Close">&times;</button>' +
+      '<button class="lightbox-prev" aria-label="Previous image">&lsaquo;</button>' +
+      '<img class="lightbox-img" src="" alt="">' +
+      '<button class="lightbox-next" aria-label="Next image">&rsaquo;</button>';
+    document.body.appendChild(overlay);
+
+    const lightboxImg = overlay.querySelector('.lightbox-img');
+
+    function render() {
+      const img = entries[currentIndex];
+      lightboxImg.src = img.getAttribute('src') || img.src;
+      lightboxImg.alt = img.getAttribute('alt') || '';
+    }
+
+    function open(index) {
+      currentIndex = index;
+      render();
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigate(dir) {
+      currentIndex = (currentIndex + dir + entries.length) % entries.length;
+      render();
+    }
+
+    entries.forEach((img, i) => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', () => open(i));
+    });
+
+    overlay.querySelector('.lightbox-close').addEventListener('click', close);
+    overlay.querySelector('.lightbox-prev').addEventListener('click', () => navigate(-1));
+    overlay.querySelector('.lightbox-next').addEventListener('click', () => navigate(1));
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('active')) return;
+      if (e.key === 'Escape')     close();
+      if (e.key === 'ArrowLeft')  navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    });
+  }
+
+  document.querySelectorAll('.bento-gallery').forEach(gallery => {
+    buildGallery(gallery);
+    initLightbox(gallery);
+  });
+})();

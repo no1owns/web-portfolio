@@ -622,6 +622,104 @@ ul { list-style: none; }
   .bento-item.span-2, .bento-item.span-3 { grid-column: span 1; }
 }
 
+/* ── Gallery hero + masonry (JS-built layout, gallery.js) ── */
+.bento-gallery.gallery-built {
+  display: block;
+}
+
+.gallery-heroes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.gallery-heroes--single .bento-item img,
+.gallery-heroes--single .bento-item video,
+.gallery-hero-full .bento-item img,
+.gallery-hero-full .bento-item video {
+  max-height: 70vh;
+  object-fit: cover;
+}
+.gallery-hero-row {
+  display: flex;
+  gap: 12px;
+}
+.gallery-hero-row .bento-item {
+  flex: 1;
+  width: 0; /* flex children need this to distribute evenly */
+}
+.gallery-hero-row .bento-item img,
+.gallery-hero-row .bento-item video {
+  max-height: 50vh;
+  object-fit: cover;
+}
+
+.gallery-masonry {
+  columns: 3;
+  column-gap: 12px;
+}
+.gallery-masonry__item {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+  break-inside: avoid;
+}
+
+@media (max-width: 1024px) {
+  .gallery-masonry { columns: 2; }
+  .gallery-hero-row { flex-direction: column; }
+  .gallery-hero-row .bento-item { width: auto; }
+  .gallery-hero-row .bento-item img,
+  .gallery-hero-row .bento-item video { max-height: 60vh; }
+}
+@media (max-width: 768px) {
+  .gallery-masonry { columns: 1; }
+  .gallery-heroes--single .bento-item img,
+  .gallery-heroes--single .bento-item video,
+  .gallery-hero-full .bento-item img,
+  .gallery-hero-full .bento-item video { max-height: 50vh; }
+}
+
+/* ── Lightbox ── */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay.active { display: flex; }
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 16px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.lightbox-close { top: 16px; right: 16px; font-size: 1.5rem; }
+.lightbox-prev  { left: 16px; top: 50%; transform: translateY(-50%); }
+.lightbox-next  { right: 16px; top: 50%; transform: translateY(-50%); }
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover { opacity: 1; }
+@media (max-width: 480px) {
+  .lightbox-prev, .lightbox-next { font-size: 1.5rem; padding: 12px; }
+}
+
 /* ── Light background mode ── */
 body.light-bg {
   background: #f5f5f5;

@@ -481,15 +481,17 @@ if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
 
   window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
 
-  /* Event delegation — handles dynamically shown/hidden elements */
+  /* Event delegation — handles dynamically shown/hidden elements.
+     e.target can be `document` itself (no .closest()) when mouseenter/leave
+     fires at the document boundary, so guard for a real Element first. */
   document.addEventListener('mouseenter', e => {
-    if (e.target.closest('a, button, .proj-card, .lab-card')) {
+    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
       cursorDot.classList.add('hovering');
       cursorRing.classList.add('hovering');
     }
   }, true);
   document.addEventListener('mouseleave', e => {
-    if (e.target.closest('a, button, .proj-card, .lab-card')) {
+    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
       cursorDot.classList.remove('hovering');
       cursorRing.classList.remove('hovering');
     }

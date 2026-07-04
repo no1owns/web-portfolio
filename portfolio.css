@@ -158,6 +158,32 @@ ul { list-style: none; }
   display: block;
   will-change: transform;
 }
+/* Stacks above the mask/stroke/video layers (z-index 0–4) so the tagline reads
+   immediately during the pinned intro, instead of being hidden behind it.
+   Decorative-only: the accessible copy lives in .hero-tagline inside
+   .hero-content, which this section (aria-hidden) hands off to once unpinned. */
+.ayo-tagline {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  transform: translateX(-50%);
+  z-index: 5;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(255, 250, 245, 0.82);
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .ayo-tagline {
+    font-size: 1rem;
+    width: auto;
+    padding: 0 24px;
+    bottom: 6%;
+  }
+}
 
 /* ── Navigation ── */
 .p-nav {

@@ -9,10 +9,10 @@
   --bg-card:       #ffffff;
   --bg-elevated:   #e8e8e8;
 
-  /* Accent — vivid amber for keyword highlights only */
-  --accent:        hsl(33, 90%, 46%);
-  --accent-warm:   hsl(38, 85%, 40%);
-  --accent-bright: hsl(43, 80%, 54%);
+  /* Accent — teal for keyword highlights only */
+  --accent:        #4FBDBA;
+  --accent-warm:   #3FA19E;
+  --accent-bright: #7DD8D5;
 
   /* Gradient — dual-radial mesh: blue origin left, green/teal origin right */
   --gradient:      radial-gradient(circle at 15% 50%, #3b82f6 0%, transparent 62%),
@@ -25,7 +25,7 @@
 
   /* Borders */
   --border:        rgba(0, 0, 0, 0.07);
-  --border-lit:    rgba(180, 110, 20, 0.28);
+  --border-lit:    rgba(79, 189, 186, 0.28);
   --border-solid:  #e0e0e0;
 
   /* Surface shadow — soft depth on white */
@@ -233,7 +233,7 @@ ul { list-style: none; }
 .nav-social a:hover {
   color: var(--accent);
   border-color: var(--border-lit);
-  background: rgba(180, 110, 20, 0.06);
+  background: rgba(79, 189, 186, 0.06);
 }
 .nav-hire-mobile { display: none; }
 .nav-hire {
@@ -309,14 +309,14 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Soft warm glow — barely-there gradient for depth */
+/* Soft glow — barely-there gradient for depth */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 60% at 20% 80%, rgba(255, 190, 80, 0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(255, 160, 60, 0.06) 0%, transparent 50%);
+    radial-gradient(ellipse 70% 60% at 20% 80%, rgba(79, 189, 186, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(79, 189, 186, 0.06) 0%, transparent 50%);
   pointer-events: none;
 }
 .hero-content {
@@ -404,6 +404,20 @@ ul { list-style: none; }
   margin-bottom: 1rem;
   /* opacity managed by GSAP */
   white-space: normal;
+}
+.hero-tagline {
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-sub);
+  max-width: 600px;
+  margin: 20px auto 0;
+  /* Always visible on load — not animated, not gated behind scroll/mask */
+}
+@media (max-width: 768px) {
+  .hero-tagline {
+    font-size: 1rem;
+    padding: 0 24px;
+  }
 }
 .hero-typewriter {
   font-size: clamp(1rem, 2vw, 1.15rem);
@@ -765,9 +779,19 @@ ul { list-style: none; }
 }
 .proj-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1.25rem;
 }
+/* First row larger, structural default (JS keeps this correct after filtering — see Project filter) */
+.proj-card:nth-child(1),
+.proj-card:nth-child(2) {
+  grid-column: span 3;
+}
+.proj-card:nth-child(n+3) {
+  grid-column: span 2;
+}
+.proj-card.card--featured { grid-column: span 3; }
+.proj-card.card--compact  { grid-column: span 2; }
 .proj-card {
   border-radius: var(--radius);
   overflow: hidden;
@@ -1069,10 +1093,38 @@ ul { list-style: none; }
   border-color: rgba(255,255,255,0.10);
   box-shadow: none;
 }
+.lab-card[data-status="live"] { cursor: pointer; }
+
+/* ── Live-first / expandable toggle (Fix 4) ── */
+.lab-grid--collapsed {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.lab-card--inactive {
+  opacity: 0.45;
+  filter: saturate(0.3);
+  cursor: default;
+  pointer-events: none;
+}
+.lab-toggle {
+  display: block;
+  margin: 2rem auto 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+.lab-toggle:hover { color: var(--accent); }
 
 @media (max-width: 768px) {
   .lab-section { padding: 60px 0; }
   .lab-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .lab-grid--collapsed { grid-template-columns: 1fr; max-width: 420px; }
 }
 @media (max-width: 480px) {
   .lab-grid { grid-template-columns: 1fr; }
@@ -1122,7 +1174,7 @@ ul { list-style: none; }
 }
 .tl-item:hover .tl-dot {
   border-color: var(--accent);
-  background: rgba(180, 110, 20, 0.08);
+  background: rgba(79, 189, 186, 0.08);
   color: var(--accent);
 }
 .tl-body { flex: 1; padding-top: 4px; }
@@ -1292,7 +1344,7 @@ ul { list-style: none; }
 .contact-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255, 190, 80, 0.07) 0%, transparent 65%);
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(79, 189, 186, 0.07) 0%, transparent 65%);
   pointer-events: none;
 }
 .contact-inner { position: relative; z-index: 1; }
@@ -1455,6 +1507,22 @@ ul { list-style: none; }
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .proj-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Tablet: first row stays 2-up naturally; reduce the height differential instead of column span */
+  .proj-card:nth-child(1), .proj-card:nth-child(2),
+  .proj-card:nth-child(n+3),
+  .proj-card.card--featured, .proj-card.card--compact {
+    grid-column: auto;
+  }
+  .proj-card:nth-child(1) .proj-thumb, .proj-card:nth-child(2) .proj-thumb,
+  .proj-card.card--featured .proj-thumb {
+    aspect-ratio: auto;
+    height: 400px;
+  }
+  .proj-card:nth-child(n+3) .proj-thumb,
+  .proj-card.card--compact .proj-thumb {
+    aspect-ratio: auto;
+    height: 320px;
+  }
   /* skills-cloud: wraps naturally on small screens */
   .exp-grid { grid-template-columns: 1fr; gap: 3rem; }
   .exp-sticky { position: static; }
@@ -1496,6 +1564,14 @@ ul { list-style: none; }
   .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 3.5rem 1.25rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
   .stat-cell:last-child { border-bottom: none; }
   .proj-grid { grid-template-columns: 1fr; }
+  /* Mobile: single column, uniform card size — no featured treatment */
+  .proj-card:nth-child(1) .proj-thumb, .proj-card:nth-child(2) .proj-thumb,
+  .proj-card:nth-child(n+3) .proj-thumb,
+  .proj-card.card--featured .proj-thumb,
+  .proj-card.card--compact .proj-thumb {
+    aspect-ratio: 4/5;
+    height: auto;
+  }
   /* skills-cloud: wraps naturally on small screens */
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; }
   .footer-brand { grid-column: 1 / -1; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-solid); margin-bottom: 0.25rem; }

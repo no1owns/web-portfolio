@@ -389,7 +389,7 @@ initAYOReveal();
       const sin = Math.sin(l.angle);
       const half = LEN / 2;
 
-      ctx.strokeStyle = `rgba(160, 96, 16, ${alpha})`;
+      ctx.strokeStyle = `rgba(79, 189, 186, ${alpha})`;
       ctx.beginPath();
       ctx.moveTo(l.x - cos * half, l.y - sin * half);
       ctx.lineTo(l.x + cos * half, l.y + sin * half);
@@ -570,6 +570,16 @@ document.querySelectorAll('.proj-card').forEach(card => {
 /* ── Project filter ── */
 const filterBtns = document.querySelectorAll('.flt-btn');
 const projCards  = document.querySelectorAll('.proj-card');
+
+/* Fix 2: first two VISIBLE cards get the larger treatment — cards use opacity-fade
+   (.faded), not display:none, so nth-child alone can't react to the active filter. */
+function updateFeaturedCards() {
+  const visibleCards = Array.from(projCards).filter(c => !c.classList.contains('faded'));
+  projCards.forEach(c => c.classList.remove('card--featured', 'card--compact'));
+  visibleCards.forEach((c, i) => c.classList.add(i < 2 ? 'card--featured' : 'card--compact'));
+}
+updateFeaturedCards();
+
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('on'));
@@ -581,31 +591,145 @@ filterBtns.forEach(btn => {
       card.classList.toggle('faded', hide);
       gsap.to(card, { opacity: hide ? 0.25 : 1, duration: 0.3, overwrite: 'auto' });
     });
+    updateFeaturedCards();
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   });
 });
 
-/* ── Lab tab filtering ── */
-const labTabs  = document.querySelectorAll('.lab-tab');
-const labCards = document.querySelectorAll('.lab-card');
-labTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    labTabs.forEach(t => { t.classList.remove('on'); t.setAttribute('aria-selected', 'false'); });
-    tab.classList.add('on');
-    tab.setAttribute('aria-selected', 'true');
-    const cat = tab.dataset.lab;
-    labCards.forEach(card => {
-      const show = cat === 'all' || card.dataset.category === cat;
-      card.style.display = show ? '' : 'none';
+/* ── Lab section: live-first with expandable toggle ── */
+(function initLabSection() {
+  const labSection = document.getElementById('lab');
+  if (!labSection) return;
+
+  const labGrid     = labSection.querySelector('.lab-grid');
+  const tabsContainer = labSection.querySelector('.lab-tabs');
+  const toggleBtn    = labSection.querySelector('.lab-toggle');
+  const allCards     = Array.from(labSection.querySelectorAll('.lab-card'));
+  const liveCards    = allCards.filter(c => c.dataset.status === 'live');
+  const nonLiveCards = allCards.filter(c => c.dataset.status !== 'live');
+  const tabs         = tabsContainer ? Array.from(tabsContainer.querySelectorAll('.lab-tab')) : [];
+
+  if (!toggleBtn) return;
+
+  let isExpanded = false;
+
+  function fadeIn(card) {
+    card.style.display = '';
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(8px)';
+    requestAnimationFrame(() => {
+      card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+  }
+
+  function resetCardStyles(card) {
+    card.style.display = 'none';
+    card.style.opacity = '';
+    card.style.transform = '';
+    card.style.transition = '';
+  }
+
+  /* Category filtering (while expanded) can hide live cards too, since they may not
+     match the active category — collapsing must always force live cards back to visible. */
+  function showLiveCard(card) {
+    card.style.display = '';
+    card.style.opacity = '';
+    card.style.transform = '';
+    card.style.transition = '';
+  }
+
+  function updateTabHighlight(value) {
+    tabs.forEach(t => {
+      const active = t.dataset.lab === value;
+      t.classList.toggle('on', active);
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+
+  /* Filters by category among already-expanded cards (tabs only visible when expanded) */
+  function filterByCategory(value) {
+    updateTabHighlight(value);
+    allCards.forEach(card => {
+      const isLive = card.dataset.status === 'live';
+      const show   = value === 'all' || card.dataset.category === value;
+      card.classList.toggle('lab-card--inactive', !isLive && show);
       if (show) {
-        card.style.opacity = '0';
-        requestAnimationFrame(() => {
-          card.style.transition = 'opacity 0.15s ease';
-          card.style.opacity = '1';
-        });
+        if (card.style.display === 'none') fadeIn(card);
+      } else {
+        card.style.display = 'none';
       }
     });
+  }
+
+  function refreshScrollTrigger() {
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+  }
+
+  /* Initial state: live cards only, no tabs, collapsed 2-up grid */
+  if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+  nonLiveCards.forEach(c => { c.style.display = 'none'; });
+  liveCards.forEach(c => c.classList.remove('lab-card--inactive'));
+  if (tabsContainer) tabsContainer.style.display = 'none';
+  refreshScrollTrigger();
+
+  toggleBtn.addEventListener('click', () => {
+    isExpanded = !isExpanded;
+
+    if (isExpanded) {
+      if (labGrid) labGrid.classList.remove('lab-grid--collapsed');
+      if (tabsContainer) {
+        tabsContainer.style.display = '';
+        tabsContainer.style.opacity = '0';
+        tabsContainer.style.transform = 'translateY(-8px)';
+        requestAnimationFrame(() => {
+          tabsContainer.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          tabsContainer.style.opacity = '1';
+          tabsContainer.style.transform = 'translateY(0)';
+        });
+      }
+      liveCards.forEach(showLiveCard);
+      nonLiveCards.forEach(c => {
+        c.classList.add('lab-card--inactive');
+        fadeIn(c);
+      });
+      toggleBtn.textContent = 'Show less ↑';
+      updateTabHighlight('all');
+    } else {
+      if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+      if (tabsContainer) {
+        tabsContainer.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        tabsContainer.style.opacity = '0';
+        tabsContainer.style.transform = 'translateY(-8px)';
+        setTimeout(() => { tabsContainer.style.display = 'none'; }, 250);
+      }
+      nonLiveCards.forEach(resetCardStyles);
+      liveCards.forEach(c => { showLiveCard(c); c.classList.remove('lab-card--inactive'); });
+      toggleBtn.textContent = "See what's coming →";
+      updateTabHighlight('all');
+    }
+
+    setTimeout(refreshScrollTrigger, 320);
   });
-});
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterByCategory(tab.dataset.lab);
+      setTimeout(refreshScrollTrigger, 320);
+    });
+  });
+
+  /* Live card click-through (mirrors .proj-card behavior) */
+  liveCards.forEach(card => {
+    const link = card.querySelector('.lab-cta');
+    if (!link) return;
+    card.addEventListener('click', e => {
+      if (e.target.closest('a')) return;
+      window.open(link.href, link.target || '_self');
+    });
+  });
+})();
 
 /* Ticker and skills marquee use CSS animation (clip-path: inset(0) parent,
    translateX(-50%) on doubled strip content). Pause on hover handled in CSS. */

@@ -622,6 +622,22 @@ ul { list-style: none; }
   .bento-item.span-2, .bento-item.span-3 { grid-column: span 1; }
 }
 
+/* ── Bento gallery grouped by asset type (scoped — doesn't affect the
+   single flat .bento-gallery used on other case study pages) ── */
+.bento-group { margin-bottom: 56px; }
+.bento-group:last-of-type { margin-bottom: 80px; }
+.bento-group .bento-gallery { margin-bottom: 0; }
+.bento-group-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  padding: 0 5vw;
+  margin: 0 0 14px;
+}
+@media (max-width: 768px) { .bento-group-label { padding: 0 4vw; } }
+
 /* ── Gallery hero + masonry (JS-built layout, gallery.js) ── */
 .bento-gallery.gallery-built {
   display: block;
@@ -753,6 +769,7 @@ body.light-bg .cs-meta-cell {
 body.light-bg .cs-meta-label { color: rgba(0, 0, 0, 0.42); }
 body.light-bg .cs-meta-value { color: rgba(0, 0, 0, 0.85); }
 body.light-bg .cs-section-label { color: rgba(0, 0, 0, 0.42); }
+body.light-bg .bento-group-label { color: rgba(0, 0, 0, 0.42); }
 body.light-bg .cs-tag {
   background: rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.14);

@@ -687,8 +687,19 @@ filterBtns.forEach(btn => {
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
 
-  /* Initial state: live cards only, no tabs, collapsed 2-up grid */
-  if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+  /* Collapsed grid adapts to however many live cards actually exist, rather
+     than assuming a fixed count — set once from data, not hardcoded in CSS. */
+  function applyCollapsedLayout() {
+    if (!labGrid) return;
+    labGrid.classList.add('lab-grid--collapsed');
+    const cols = Math.min(liveCards.length, 3) || 1;
+    const maxWidth = { 1: '420px', 2: '760px', 3: '1140px' }[cols];
+    labGrid.style.setProperty('--collapsed-cols', cols);
+    labGrid.style.setProperty('--collapsed-max-w', maxWidth);
+  }
+
+  /* Initial state: live cards only, no tabs, collapsed grid */
+  applyCollapsedLayout();
   nonLiveCards.forEach(c => { c.style.display = 'none'; });
   liveCards.forEach(c => c.classList.remove('lab-card--inactive'));
   if (tabsContainer) tabsContainer.style.display = 'none';
@@ -717,7 +728,7 @@ filterBtns.forEach(btn => {
       toggleBtn.textContent = 'Show less ↑';
       updateTabHighlight('all');
     } else {
-      if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+      applyCollapsedLayout();
       if (tabsContainer) {
         tabsContainer.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
         tabsContainer.style.opacity = '0';

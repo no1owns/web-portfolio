@@ -1127,9 +1127,12 @@ ul { list-style: none; }
 .lab-card[data-status="live"] { cursor: pointer; }
 
 /* ── Live-first / expandable toggle (Fix 4) ── */
+/* Column count/max-width are set from JS based on the actual number of
+   live cards (--collapsed-cols/--collapsed-max-w), so this adapts whenever
+   a new lab project goes live instead of assuming a fixed count of 2. */
 .lab-grid--collapsed {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 760px;
+  grid-template-columns: repeat(var(--collapsed-cols, 2), 1fr);
+  max-width: var(--collapsed-max-w, 760px);
   margin: 0 auto;
 }
 .lab-card--inactive {

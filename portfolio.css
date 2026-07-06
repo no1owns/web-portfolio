@@ -1605,6 +1605,12 @@ ul { list-style: none; }
     font-size: 0.95rem;
     color: var(--text-primary);
   }
+  /* .nav-hire's own background is also var(--text-primary) — without this,
+     the rule above (higher specificity than .nav-hire's own color rule)
+     overrides its text to match its background, making the label invisible. */
+  .nav-links.open a.nav-hire {
+    color: var(--bg-card);
+  }
   .nav-toggle { display: flex; }
   .about-section { padding: 50px 0 0; }
   .about-grid { grid-template-columns: 1fr; gap: 2.5rem; text-align: left; }

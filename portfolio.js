@@ -69,17 +69,23 @@ const heroTl = gsap.timeline({
     once: true
   }
 });
+/* fromTo (not from) for every element gsap.set() above already forced to
+   opacity:0 — .from() infers its implicit "to" from the element's CURRENT
+   value, which is already 0 at this point, so it would silently animate
+   0 -> 0 and never actually reveal the element. Confirmed via an isolated
+   repro of gsap.set(el,{opacity:0}) followed by gsap.from(el,{opacity:0}):
+   the timeline completes but opacity never leaves 0. */
 heroTl
-  .from('.hero-eyebrow',         { y: -20, opacity: 0, duration: 0.7 })
+  .fromTo('.hero-eyebrow',         { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 })
   .from('.hero-name-line .n-char', {
     y: 80, opacity: 0, duration: 0.65,
     stagger: { each: 0.038, from: 'start' },
     ease: 'power4.out'
   }, '-=0.3')
-  .from('.hero-sub',             { y: 24, opacity: 0, duration: 0.8 }, '-=0.2')
-  .from('.hero-typewriter',      { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-cta',             { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-scroll',          { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
+  .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
+  .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
 gsap.to('#hero-content', {
@@ -329,6 +335,21 @@ async function initAYOReveal() {
 
       /* Keep pin fully visible at all scroll positions */
       if (ayoPin) ayoPin.style.opacity = 1;
+
+      /* Once the reveal is done, the pin box must stop rendering entirely —
+         not just be scrolled past — since .ayo-bg is an always-opaque full
+         cover inside it, sitting at z-index:2 (above .hero's z-index:1) in
+         the same vertical space .hero overlaps into by design (via
+         .ayo-reveal's negative margin). Relying on GSAP's pin/position
+         state alone to move it out of the way is fragile on iOS Safari,
+         where position:fixed elements toggled via JS are known to
+         misbehave or visually "stick" long after the page has scrolled
+         well past them, permanently blocking whatever's underneath. */
+      if (ayoPin) {
+        const done = p >= 0.995;
+        ayoPin.style.visibility = done ? 'hidden' : 'visible';
+        ayoPin.style.pointerEvents = done ? 'none' : '';
+      }
     }
   });
 }

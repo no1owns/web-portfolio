@@ -91,14 +91,24 @@ ul { list-style: none; }
 
 /* ── AYO Reveal Section ── */
 .ayo-reveal {
+  /* Must use the same viewport unit as .ayo-pin below (dvh, with vh as the
+     fallback for browsers without dvh support). This section's height sets
+     the scroll RANGE for the GSAP pin, while .ayo-pin's height sets the
+     pinned visual BOX size — on mobile Safari, plain vh reflects the
+     largest viewport (address bar hidden) while the pin's dvh box reflects
+     whatever is currently visible (address bar shown), so mixing them
+     means more scroll is required to release the pin than one dynamic
+     viewport's worth, and the hero content never appears where expected. */
   position: relative;
   height: 200vh;
+  height: 200dvh;
   background: transparent;
   margin-bottom: -100vh;
+  margin-bottom: -100dvh;
   z-index: 2;
 }
 @media (max-width: 768px) {
-  .ayo-reveal { height: 200vh; margin-bottom: -100vh; }
+  .ayo-reveal { height: 200vh; height: 200dvh; margin-bottom: -100vh; margin-bottom: -100dvh; }
 }
 .ayo-pin {
   /* Pinning is handled by GSAP ScrollTrigger (avoids overflow-x:hidden breaking CSS sticky) */

@@ -12,6 +12,34 @@ document.body.classList.add('loaded');
 
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
+}
+
+/* ── Stat counters ── */
+/* These are real content, not decoration — they must always land on the
+   correct value, whether GSAP is available, reduced-motion is on, or not.
+   (Runs regardless of the !reducedMotion gate below, unlike the rest of
+   this file's animations.) */
+document.querySelectorAll('.stat-n').forEach(el => {
+  const target = +el.dataset.target;
+
+  if (reducedMotion || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    el.textContent = target;
+    return;
+  }
+
+  const start = +el.textContent;
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 80%',
+    once: true,
+    onEnter: () => gsap.fromTo(el,
+      { innerHTML: start },
+      { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
+    )
+  });
+});
+
+if (typeof gsap !== 'undefined') {
 
 /* ── Functional: nav scroll state + back-to-top (always active) ── */
 ScrollTrigger.create({
@@ -160,21 +188,6 @@ function splitReveal(selector) {
   });
 }
 splitReveal('.section-title');
-
-/* ── Stat counters ── */
-document.querySelectorAll('.stat-n').forEach(el => {
-  const target = +el.dataset.target;
-  const start  = +el.textContent;
-  ScrollTrigger.create({
-    trigger: el,
-    start: 'top 80%',
-    once: true,
-    onEnter: () => gsap.fromTo(el,
-      { innerHTML: start },
-      { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
-    )
-  });
-});
 
 } /* end !reducedMotion */
 } /* end gsap guard */
@@ -735,3 +748,11 @@ filterBtns.forEach(btn => {
 
 /* Ticker and skills marquee use CSS animation (clip-path: inset(0) parent,
    translateX(-50%) on doubled strip content). Pause on hover handled in CSS. */
+
+/* Late-loading webfonts/images and mobile Safari's dynamic address bar can
+   shift layout after ScrollTrigger has already measured trigger positions,
+   causing scroll-linked effects to fire at the wrong point (or not at all).
+   One refresh once everything has actually settled is cheap insurance. */
+if (typeof ScrollTrigger !== 'undefined') {
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+}

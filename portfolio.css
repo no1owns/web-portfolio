@@ -106,6 +106,14 @@ ul { list-style: none; }
   margin-bottom: -100vh;
   margin-bottom: -100dvh;
   z-index: 2;
+  /* Purely decorative (aria-hidden, nothing inside needs interaction) —
+     but its box still occupies full-height space overlapping .hero by
+     design, at a z-index above it. Hiding .ayo-pin once the reveal
+     completes isn't enough on its own: this outer section's own box still
+     sits there with default pointer-events, silently swallowing clicks
+     meant for the hero content underneath (e.g. the CTA buttons), even
+     though nothing is visibly there anymore. */
+  pointer-events: none;
 }
 @media (max-width: 768px) {
   .ayo-reveal { height: 200vh; height: 200dvh; margin-bottom: -100vh; margin-bottom: -100dvh; }
@@ -366,6 +374,12 @@ ul { list-style: none; }
   text-align: center;
   max-width: 860px;
   padding: 0 1.5rem;
+  /* .hero-scroll is absolutely positioned at a fixed distance from .hero's
+     own bottom edge, independent of how tall this content stack renders —
+     without a reserved margin here, a taller content stack (long typewriter
+     text, wrapped sub-copy, the tagline) can end up hard against or
+     overlapping it, since nothing otherwise enforces a minimum gap. */
+  margin-bottom: clamp(2rem, 8vh, 4rem);
   will-change: transform, opacity;
 }
 .hero-eyebrow {

@@ -17,26 +17,31 @@ gsap.registerPlugin(ScrollTrigger, Observer);
 /* ── Stat counters ── */
 /* These are real content, not decoration — they must always land on the
    correct value, whether GSAP is available, reduced-motion is on, or not.
-   (Runs regardless of the !reducedMotion gate below, unlike the rest of
-   this file's animations.) */
+   Uses IntersectionObserver rather than ScrollTrigger position math: it
+   fires correctly even if the element is already in view when observed
+   (e.g. a mid-page reload), which a scroll-position trigger created after
+   that point would silently miss, and it isn't sensitive to mobile
+   Safari's dynamic address bar changing viewport height after the fact. */
 document.querySelectorAll('.stat-n').forEach(el => {
   const target = +el.dataset.target;
 
-  if (reducedMotion || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+  if (reducedMotion || typeof gsap === 'undefined' || typeof IntersectionObserver === 'undefined') {
     el.textContent = target;
     return;
   }
 
   const start = +el.textContent;
-  ScrollTrigger.create({
-    trigger: el,
-    start: 'top 80%',
-    once: true,
-    onEnter: () => gsap.fromTo(el,
-      { innerHTML: start },
-      { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
-    )
-  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      gsap.fromTo(el,
+        { innerHTML: start },
+        { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
+      );
+      observer.disconnect();
+    });
+  }, { threshold: 0.2 });
+  observer.observe(el);
 });
 
 if (typeof gsap !== 'undefined') {

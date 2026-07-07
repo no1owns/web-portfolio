@@ -91,14 +91,32 @@ ul { list-style: none; }
 
 /* ── AYO Reveal Section ── */
 .ayo-reveal {
+  /* Must use the same viewport unit as .ayo-pin below (dvh, with vh as the
+     fallback for browsers without dvh support). This section's height sets
+     the scroll RANGE for the GSAP pin, while .ayo-pin's height sets the
+     pinned visual BOX size — on mobile Safari, plain vh reflects the
+     largest viewport (address bar hidden) while the pin's dvh box reflects
+     whatever is currently visible (address bar shown), so mixing them
+     means more scroll is required to release the pin than one dynamic
+     viewport's worth, and the hero content never appears where expected. */
   position: relative;
   height: 200vh;
+  height: 200dvh;
   background: transparent;
   margin-bottom: -100vh;
+  margin-bottom: -100dvh;
   z-index: 2;
+  /* Purely decorative (aria-hidden, nothing inside needs interaction) —
+     but its box still occupies full-height space overlapping .hero by
+     design, at a z-index above it. Hiding .ayo-pin once the reveal
+     completes isn't enough on its own: this outer section's own box still
+     sits there with default pointer-events, silently swallowing clicks
+     meant for the hero content underneath (e.g. the CTA buttons), even
+     though nothing is visibly there anymore. */
+  pointer-events: none;
 }
 @media (max-width: 768px) {
-  .ayo-reveal { height: 200vh; margin-bottom: -100vh; }
+  .ayo-reveal { height: 200vh; height: 200dvh; margin-bottom: -100vh; margin-bottom: -100dvh; }
 }
 .ayo-pin {
   /* Pinning is handled by GSAP ScrollTrigger (avoids overflow-x:hidden breaking CSS sticky) */
@@ -356,6 +374,12 @@ ul { list-style: none; }
   text-align: center;
   max-width: 860px;
   padding: 0 1.5rem;
+  /* .hero-scroll is absolutely positioned at a fixed distance from .hero's
+     own bottom edge, independent of how tall this content stack renders —
+     without a reserved margin here, a taller content stack (long typewriter
+     text, wrapped sub-copy, the tagline) can end up hard against or
+     overlapping it, since nothing otherwise enforces a minimum gap. */
+  margin-bottom: clamp(2rem, 8vh, 4rem);
   will-change: transform, opacity;
 }
 .hero-eyebrow {
@@ -1127,9 +1151,12 @@ ul { list-style: none; }
 .lab-card[data-status="live"] { cursor: pointer; }
 
 /* ── Live-first / expandable toggle (Fix 4) ── */
+/* Column count/max-width are set from JS based on the actual number of
+   live cards (--collapsed-cols/--collapsed-max-w), so this adapts whenever
+   a new lab project goes live instead of assuming a fixed count of 2. */
 .lab-grid--collapsed {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 760px;
+  grid-template-columns: repeat(var(--collapsed-cols, 2), 1fr);
+  max-width: var(--collapsed-max-w, 760px);
   margin: 0 auto;
 }
 .lab-card--inactive {
@@ -1577,6 +1604,12 @@ ul { list-style: none; }
     padding: 10px 14px;
     font-size: 0.95rem;
     color: var(--text-primary);
+  }
+  /* .nav-hire's own background is also var(--text-primary) — without this,
+     the rule above (higher specificity than .nav-hire's own color rule)
+     overrides its text to match its background, making the label invisible. */
+  .nav-links.open a.nav-hire {
+    color: var(--bg-card);
   }
   .nav-toggle { display: flex; }
   .about-section { padding: 50px 0 0; }

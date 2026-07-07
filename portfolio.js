@@ -12,6 +12,39 @@ document.body.classList.add('loaded');
 
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
+}
+
+/* ── Stat counters ── */
+/* These are real content, not decoration — they must always land on the
+   correct value, whether GSAP is available, reduced-motion is on, or not.
+   Uses IntersectionObserver rather than ScrollTrigger position math: it
+   fires correctly even if the element is already in view when observed
+   (e.g. a mid-page reload), which a scroll-position trigger created after
+   that point would silently miss, and it isn't sensitive to mobile
+   Safari's dynamic address bar changing viewport height after the fact. */
+document.querySelectorAll('.stat-n').forEach(el => {
+  const target = +el.dataset.target;
+
+  if (reducedMotion || typeof gsap === 'undefined' || typeof IntersectionObserver === 'undefined') {
+    el.textContent = target;
+    return;
+  }
+
+  const start = +el.textContent;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      gsap.fromTo(el,
+        { innerHTML: start },
+        { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
+      );
+      observer.disconnect();
+    });
+  }, { threshold: 0.2 });
+  observer.observe(el);
+});
+
+if (typeof gsap !== 'undefined') {
 
 /* ── Functional: nav scroll state + back-to-top (always active) ── */
 ScrollTrigger.create({
@@ -36,17 +69,23 @@ const heroTl = gsap.timeline({
     once: true
   }
 });
+/* fromTo (not from) for every element gsap.set() above already forced to
+   opacity:0 — .from() infers its implicit "to" from the element's CURRENT
+   value, which is already 0 at this point, so it would silently animate
+   0 -> 0 and never actually reveal the element. Confirmed via an isolated
+   repro of gsap.set(el,{opacity:0}) followed by gsap.from(el,{opacity:0}):
+   the timeline completes but opacity never leaves 0. */
 heroTl
-  .from('.hero-eyebrow',         { y: -20, opacity: 0, duration: 0.7 })
+  .fromTo('.hero-eyebrow',         { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 })
   .from('.hero-name-line .n-char', {
     y: 80, opacity: 0, duration: 0.65,
     stagger: { each: 0.038, from: 'start' },
     ease: 'power4.out'
   }, '-=0.3')
-  .from('.hero-sub',             { y: 24, opacity: 0, duration: 0.8 }, '-=0.2')
-  .from('.hero-typewriter',      { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-cta',             { y: 18, opacity: 0, duration: 0.7 }, '-=0.5')
-  .from('.hero-scroll',          { y: 12, opacity: 0, duration: 0.6 }, '-=0.3');
+  .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
+  .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
 gsap.to('#hero-content', {
@@ -160,21 +199,6 @@ function splitReveal(selector) {
   });
 }
 splitReveal('.section-title');
-
-/* ── Stat counters ── */
-document.querySelectorAll('.stat-n').forEach(el => {
-  const target = +el.dataset.target;
-  const start  = +el.textContent;
-  ScrollTrigger.create({
-    trigger: el,
-    start: 'top 80%',
-    once: true,
-    onEnter: () => gsap.fromTo(el,
-      { innerHTML: start },
-      { innerHTML: target, duration: 1.6, snap: { innerHTML: 1 }, ease: 'power2.out' }
-    )
-  });
-});
 
 } /* end !reducedMotion */
 } /* end gsap guard */
@@ -311,6 +335,21 @@ async function initAYOReveal() {
 
       /* Keep pin fully visible at all scroll positions */
       if (ayoPin) ayoPin.style.opacity = 1;
+
+      /* Once the reveal is done, the pin box must stop rendering entirely —
+         not just be scrolled past — since .ayo-bg is an always-opaque full
+         cover inside it, sitting at z-index:2 (above .hero's z-index:1) in
+         the same vertical space .hero overlaps into by design (via
+         .ayo-reveal's negative margin). Relying on GSAP's pin/position
+         state alone to move it out of the way is fragile on iOS Safari,
+         where position:fixed elements toggled via JS are known to
+         misbehave or visually "stick" long after the page has scrolled
+         well past them, permanently blocking whatever's underneath. */
+      if (ayoPin) {
+        const done = p >= 0.995;
+        ayoPin.style.visibility = done ? 'hidden' : 'visible';
+        ayoPin.style.pointerEvents = done ? 'none' : '';
+      }
     }
   });
 }
@@ -669,8 +708,19 @@ filterBtns.forEach(btn => {
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
 
-  /* Initial state: live cards only, no tabs, collapsed 2-up grid */
-  if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+  /* Collapsed grid adapts to however many live cards actually exist, rather
+     than assuming a fixed count — set once from data, not hardcoded in CSS. */
+  function applyCollapsedLayout() {
+    if (!labGrid) return;
+    labGrid.classList.add('lab-grid--collapsed');
+    const cols = Math.min(liveCards.length, 3) || 1;
+    const maxWidth = { 1: '420px', 2: '760px', 3: '1140px' }[cols];
+    labGrid.style.setProperty('--collapsed-cols', cols);
+    labGrid.style.setProperty('--collapsed-max-w', maxWidth);
+  }
+
+  /* Initial state: live cards only, no tabs, collapsed grid */
+  applyCollapsedLayout();
   nonLiveCards.forEach(c => { c.style.display = 'none'; });
   liveCards.forEach(c => c.classList.remove('lab-card--inactive'));
   if (tabsContainer) tabsContainer.style.display = 'none';
@@ -699,7 +749,7 @@ filterBtns.forEach(btn => {
       toggleBtn.textContent = 'Show less ↑';
       updateTabHighlight('all');
     } else {
-      if (labGrid) labGrid.classList.add('lab-grid--collapsed');
+      applyCollapsedLayout();
       if (tabsContainer) {
         tabsContainer.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
         tabsContainer.style.opacity = '0';
@@ -735,3 +785,11 @@ filterBtns.forEach(btn => {
 
 /* Ticker and skills marquee use CSS animation (clip-path: inset(0) parent,
    translateX(-50%) on doubled strip content). Pause on hover handled in CSS. */
+
+/* Late-loading webfonts/images and mobile Safari's dynamic address bar can
+   shift layout after ScrollTrigger has already measured trigger positions,
+   causing scroll-linked effects to fire at the wrong point (or not at all).
+   One refresh once everything has actually settled is cheap insurance. */
+if (typeof ScrollTrigger !== 'undefined') {
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+}

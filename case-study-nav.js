@@ -6,7 +6,7 @@
  * Every page's next-project link updates automatically — no other edits needed.
  */
 const PROJECTS = [
-  { title: 'MongoDB World',         url: 'event-brand/mongodb-world.html' },
+  { title: 'MongoDB',               url: 'event-brand/mongodb-world.html' },
   { title: 'Navan',                 url: 'event-brand/navan.html' },
   { title: 'DocuSign Momentum',     url: 'event-brand/docusign-momentum.html' },
   { title: 'DocuSign Campaigns',    url: 'campaign-partner/docusign-campaigns.html' },
@@ -15,9 +15,6 @@ const PROJECTS = [
   { title: 'Apollo Summit',         url: 'event-brand/apollo-summit.html' },
   { title: 'BetterUp',             url: 'presentation-design/betterup.html' },
   { title: 'Linx Security',         url: 'linx-security/linx.html' },
-  { title: 'MongoDB IPO Launch',    url: 'technical-developer/mongodb-ipo.html' },
-  { title: 'MongoDB Dream Big',     url: 'brand-character/mongodb-dream-big.html' },
-  { title: 'MongoDB Beliefs',       url: 'brand-character/mongodb-values.html' },
 ];
 
 (function () {

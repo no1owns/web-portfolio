@@ -77,8 +77,16 @@ const heroTl = gsap.timeline({
    the timeline completes but opacity never leaves 0. */
 heroTl
   .fromTo('.hero-eyebrow',         { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 })
+  /* Opacity only — no y/transform here. .n-char's ancestor (.hero-name-inner)
+     uses background-clip:text for the gradient fill, and Chromium fails to
+     render clip-text gradients correctly when a transformed descendant
+     exists anywhere in that subtree (confirmed by reproduction: adding
+     `y: 80` back makes "Ayodeji" render fully invisible despite every
+     computed style — opacity, background-image, position — looking correct).
+     Losing the rise motion here is a small trade for the name actually
+     being visible. */
   .from('.hero-name-line .n-char', {
-    y: 80, opacity: 0, duration: 0.65,
+    opacity: 0, duration: 0.65,
     stagger: { each: 0.038, from: 'start' },
     ease: 'power4.out'
   }, '-=0.3')

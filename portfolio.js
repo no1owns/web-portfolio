@@ -529,45 +529,6 @@ if (typeof gsap !== 'undefined' && !reducedMotion && window.matchMedia('(hover: 
   document.querySelectorAll('.lab-card').forEach(c => addCardTilt(c, 8, 800, 8));
 }
 
-/* ── Magnetic lag-trail cursor (fine-pointer, no reduced motion) ── */
-if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
-  const cursorDot  = document.createElement('div');
-  const cursorRing = document.createElement('div');
-  cursorDot.className  = 'cursor-dot';
-  cursorRing.className = 'cursor-ring';
-  document.body.appendChild(cursorDot);
-  document.body.appendChild(cursorRing);
-
-  let mx = -200, my = -200;
-  let rx = -200, ry = -200;
-
-  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-
-  /* Event delegation — handles dynamically shown/hidden elements.
-     e.target can be `document` itself (no .closest()) when mouseenter/leave
-     fires at the document boundary, so guard for a real Element first. */
-  document.addEventListener('mouseenter', e => {
-    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
-      cursorDot.classList.add('hovering');
-      cursorRing.classList.add('hovering');
-    }
-  }, true);
-  document.addEventListener('mouseleave', e => {
-    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
-      cursorDot.classList.remove('hovering');
-      cursorRing.classList.remove('hovering');
-    }
-  }, true);
-
-  (function raf() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    cursorDot.style.transform  = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-    cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    requestAnimationFrame(raf);
-  })();
-}
-
 /* ── Typewriter ── */
 const phrases = [
   'Senior Visual Designer @ AppOmni',

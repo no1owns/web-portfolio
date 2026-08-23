@@ -10,6 +10,20 @@ const navLinks  = document.getElementById('nav-links');
 
 document.body.classList.add('loaded');
 
+/* ── Project thumb "selection frame" — corner-handle dots + a floating
+   tool badge over each project thumbnail, revealed on hover. Injected
+   here rather than hand-added to every card in the HTML so the effect
+   stays in sync automatically as project cards are added/removed. ── */
+document.querySelectorAll('.proj-thumb').forEach(thumb => {
+  const frame = document.createElement('div');
+  frame.className = 'thumb-frame';
+  frame.innerHTML = '<span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>';
+  const tools = document.createElement('div');
+  tools.className = 'thumb-tools';
+  tools.innerHTML = '<i class="fas fa-crop-simple"></i><i class="fas fa-layer-group"></i>';
+  thumb.append(frame, tools);
+});
+
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
 }
@@ -58,7 +72,7 @@ ScrollTrigger.create({
 if (!reducedMotion) {
 
 /* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
-gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-scroll'], { opacity: 0 });
+gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-frame-row', '.hero-scroll'], { opacity: 0 });
 
 /* ── Hero entrance timeline — scroll-triggered so it's ready when hero is visible ── */
 const heroTl = gsap.timeline({
@@ -93,6 +107,7 @@ heroTl
   .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
   .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-frame-row',       { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */

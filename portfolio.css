@@ -560,6 +560,82 @@ ul { list-style: none; }
 }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
+/* ── Hero frame row — "active selection" chips echoing a design app's
+   canvas UI: colored corner-handled frame + tool badge over a work sample.
+   Purely decorative (aria-hidden), sits between the CTAs and scroll cue. ── */
+.hero-frame-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.9rem, 2.5vw, 1.6rem);
+  margin-top: clamp(2.2rem, 6vh, 3.2rem);
+  /* opacity managed by GSAP */
+}
+.hero-frame-item {
+  position: relative;
+  width: clamp(76px, 9vw, 112px);
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: visible;
+  --fc: var(--accent);
+}
+.hero-frame-item .hf-img-wrap {
+  width: 100%; height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+.hero-frame-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-frame-item::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1.5px solid var(--fc);
+  border-radius: 12px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.hero-frame-item:nth-child(2) { margin-top: -0.6rem; }
+
+/* ── Selection-frame corner dots + floating tool badge — shared by the
+   hero frame row and project-card thumbs. Dots injected via JS so no
+   markup edit is needed per project card. ── */
+.tf-dot {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--fc, var(--accent));
+  background: var(--bg-card);
+  pointer-events: none;
+}
+.tf-tl { top: -6px; left: -6px; }
+.tf-tr { top: -6px; right: -6px; }
+.tf-bl { bottom: -6px; left: -6px; }
+.tf-br { bottom: -6px; right: -6px; }
+
+.thumb-tools {
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 7px 6px;
+  background: rgba(10, 10, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity var(--tr-med), transform var(--tr-med);
+  pointer-events: none;
+}
+.thumb-tools i { font-size: 0.66rem; color: rgba(255, 255, 255, 0.85); }
+
 /* ── Shared section styles ── */
 .section-chip {
   display: inline-block;
@@ -881,6 +957,21 @@ ul { list-style: none; }
   position: relative;
   aspect-ratio: 4/5;
   overflow: hidden;
+}
+.thumb-frame {
+  position: absolute;
+  inset: 12px;
+  border: 1.5px solid var(--fc, var(--accent));
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity var(--tr-med);
+  pointer-events: none;
+  z-index: 2;
+}
+.proj-card:hover .thumb-frame,
+.proj-card:hover .thumb-tools {
+  opacity: 1;
+  transform: translateY(0);
 }
 .proj-thumb-bg {
   width: 100%; height: 100%;

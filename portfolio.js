@@ -10,6 +10,20 @@ const navLinks  = document.getElementById('nav-links');
 
 document.body.classList.add('loaded');
 
+/* ── Project thumb "selection frame" — corner-handle dots + a floating
+   tool badge over each project thumbnail, revealed on hover. Injected
+   here rather than hand-added to every card in the HTML so the effect
+   stays in sync automatically as project cards are added/removed. ── */
+document.querySelectorAll('.proj-thumb').forEach(thumb => {
+  const frame = document.createElement('div');
+  frame.className = 'thumb-frame';
+  frame.innerHTML = '<span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>';
+  const tools = document.createElement('div');
+  tools.className = 'thumb-tools';
+  tools.innerHTML = '<i class="fas fa-crop-simple"></i><i class="fas fa-layer-group"></i>';
+  thumb.append(frame, tools);
+});
+
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
 }
@@ -58,7 +72,7 @@ ScrollTrigger.create({
 if (!reducedMotion) {
 
 /* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
-gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-scroll'], { opacity: 0 });
+gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-proj-row', '.hero-scroll'], { opacity: 0 });
 
 /* ── Hero entrance timeline — scroll-triggered so it's ready when hero is visible ── */
 const heroTl = gsap.timeline({
@@ -93,6 +107,7 @@ heroTl
   .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
   .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-proj-row',       { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
@@ -172,6 +187,18 @@ ScrollTrigger.batch('.reveal-s', {
     stagger: revStg, ease: 'expo.out'
   }),
   start: 'top 88%', once: true
+});
+
+/* ── Project grid entrance — picks up where the hero project row's
+   scroll-fade (see the hero parallax block below) leaves off, so the
+   hero cards recede as the user scrolls and the full grid rises into
+   place a beat later. ── */
+ScrollTrigger.batch('.proj-card', {
+  onEnter: els => gsap.from(els, {
+    y: isMobile ? 20 : 40, scale: isMobile ? 0.97 : 0.94, opacity: 0,
+    duration: revDur, stagger: revStg, ease: 'expo.out'
+  }),
+  start: 'top 90%', once: true
 });
 
 /* ── Heading line-mask reveal ── */
@@ -484,74 +511,6 @@ initAYOReveal();
     });
   }
 })();
-
-/* ── 3D card tilt (GSAP-smoothed, hover-capable devices only) ── */
-if (typeof gsap !== 'undefined' && !reducedMotion && window.matchMedia('(hover: hover)').matches) {
-  function addCardTilt(card, deg, perspective, z) {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width  - 0.5;
-      const y = (e.clientY - r.top)  / r.height - 0.5;
-      gsap.to(card, {
-        rotationY: x * deg,
-        rotationX: -y * deg,
-        transformPerspective: perspective,
-        z,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, {
-        rotationY: 0, rotationX: 0, z: 0,
-        duration: 0.5, ease: 'power3.out',
-        overwrite: 'auto'
-      });
-    });
-  }
-  document.querySelectorAll('.proj-card').forEach(c => addCardTilt(c, 7, 900, 6));
-  document.querySelectorAll('.lab-card').forEach(c => addCardTilt(c, 8, 800, 8));
-}
-
-/* ── Magnetic lag-trail cursor (fine-pointer, no reduced motion) ── */
-if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
-  const cursorDot  = document.createElement('div');
-  const cursorRing = document.createElement('div');
-  cursorDot.className  = 'cursor-dot';
-  cursorRing.className = 'cursor-ring';
-  document.body.appendChild(cursorDot);
-  document.body.appendChild(cursorRing);
-
-  let mx = -200, my = -200;
-  let rx = -200, ry = -200;
-
-  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-
-  /* Event delegation — handles dynamically shown/hidden elements.
-     e.target can be `document` itself (no .closest()) when mouseenter/leave
-     fires at the document boundary, so guard for a real Element first. */
-  document.addEventListener('mouseenter', e => {
-    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
-      cursorDot.classList.add('hovering');
-      cursorRing.classList.add('hovering');
-    }
-  }, true);
-  document.addEventListener('mouseleave', e => {
-    if (e.target instanceof Element && e.target.closest('a, button, .proj-card, .lab-card')) {
-      cursorDot.classList.remove('hovering');
-      cursorRing.classList.remove('hovering');
-    }
-  }, true);
-
-  (function raf() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    cursorDot.style.transform  = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-    cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    requestAnimationFrame(raf);
-  })();
-}
 
 /* ── Typewriter ── */
 const phrases = [

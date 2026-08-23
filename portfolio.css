@@ -189,11 +189,9 @@ ul { list-style: none; }
   font-size: clamp(0.95rem, 1.8vw, 1.15rem);
   line-height: 1.6;
   color: rgba(255, 250, 245, 0.92);
-  background: rgba(6, 14, 28, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(6, 14, 28, 0.82);
   padding: 12px 22px;
-  border-radius: 16px;
+  border-radius: 10px;
   pointer-events: none;
 }
 @media (max-width: 768px) {
@@ -251,7 +249,7 @@ ul { list-style: none; }
   font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-sub);
-  border-radius: 100px;
+  border-radius: 8px;
   transition: color var(--tr-fast), background var(--tr-fast);
 }
 .nav-links a:hover, .nav-links a.active {
@@ -283,7 +281,7 @@ ul { list-style: none; }
   padding: 7px 18px;
   background: var(--text-primary);
   color: var(--bg-card);
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 600;
   transition: opacity var(--tr-fast), transform var(--tr-fast), box-shadow var(--tr-fast);
@@ -352,21 +350,17 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Soft glow — barely-there gradient for depth */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 70% 60% at 20% 80%, rgba(79, 189, 186, 0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(79, 189, 186, 0.06) 0%, transparent 50%);
-  pointer-events: none;
-}
 .hero-content {
   position: relative;
   z-index: 3;
   text-align: center;
   max-width: 860px;
+  width: 100%;
+  /* .hero is a flex container centering this child — without min-width:0,
+     a flex item's min-content size (here, the hero-proj-row's non-shrinking
+     mobile cards) can force this whole column wider than the viewport,
+     bleeding every centered line of text off both edges. */
+  min-width: 0;
   padding: 0 1.5rem;
   /* .hero-scroll is absolutely positioned at a fixed distance from .hero's
      own bottom edge, independent of how tall this content stack renders —
@@ -383,7 +377,7 @@ ul { list-style: none; }
   padding: 6px 16px;
   background: rgba(16, 185, 129, 0.07);
   border: 1px solid rgba(16, 185, 129, 0.22);
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -482,7 +476,7 @@ ul { list-style: none; }
   align-items: center;
   gap: 8px;
   padding: 13px 28px;
-  border-radius: 100px;
+  border-radius: 10px;
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
@@ -535,36 +529,62 @@ ul { list-style: none; }
 }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
-/* ── Hero frame row — "active selection" chips echoing a design app's
-   canvas UI: colored corner-handled frame + tool badge over a work sample.
-   Purely decorative (aria-hidden), sits between the CTAs and scroll cue. ── */
-.hero-frame-row {
+/* ── Hero project row — real, clickable work samples framed like an
+   active selection in a design app (colored corner-handled frame + tool
+   badge), each carrying the same title/category caption a grid tile
+   gets. Scroll-faded via GSAP alongside the rest of #hero-content (see
+   the hero parallax block in portfolio.js) so the row visually recedes
+   as the real project grid takes over below. ── */
+.hero-proj-row {
   display: flex;
   justify-content: center;
-  gap: clamp(0.9rem, 2.5vw, 1.6rem);
-  margin-top: clamp(2.2rem, 6vh, 3.2rem);
+  gap: clamp(1.1rem, 2.8vw, 2rem);
+  margin-top: clamp(2.4rem, 6vh, 3.4rem);
   /* opacity managed by GSAP */
 }
-.hero-frame-item {
+@media (max-width: 480px) {
+  /* 3 cards at the desktop min-width overflow a narrow viewport — let the
+     row scroll horizontally with a bit of peek rather than clipping or
+     forcing the page wider. */
+  .hero-proj-row {
+    justify-content: flex-start;
+    gap: 0.85rem;
+    padding: 0 6vw;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hero-proj-card {
+    width: 118px;
+    flex: none;
+    scroll-snap-align: start;
+  }
+}
+.hero-proj-card {
   position: relative;
-  width: clamp(76px, 9vw, 112px);
-  aspect-ratio: 1;
+  display: block;
+  width: clamp(130px, 15vw, 190px);
+  aspect-ratio: 4/5;
   border-radius: 10px;
   overflow: visible;
   --fc: var(--accent);
+  transition: transform var(--tr-med);
 }
-.hero-frame-item .hf-img-wrap {
+.hero-proj-card:hover { transform: translateY(-4px); }
+.hero-proj-card .hf-img-wrap {
   width: 100%; height: 100%;
   border-radius: 10px;
   overflow: hidden;
   background: var(--bg-elevated);
 }
-.hero-frame-item img {
+.hero-proj-card img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform var(--tr-slow);
 }
-.hero-frame-item::before {
+.hero-proj-card:hover img { transform: scale(1.06); }
+.hero-proj-card::before {
   content: '';
   position: absolute;
   inset: -6px;
@@ -573,7 +593,35 @@ ul { list-style: none; }
   opacity: 0.85;
   pointer-events: none;
 }
-.hero-frame-item:nth-child(2) { margin-top: -0.6rem; }
+.hero-proj-card:nth-child(2) { margin-top: -0.8rem; }
+.hpc-cap {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  border-radius: 0 0 10px 10px;
+}
+.hpc-cat {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+.hpc-title {
+  font-family: var(--font-head);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+}
+@media (max-width: 640px) {
+  .hpc-cat { display: none; }
+  .hpc-title { font-size: 0.8rem; }
+}
 
 /* ── Selection-frame corner dots + floating tool badge — shared by the
    hero frame row and project-card thumbs. Dots injected via JS so no
@@ -865,7 +913,7 @@ ul { list-style: none; }
   padding: 7px 18px;
   background: var(--bg-card);
   border: 1.5px solid var(--border-solid);
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-sub);
@@ -899,8 +947,6 @@ ul { list-style: none; }
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: border-color var(--tr-med), box-shadow var(--tr-med), transform var(--tr-med), opacity var(--tr-med);
-  transform-style: preserve-3d;
-  will-change: transform;
   cursor: pointer;
 }
 .proj-thumb-video {
@@ -1048,7 +1094,7 @@ ul { list-style: none; }
   padding: 7px 18px;
   background: var(--bg-card);
   border: 1.5px solid var(--border-solid);
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-sub);
@@ -1140,7 +1186,7 @@ ul { list-style: none; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 100px;
+  border-radius: 6px;
 }
 .lab-badge--live {
   background: rgba(34,197,94,0.14);
@@ -1315,7 +1361,7 @@ ul { list-style: none; }
   white-space: nowrap;
   padding: 3px 8px;
   background: var(--bg-deep);
-  border-radius: 100px;
+  border-radius: 6px;
   border: 1px solid var(--border-solid);
 }
 .tl-company {
@@ -1456,12 +1502,6 @@ ul { list-style: none; }
   overflow: hidden;
   background: var(--bg-card);
 }
-.contact-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(79, 189, 186, 0.07) 0%, transparent 65%);
-  pointer-events: none;
-}
 .contact-inner { position: relative; z-index: 1; }
 .contact-inner .section-body { margin: 0 auto 2.5rem; max-width: 520px; }
 .contact-actions {
@@ -1550,9 +1590,6 @@ ul { list-style: none; }
 #back-top.show { opacity: 1; transform: translateY(0); }
 #back-top:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22); }
 
-/* ── Reveal — initial states owned by GSAP ── */
-.d1,.d2,.d3,.d4,.d5,.d6 {}
-
 /* ── Nav link underline hover ── */
 .nav-links a {
   position: relative;
@@ -1564,10 +1601,10 @@ ul { list-style: none; }
   bottom: 3px;
   left: 13px; right: 13px;
   height: 1.5px;
-  background: linear-gradient(90deg, #3b82f6, #10b981);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--tr-fast);
   border-radius: 1px;
 }
 .nav-links a:hover::after {

@@ -72,7 +72,7 @@ ScrollTrigger.create({
 if (!reducedMotion) {
 
 /* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
-gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-frame-row', '.hero-scroll'], { opacity: 0 });
+gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-proj-row', '.hero-scroll'], { opacity: 0 });
 
 /* ── Hero entrance timeline — scroll-triggered so it's ready when hero is visible ── */
 const heroTl = gsap.timeline({
@@ -107,7 +107,7 @@ heroTl
   .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
   .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
-  .fromTo('.hero-frame-row',       { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-proj-row',       { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
@@ -187,6 +187,18 @@ ScrollTrigger.batch('.reveal-s', {
     stagger: revStg, ease: 'expo.out'
   }),
   start: 'top 88%', once: true
+});
+
+/* ── Project grid entrance — picks up where the hero project row's
+   scroll-fade (see the hero parallax block below) leaves off, so the
+   hero cards recede as the user scrolls and the full grid rises into
+   place a beat later. ── */
+ScrollTrigger.batch('.proj-card', {
+  onEnter: els => gsap.from(els, {
+    y: isMobile ? 20 : 40, scale: isMobile ? 0.97 : 0.94, opacity: 0,
+    duration: revDur, stagger: revStg, ease: 'expo.out'
+  }),
+  start: 'top 90%', once: true
 });
 
 /* ── Heading line-mask reveal ── */
@@ -499,35 +511,6 @@ initAYOReveal();
     });
   }
 })();
-
-/* ── 3D card tilt (GSAP-smoothed, hover-capable devices only) ── */
-if (typeof gsap !== 'undefined' && !reducedMotion && window.matchMedia('(hover: hover)').matches) {
-  function addCardTilt(card, deg, perspective, z) {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width  - 0.5;
-      const y = (e.clientY - r.top)  / r.height - 0.5;
-      gsap.to(card, {
-        rotationY: x * deg,
-        rotationX: -y * deg,
-        transformPerspective: perspective,
-        z,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, {
-        rotationY: 0, rotationX: 0, z: 0,
-        duration: 0.5, ease: 'power3.out',
-        overwrite: 'auto'
-      });
-    });
-  }
-  document.querySelectorAll('.proj-card').forEach(c => addCardTilt(c, 7, 900, 6));
-  document.querySelectorAll('.lab-card').forEach(c => addCardTilt(c, 8, 800, 8));
-}
 
 /* ── Typewriter ── */
 const phrases = [

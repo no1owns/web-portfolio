@@ -108,8 +108,6 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Observer.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9W4T8LYXQ1"></script>
   <script>
@@ -151,31 +149,6 @@
   </div>
 </nav>
 
-<!-- ── AYO Reveal ─────────────────────────────────── -->
-<section id="ayo-reveal" class="ayo-reveal" aria-hidden="true">
-  <div class="ayo-pin">
-    <div class="ayo-bg"></div>
-    <svg class="ayo-clip-svg" focusable="false">
-      <defs>
-        <clipPath id="ayo-clip" clipPathUnits="userSpaceOnUse">
-          <path id="ayo-morph-path" d=""/>
-        </clipPath>
-      </defs>
-    </svg>
-    <svg class="ayo-stroke-svg" aria-hidden="true" focusable="false">
-      <path id="ayo-stroke-path" d=""/>
-    </svg>
-    <div class="ayo-video-wrap">
-      <div class="ayo-video-frame">
-        <video class="ayo-video" autoplay muted loop playsinline>
-          <source src="./images/appomni/motion-appomni-03.mp4" type="video/mp4">
-        </video>
-      </div>
-    </div>
-    <p class="ayo-tagline">I turn brand strategy into design systems that scale — from early-stage identity to enterprise campaign execution.</p>
-  </div>
-</section>
-
 <!-- ── Hero ───────────────────────────────────────── -->
 <section id="hero" class="hero">
 
@@ -202,32 +175,12 @@
       <a href="#contact" class="btn btn-ghost">Get In Touch</a>
     </div>
 
-    <div class="hero-proj-row" id="hero-proj-row">
-      <a href="event-brand/mongodb-world.html" class="hero-proj-card" style="--fc:#10b981;">
-        <div class="hf-img-wrap"><img src="./images/mongodb/events/event-mongodb-01.png" alt="" loading="lazy"></div>
-        <span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>
-        <div class="hpc-cap">
-          <span class="hpc-cat">Events · Campaigns · Brand</span>
-          <span class="hpc-title">MongoDB</span>
-        </div>
-      </a>
-      <a href="brand-systems/appomni.html" class="hero-proj-card" style="--fc:#4FBDBA;">
-        <div class="hf-img-wrap"><img src="./images/appomni/hero.png" alt="" loading="lazy"></div>
-        <span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>
-        <div class="hpc-cap">
-          <span class="hpc-cat">Brand Systems · Motion</span>
-          <span class="hpc-title">AppOmni</span>
-        </div>
-      </a>
-      <a href="campaign-partner/docusign-campaigns.html" class="hero-proj-card" style="--fc:#f97316;">
-        <div class="hf-img-wrap"><img src="./images/docusign/ads/campaign-docusign-01.png" alt="" loading="lazy"></div>
-        <span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>
-        <div class="hpc-cap">
-          <span class="hpc-cat">Campaign · Partnerships</span>
-          <span class="hpc-title">DocuSign</span>
-        </div>
-      </a>
-    </div>
+    <!-- 6 clone cards are laid out here at load (portfolio.js reads content
+         from the matching .proj-card[data-hero-card] in the grid below, so
+         nothing is hand-duplicated) — this row establishes their true "hero"
+         layout via normal flex flow, then JS measures it and switches each
+         clone to position:fixed for the scroll flight down to the grid. -->
+    <div class="hero-proj-row" id="hero-proj-row" aria-hidden="true"></div>
   </div>
 
   <div class="hero-scroll">
@@ -286,8 +239,8 @@
     <div class="proj-grid">
 
 
-      <!-- MongoDB -->
-      <div class="proj-card" data-cat="event-brand">
+<!-- MongoDB -->
+      <div class="proj-card" data-hero-card="0" data-cat="event-brand">
         <div class="proj-thumb">
           <div class="proj-thumb-bg" style="background:url('./images/mongodb/events/event-mongodb-01.png') center/cover no-repeat,linear-gradient(135deg,#001a25 0%,#012e1e 100%);">
           </div>
@@ -308,124 +261,8 @@
           <span class="proj-year">2017–19</span>
         </div>
       </div>
-
-      <!-- Navan / TripActions: Campaigns -->
-      <div class="proj-card" data-cat="campaign">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/navan/ads/ad-tripactions-04.png') center/cover no-repeat, linear-gradient(135deg,#100804 0%,#1e0f05 55%,#150b04 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Campaign · Digital Ads</span>
-              <h3>Navan / TripActions: Campaigns</h3>
-              <p>Digital campaign creative for Navan (formerly TripActions): 30+ ad executions, motion assets, and brand expression across paid channels.</p>
-              <a href="event-brand/navan.html#campaigns" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Campaign</div>
-            <div class="proj-foot-title">Navan / TripActions: Campaigns</div>
-          </div>
-          <span class="proj-year">2019–22</span>
-        </div>
-      </div>
-
-      <!-- Lufthansa × TripActions -->
-      <div class="proj-card" data-cat="campaign">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/navan/lufthansa/motion-tripactions-01.png') center/cover no-repeat, linear-gradient(135deg,#020610 0%,#040c22 55%,#020810 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Campaign · Partner Marketing</span>
-              <h3>Lufthansa × TripActions</h3>
-              <p>Co-branded campaign connecting Lufthansa's premium airline brand with TripActions, positioning TripActions as the preferred booking layer for business travel.</p>
-              <a href="event-brand/navan.html#lufthansa" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Partner Campaign</div>
-            <div class="proj-foot-title">Lufthansa × TripActions</div>
-          </div>
-          <span class="proj-year">2021</span>
-        </div>
-      </div>
-
-      <!-- TripActions T&E Video Spot -->
-      <div class="proj-card" data-cat="campaign">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/navan/travel-expense-video-spot/motion-tripactions-01.png') center/cover no-repeat, linear-gradient(135deg,#0a0c0e 0%,#141820 55%,#0c0e14 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Video Production · Motion</span>
-              <h3>TripActions T&amp;E Video Spot</h3>
-              <p>Original video spot communicating TripActions' travel and expense capabilities, including creative direction, motion design, and production stills.</p>
-              <a href="event-brand/navan.html#video-spot" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Video Production</div>
-            <div class="proj-foot-title">TripActions T&amp;E Video Spot</div>
-          </div>
-          <span class="proj-year">2020</span>
-        </div>
-      </div>
-
-      <!-- DocuSign Momentum -->
-      <div class="proj-card" data-cat="event-brand">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/docusign/events/event-docusign-00002.png') center/cover no-repeat, linear-gradient(150deg,#040c1c 0%,#091830 55%,#0c1e3a 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Event · Brand</span>
-              <h3>DocuSign Momentum</h3>
-              <p>Full conference branding and event creative for DocuSign's flagship annual user conference, Momentum.</p>
-              <a href="event-brand/docusign-momentum.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Event Branding</div>
-            <div class="proj-foot-title">DocuSign Momentum</div>
-          </div>
-          <span class="proj-year">2021</span>
-        </div>
-      </div>
-
-      <!-- DocuSign Campaigns & Partnerships -->
-      <div class="proj-card" data-cat="campaign">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/docusign/ads/campaign-docusign-01.png') center/cover no-repeat, linear-gradient(135deg,#060c18 0%,#0a1530 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Campaign · Partner Marketing</span>
-              <h3>DocuSign Campaigns &amp; Partnerships</h3>
-              <p>Creative direction for DocuSign's enterprise co-marketing with Salesforce, Google, Microsoft, and Apple, plus standalone brand campaigns across digital, print, and OOH.</p>
-              <a href="campaign-partner/docusign-campaigns.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Campaign · Partnerships</div>
-            <div class="proj-foot-title">DocuSign Campaigns &amp; Partnerships</div>
-          </div>
-          <span class="proj-year">2012–2015</span>
-        </div>
-      </div>
-
-      <!-- AppOmni -->
-      <div class="proj-card" data-cat="brand-systems">
+<!-- AppOmni -->
+      <div class="proj-card" data-hero-card="1" data-cat="brand-systems">
         <div class="proj-thumb">
           <video class="proj-thumb-video" autoplay muted loop playsinline poster="./images/appomni/hero.png">
             <source src="./images/appomni/motion-appomni-03.mp4" type="video/mp4">
@@ -447,8 +284,161 @@
           <span class="proj-year">2024–Now</span>
         </div>
       </div>
-
-      <!-- Secureframe -->
+<!-- DocuSign Campaigns & Partnerships -->
+      <div class="proj-card" data-hero-card="2" data-cat="campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/docusign/ads/campaign-docusign-01.png') center/cover no-repeat, linear-gradient(135deg,#060c18 0%,#0a1530 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Campaign · Partner Marketing</span>
+              <h3>DocuSign Campaigns &amp; Partnerships</h3>
+              <p>Creative direction for DocuSign's enterprise co-marketing with Salesforce, Google, Microsoft, and Apple, plus standalone brand campaigns across digital, print, and OOH.</p>
+              <a href="campaign-partner/docusign-campaigns.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Campaign · Partnerships</div>
+            <div class="proj-foot-title">DocuSign Campaigns &amp; Partnerships</div>
+          </div>
+          <span class="proj-year">2012–2015</span>
+        </div>
+      </div>
+<!-- BetterUp -->
+      <div class="proj-card" data-hero-card="3" data-cat="presentation">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/betterup/hero.png') center/cover no-repeat, linear-gradient(135deg,#0f0800 0%,#1e1200 55%,#150e00 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Presentation · Executive Communications</span>
+              <h3>BetterUp</h3>
+              <p>Executive presentation design, translating complex platform capabilities into visually unified narratives for investor and sales contexts.</p>
+              <a href="presentation-design/betterup.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Presentation Design</div>
+            <div class="proj-foot-title">BetterUp</div>
+          </div>
+          <span class="proj-year">2022</span>
+        </div>
+      </div>
+<!-- Linx Security -->
+      <div class="proj-card" data-hero-card="4" data-cat="brand-character">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/linx/Level 4-1.png') center/cover no-repeat, linear-gradient(135deg,#0d0c00 0%,#1a1800 55%,#100f00 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Brand Character · Visual Identity</span>
+              <h3>Linx Security</h3>
+              <p>Brand character and illustration system for Linx Security: a four-level visual ecosystem built to scale from hero scenes to feature card icons, spot illustrations, and accent elements.</p>
+              <a href="linx-security/linx.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Brand Character</div>
+            <div class="proj-foot-title">Linx Security</div>
+          </div>
+          <span class="proj-year">2026</span>
+        </div>
+      </div>
+<!-- Navan / TripActions: Campaigns -->
+      <div class="proj-card" data-hero-card="5" data-cat="campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/navan/ads/ad-tripactions-04.png') center/cover no-repeat, linear-gradient(135deg,#100804 0%,#1e0f05 55%,#150b04 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Campaign · Digital Ads</span>
+              <h3>Navan / TripActions: Campaigns</h3>
+              <p>Digital campaign creative for Navan (formerly TripActions): 30+ ad executions, motion assets, and brand expression across paid channels.</p>
+              <a href="event-brand/navan.html#campaigns" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Campaign</div>
+            <div class="proj-foot-title">Navan / TripActions: Campaigns</div>
+          </div>
+          <span class="proj-year">2019–22</span>
+        </div>
+      </div>
+<!-- Lufthansa × TripActions -->
+      <div class="proj-card" data-cat="campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/navan/lufthansa/motion-tripactions-01.png') center/cover no-repeat, linear-gradient(135deg,#020610 0%,#040c22 55%,#020810 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Campaign · Partner Marketing</span>
+              <h3>Lufthansa × TripActions</h3>
+              <p>Co-branded campaign connecting Lufthansa's premium airline brand with TripActions, positioning TripActions as the preferred booking layer for business travel.</p>
+              <a href="event-brand/navan.html#lufthansa" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Partner Campaign</div>
+            <div class="proj-foot-title">Lufthansa × TripActions</div>
+          </div>
+          <span class="proj-year">2021</span>
+        </div>
+      </div>
+<!-- TripActions T&E Video Spot -->
+      <div class="proj-card" data-cat="campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/navan/travel-expense-video-spot/motion-tripactions-01.png') center/cover no-repeat, linear-gradient(135deg,#0a0c0e 0%,#141820 55%,#0c0e14 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Video Production · Motion</span>
+              <h3>TripActions T&amp;E Video Spot</h3>
+              <p>Original video spot communicating TripActions' travel and expense capabilities, including creative direction, motion design, and production stills.</p>
+              <a href="event-brand/navan.html#video-spot" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Video Production</div>
+            <div class="proj-foot-title">TripActions T&amp;E Video Spot</div>
+          </div>
+          <span class="proj-year">2020</span>
+        </div>
+      </div>
+<!-- DocuSign Momentum -->
+      <div class="proj-card" data-cat="event-brand">
+        <div class="proj-thumb">
+          <div class="proj-thumb-bg" style="background:url('./images/docusign/events/event-docusign-00002.png') center/cover no-repeat, linear-gradient(150deg,#040c1c 0%,#091830 55%,#0c1e3a 100%);">
+          </div>
+          <div class="proj-overlay">
+            <div class="proj-ov-inner">
+              <span class="proj-ov-cat">Event · Brand</span>
+              <h3>DocuSign Momentum</h3>
+              <p>Full conference branding and event creative for DocuSign's flagship annual user conference, Momentum.</p>
+              <a href="event-brand/docusign-momentum.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="proj-foot">
+          <div>
+            <div class="proj-foot-tag">Event Branding</div>
+            <div class="proj-foot-title">DocuSign Momentum</div>
+          </div>
+          <span class="proj-year">2021</span>
+        </div>
+      </div>
+<!-- Secureframe -->
       <div class="proj-card" data-cat="brand-systems">
         <div class="proj-thumb">
           <div class="proj-thumb-bg" style="background:url('./images/secureframe/web-secureframe-01.png') center/cover no-repeat, linear-gradient(135deg,#030e09 0%,#051808 55%,#031210 100%);">
@@ -470,8 +460,7 @@
           <span class="proj-year">2022–24</span>
         </div>
       </div>
-
-      <!-- Apollo Summit -->
+<!-- Apollo Summit -->
       <div class="proj-card" data-cat="event-brand">
         <div class="proj-thumb">
           <div class="proj-thumb-bg" style="background:url('./images/apollo/event-apollo-00003.png') center/cover no-repeat, linear-gradient(135deg,#150800 0%,#2a1000 55%,#1a0a00 100%);">
@@ -491,52 +480,6 @@
             <div class="proj-foot-title">Apollo Summit</div>
           </div>
           <span class="proj-year">2023</span>
-        </div>
-      </div>
-
-      <!-- BetterUp -->
-      <div class="proj-card" data-cat="presentation">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/betterup/hero.png') center/cover no-repeat, linear-gradient(135deg,#0f0800 0%,#1e1200 55%,#150e00 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Presentation · Executive Communications</span>
-              <h3>BetterUp</h3>
-              <p>Executive presentation design, translating complex platform capabilities into visually unified narratives for investor and sales contexts.</p>
-              <a href="presentation-design/betterup.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Presentation Design</div>
-            <div class="proj-foot-title">BetterUp</div>
-          </div>
-          <span class="proj-year">2022</span>
-        </div>
-      </div>
-
-      <!-- Linx Security -->
-      <div class="proj-card" data-cat="brand-character">
-        <div class="proj-thumb">
-          <div class="proj-thumb-bg" style="background:url('./images/linx/Level 4-1.png') center/cover no-repeat, linear-gradient(135deg,#0d0c00 0%,#1a1800 55%,#100f00 100%);">
-          </div>
-          <div class="proj-overlay">
-            <div class="proj-ov-inner">
-              <span class="proj-ov-cat">Brand Character · Visual Identity</span>
-              <h3>Linx Security</h3>
-              <p>Brand character and illustration system for Linx Security: a four-level visual ecosystem built to scale from hero scenes to feature card icons, spot illustrations, and accent elements.</p>
-              <a href="linx-security/linx.html" class="proj-ov-link">View Case Study <i class="fas fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="proj-foot">
-          <div>
-            <div class="proj-foot-tag">Brand Character</div>
-            <div class="proj-foot-title">Linx Security</div>
-          </div>
-          <span class="proj-year">2026</span>
         </div>
       </div>
 

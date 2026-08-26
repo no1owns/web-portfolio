@@ -72,7 +72,7 @@ ScrollTrigger.create({
 if (!reducedMotion) {
 
 /* ── Hero entrance: set initial hidden state (GSAP owns opacity, not CSS) ── */
-gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-proj-row', '.hero-scroll'], { opacity: 0 });
+gsap.set(['.hero-eyebrow', '.hero-sub', '.hero-typewriter', '.hero-cta', '.hero-scroll'], { opacity: 0 });
 
 /* ── Hero entrance timeline — scroll-triggered so it's ready when hero is visible ── */
 const heroTl = gsap.timeline({
@@ -107,7 +107,6 @@ heroTl
   .fromTo('.hero-sub',             { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
   .fromTo('.hero-typewriter',      { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-cta',             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
-  .fromTo('.hero-proj-row',       { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.5')
   .fromTo('.hero-scroll',          { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.3');
 
 /* ── Hero parallax ── */
@@ -122,6 +121,131 @@ gsap.to('#hero-content', {
     scrub: true
   }
 });
+
+/* ── Hero card flight ──────────────────────────────
+   6 decorative clones (built from the 6 real .proj-card[data-hero-card]
+   grid cards — content scraped, never hand-duplicated) sit in the hero
+   at load. As the user scrolls from the hero into the Projects grid,
+   each clone flies — via live-updated position:fixed top/left/width/
+   height — from its hero position to the real card's current position,
+   fading out right as it arrives while the real card (opacity 0 until
+   then) fades in underneath it. Deliberately reads the real card's
+   getBoundingClientRect() fresh every frame rather than caching a
+   target rect once: since that rect is naturally viewport-relative and
+   already reflects however far the page has scrolled, the clone is
+   mathematically guaranteed to land exactly on the real card the
+   instant progress reaches 1, with no separate resize-tracking needed
+   for the landing point (only the hero starting point is measured
+   once, at load). */
+function initHeroCardFlight() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || reducedMotion) return;
+  const heroRow = document.getElementById('hero-proj-row');
+  const realCards = [...document.querySelectorAll('.proj-card[data-hero-card]')]
+    .sort((a, b) => +a.dataset.heroCard - +b.dataset.heroCard);
+  if (!heroRow || !realCards.length) return;
+
+  const FRAME_COLORS = ['#10b981', '#4FBDBA', '#f97316', '#fbbf24', '#a78bfa', '#38bdf8'];
+
+  const clones = realCards.map((card, i) => {
+    const imgEl   = card.querySelector('.proj-thumb img, .proj-thumb-video');
+    const bgMatch = card.querySelector('.proj-thumb-bg')?.style.background.match(/url\(['"]?([^'")]+)['"]?\)/);
+    const imgSrc  = imgEl
+      ? (imgEl.tagName === 'VIDEO' ? imgEl.getAttribute('poster') : imgEl.src)
+      : (bgMatch ? bgMatch[1] : '');
+    const cat   = card.querySelector('.proj-ov-cat')?.textContent || '';
+    const title = card.querySelector('h3')?.textContent || '';
+    const href  = card.querySelector('.proj-ov-link')?.getAttribute('href') || '#';
+
+    const a = document.createElement('a');
+    a.href = href;
+    a.className = 'hero-proj-card';
+    a.style.setProperty('--fc', FRAME_COLORS[i % FRAME_COLORS.length]);
+    a.setAttribute('aria-hidden', 'true');
+    a.setAttribute('tabindex', '-1');
+    a.innerHTML =
+      `<div class="hf-img-wrap"><img src="${imgSrc}" alt="" loading="lazy"></div>` +
+      `<span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span>` +
+      `<span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>` +
+      `<div class="hpc-cap"><span class="hpc-cat">${cat}</span><span class="hpc-title">${title}</span></div>`;
+    a.style.opacity = '0';
+    heroRow.appendChild(a);
+    return a;
+  });
+
+  requestAnimationFrame(() => {
+    // Measure each clone's natural (flex-laid-out) rect, THEN reparent to
+    // <body> before switching to position:fixed — #hero-content carries a
+    // GSAP transform for its own parallax above, and any transformed
+    // ancestor becomes the containing block for position:fixed
+    // descendants, which would break the "fixed = viewport-relative"
+    // assumption this whole effect depends on.
+    const heroRects = clones.map(c => c.getBoundingClientRect());
+    clones.forEach((clone, i) => {
+      const r = heroRects[i];
+      document.body.appendChild(clone);
+      Object.assign(clone.style, {
+        position: 'fixed',
+        top: r.top + 'px',
+        left: r.left + 'px',
+        width: r.width + 'px',
+        height: r.height + 'px',
+        margin: '0',
+        zIndex: '40',
+        willChange: 'top, left, width, height, opacity'
+      });
+    });
+
+    const smoothstep = (x, e0, e1) => {
+      const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0)));
+      return t * t * (3 - 2 * t);
+    };
+
+    function setProgress(p) {
+      realCards.forEach((card, i) => {
+        const hr = heroRects[i];
+        const gr = card.getBoundingClientRect(); // live — see function comment
+        const top    = hr.top    + (gr.top    - hr.top)    * p;
+        const left   = hr.left   + (gr.left   - hr.left)   * p;
+        const width  = hr.width  + (gr.width  - hr.width)  * p;
+        const height = hr.height + (gr.height - hr.height) * p;
+        const clone = clones[i];
+        clone.style.top = top + 'px';
+        clone.style.left = left + 'px';
+        clone.style.width = width + 'px';
+        clone.style.height = height + 'px';
+        const cloneOpacity = 1 - smoothstep(p, 0.85, 1);
+        clone.style.opacity = String(cloneOpacity);
+        gsap.set(card, { opacity: smoothstep(p, 0.85, 1) });
+      });
+    }
+
+    // Clones start visible in the hero (progress 0); real grid cards start
+    // hidden until their clone arrives.
+    gsap.set(clones, { opacity: 1 });
+    gsap.set(realCards, { opacity: 0 });
+
+    ScrollTrigger.create({
+      trigger: '#hero',
+      endTrigger: '#projects',
+      start: 'bottom 95%',
+      end: 'top top',
+      onUpdate: self => setProgress(self.progress),
+      onLeave: () => { // scrolled past the grid — clone has fully handed off
+        clones.forEach(c => { c.style.opacity = '0'; c.style.pointerEvents = 'none'; });
+        gsap.set(realCards, { opacity: 1 });
+      },
+      onEnterBack: () => { // scrolled back up into the transition zone
+        setProgress(1); // will be immediately corrected by the next onUpdate tick
+      },
+      onLeaveBack: () => { // scrolled back above the hero — reset to rest state
+        setProgress(0);
+      }
+    });
+  });
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+}
+initHeroCardFlight();
 
 /* ── Image parallax ── */
 document.querySelectorAll('.parallax-frame').forEach(frame => {
@@ -193,7 +317,14 @@ ScrollTrigger.batch('.reveal-s', {
    scroll-fade (see the hero parallax block below) leaves off, so the
    hero cards recede as the user scrolls and the full grid rises into
    place a beat later. ── */
-ScrollTrigger.batch('.proj-card', {
+/* Excludes [data-hero-card] — those 6 cards' opacity is exclusively owned
+   by the hero card flight system (see initHeroCardFlight below), which
+   already reveals them in sync with their clone's arrival. Reusing the
+   generic reveal on top of that would fight over the same opacity
+   property, and since .from() reads the element's CURRENT value as its
+   implicit start point, a card already forced to opacity:0 by the flight
+   system would make this a 0→0 no-op on top of fighting for control. */
+ScrollTrigger.batch('.proj-card:not([data-hero-card])', {
   onEnter: els => gsap.from(els, {
     y: isMobile ? 20 : 40, scale: isMobile ? 0.97 : 0.94, opacity: 0,
     duration: revDur, stagger: revStg, ease: 'expo.out'
@@ -238,157 +369,6 @@ splitReveal('.section-title');
 } /* end !reducedMotion */
 } /* end gsap guard */
 
-/* ── AYO Reveal: scroll-driven morph A → Y → O + video clip ── */
-async function initAYOReveal() {
-  const section    = document.getElementById('ayo-reveal');
-  const morphPath  = document.getElementById('ayo-morph-path');
-  const strokePath = document.getElementById('ayo-stroke-path');
-  const ayoPin     = document.querySelector('.ayo-pin');
-  const videoWrap  = document.querySelector('.ayo-video-wrap');
-  const videoFrame = document.querySelector('.ayo-video-frame');
-  const videoEl    = document.querySelector('.ayo-video');
-  if (!section || !morphPath) return;
-  if (typeof opentype === 'undefined' || typeof flubber === 'undefined') return;
-
-  let font;
-  try { font = await opentype.load('./fonts/SpaceGrotesk-Bold.ttf'); }
-  catch (e) { console.warn('AYO: font failed', e); return; }
-
-  function getLetterPath(letter, vw, vh) {
-    const targetH = vh * 0.70;
-    const sz0 = 1000;
-    const p0  = font.getPath(letter, 0, sz0 * 0.82, sz0);
-    const b0  = p0.getBoundingBox();
-    const h0  = b0.y2 - b0.y1;
-    if (h0 <= 0) return '';
-    const sz  = sz0 * (targetH / h0);
-    const p1  = font.getPath(letter, 0, sz * 0.82, sz);
-    const b1  = p1.getBoundingBox();
-    const dx  = vw / 2 - (b1.x1 + b1.x2) / 2;
-    const dy  = vh / 2 - (b1.y1 + b1.y2) / 2;
-    return font.getPath(letter, dx, sz * 0.82 + dy, sz).toPathData(2);
-  }
-
-  function bigCirclePath(vw, vh) {
-    const cx = vw / 2, cy = vh / 2;
-    const r  = Math.hypot(vw, vh) * 0.6;
-    const k  = 0.5523;
-    return `M${cx} ${cy-r} C${cx+r*k} ${cy-r} ${cx+r} ${cy-r*k} ${cx+r} ${cy} C${cx+r} ${cy+r*k} ${cx+r*k} ${cy+r} ${cx} ${cy+r} C${cx-r*k} ${cy+r} ${cx-r} ${cy+r*k} ${cx-r} ${cy} C${cx-r} ${cy-r*k} ${cx-r*k} ${cy-r} ${cx} ${cy-r}Z`;
-  }
-
-  function frameRectPath(vw, vh) {
-    const mobile = vw < 768;
-    /* 9:16 portrait video — constrain to fit within viewport */
-    const maxW = vw * (mobile ? 0.72 : 0.40);
-    const maxH = vh * 0.82;
-    let fw, fh;
-    if (maxW * 16 / 9 <= maxH) {
-      fw = maxW; fh = fw * 16 / 9;
-    } else {
-      fh = maxH; fw = fh * 9 / 16;
-    }
-    const left   = (vw - fw) / 2;
-    const top    = (vh - fh) / 2;
-    const right  = left + fw;
-    const bottom = top  + fh;
-    return `M${left},${top} L${right},${top} L${right},${bottom} L${left},${bottom} Z`;
-  }
-
-  let vw, vh, pathA, pathY, pathO, pathFull, iAY, iYO, iOF;
-  let rectLeft, rectTop, rectW, rectH;
-
-  function rebuild() {
-    vw = window.innerWidth; vh = window.innerHeight;
-    pathA = getLetterPath('A', vw, vh);
-    pathY = getLetterPath('Y', vw, vh);
-    pathO = getLetterPath('O', vw, vh);
-    pathFull = frameRectPath(vw, vh);
-    /* Precompute portrait frame dimensions for video animation */
-    const mobile = vw < 768;
-    const maxW = vw * (mobile ? 0.72 : 0.40);
-    const maxH = vh * 0.82;
-    if (maxW * 16 / 9 <= maxH) { rectW = maxW; rectH = rectW * 16 / 9; }
-    else                        { rectH = maxH; rectW = rectH * 9 / 16; }
-    rectLeft = (vw - rectW) / 2;
-    rectTop  = (vh - rectH) / 2;
-    iAY  = flubber.interpolate(pathA, pathY,    { maxSegmentLength: 4 });
-    iYO  = flubber.interpolate(pathY, pathO,    { maxSegmentLength: 4 });
-    iOF  = flubber.interpolate(pathO, pathFull, { maxSegmentLength: 8 });
-    morphPath.setAttribute('d', pathA);
-    if (strokePath) strokePath.setAttribute('d', pathA);
-  }
-
-  rebuild();
-  window.addEventListener('resize', rebuild, { passive: true });
-
-  ScrollTrigger.create({
-    trigger: section,
-    pin: ayoPin,
-    pinSpacing: false,
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: 1.2,
-    invalidateOnRefresh: true,
-    onUpdate(self) {
-      const p = self.progress;
-
-      /* Morph path */
-      let d;
-      if      (p < 0.10) { d = pathA; }
-      else if (p < 0.48) { d = iAY(Math.min((p-0.10)/0.38, 1)); }
-      else if (p < 0.82) { d = iYO(Math.min((p-0.48)/0.34, 1)); }
-      else               { d = iOF(Math.min((p-0.82)/0.18, 1)); }
-      morphPath.setAttribute('d', d);
-      if (strokePath) strokePath.setAttribute('d', d);
-
-      /* Video zoom: arc up to 1.15 at 50% progress, back to 1.0 at end */
-      if (videoEl) {
-        const zf = p < 0.5 ? p / 0.5 : Math.max(0, 1 - (p - 0.5) / 0.5);
-        videoEl.style.transform = `scale(${1.0 + zf * 0.15})`;
-      }
-
-      /* Video frame: shrink from full-viewport to portrait rect during O→frame */
-      if (videoFrame) {
-        const rp = p < 0.82 ? 0 : Math.min((p - 0.82) / 0.18, 1);
-        if (rp > 0) {
-          videoFrame.style.position = 'absolute';
-          videoFrame.style.left   = (rectLeft * rp) + 'px';
-          videoFrame.style.top    = (rectTop  * rp) + 'px';
-          videoFrame.style.width  = (vw + (rectW - vw) * rp) + 'px';
-          videoFrame.style.height = (vh + (rectH - vh) * rp) + 'px';
-          videoFrame.style.right  = 'auto';
-          videoFrame.style.bottom = 'auto';
-        } else {
-          videoFrame.style.left   = '';
-          videoFrame.style.top    = '';
-          videoFrame.style.width  = '';
-          videoFrame.style.height = '';
-          videoFrame.style.right  = '';
-          videoFrame.style.bottom = '';
-        }
-      }
-
-      /* Keep pin fully visible at all scroll positions */
-      if (ayoPin) ayoPin.style.opacity = 1;
-
-      /* Once the reveal is done, the pin box must stop rendering entirely —
-         not just be scrolled past — since .ayo-bg is an always-opaque full
-         cover inside it, sitting at z-index:2 (above .hero's z-index:1) in
-         the same vertical space .hero overlaps into by design (via
-         .ayo-reveal's negative margin). Relying on GSAP's pin/position
-         state alone to move it out of the way is fragile on iOS Safari,
-         where position:fixed elements toggled via JS are known to
-         misbehave or visually "stick" long after the page has scrolled
-         well past them, permanently blocking whatever's underneath. */
-      if (ayoPin) {
-        const done = p >= 0.995;
-        ayoPin.style.visibility = done ? 'hidden' : 'visible';
-        ayoPin.style.pointerEvents = done ? 'none' : '';
-      }
-    }
-  });
-}
-initAYOReveal();
 
 /* ── Hero line field ── */
 (function initLineField() {

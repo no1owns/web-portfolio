@@ -10,20 +10,6 @@ const navLinks  = document.getElementById('nav-links');
 
 document.body.classList.add('loaded');
 
-/* ── Project thumb "selection frame" — corner-handle dots + a floating
-   tool badge over each project thumbnail, revealed on hover. Injected
-   here rather than hand-added to every card in the HTML so the effect
-   stays in sync automatically as project cards are added/removed. ── */
-document.querySelectorAll('.proj-thumb').forEach(thumb => {
-  const frame = document.createElement('div');
-  frame.className = 'thumb-frame';
-  frame.innerHTML = '<span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span><span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>';
-  const tools = document.createElement('div');
-  tools.className = 'thumb-tools';
-  tools.innerHTML = '<i class="fas fa-crop-simple"></i><i class="fas fa-layer-group"></i>';
-  thumb.append(frame, tools);
-});
-
 if (typeof gsap !== 'undefined') {
 gsap.registerPlugin(ScrollTrigger, Observer);
 }
@@ -144,9 +130,7 @@ function initHeroCardFlight() {
     .sort((a, b) => +a.dataset.heroCard - +b.dataset.heroCard);
   if (!heroRow || !realCards.length) return;
 
-  const FRAME_COLORS = ['#10b981', '#4FBDBA', '#f97316', '#fbbf24', '#a78bfa', '#38bdf8'];
-
-  const clones = realCards.map((card, i) => {
+  const clones = realCards.map(card => {
     const imgEl   = card.querySelector('.proj-thumb img, .proj-thumb-video');
     const bgMatch = card.querySelector('.proj-thumb-bg')?.style.background.match(/url\(['"]?([^'")]+)['"]?\)/);
     const imgSrc  = imgEl
@@ -159,13 +143,10 @@ function initHeroCardFlight() {
     const a = document.createElement('a');
     a.href = href;
     a.className = 'hero-proj-card';
-    a.style.setProperty('--fc', FRAME_COLORS[i % FRAME_COLORS.length]);
     a.setAttribute('aria-hidden', 'true');
     a.setAttribute('tabindex', '-1');
     a.innerHTML =
       `<div class="hf-img-wrap"><img src="${imgSrc}" alt="" loading="lazy"></div>` +
-      `<span class="tf-dot tf-tl"></span><span class="tf-dot tf-tr"></span>` +
-      `<span class="tf-dot tf-bl"></span><span class="tf-dot tf-br"></span>` +
       `<div class="hpc-cap"><span class="hpc-cat">${cat}</span><span class="hpc-title">${title}</span></div>`;
     a.style.opacity = '0';
     heroRow.appendChild(a);
